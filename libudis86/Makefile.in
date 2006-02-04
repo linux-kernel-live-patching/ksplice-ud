@@ -1,0 +1,69 @@
+# Makefile - libudis86
+#
+#
+
+SHELL		= @SHELL@
+top_srcdir	= @top_srcdir@
+srcdir		= @srcdir@
+CC		= @CC@
+CFLAGS		= -I.. -Wall -O2 -ansi -D_UD_BINARY_
+LIBS		= @LIBS@
+INSTALL		= @INSTALL@
+INSTALL_PROGRAM	= @INSTALL_PROGRAM@
+INSTALL_DATA	= @INSTALL_DATA@
+prefix		= @prefix@
+exec_prefix	= ${prefix}
+bindir		= $(exec_prefix)/bin
+libdir		= $(prefix)/lib
+mandir		= @mandir@
+includedir	= @includedir@
+AR		= ar
+RM		= rm
+PERL		= perl
+
+.SUFFIXES: .c .o
+.c.o:
+	$(CC) -c $(CFLAGS) -o $@ $<
+
+OBJS =	mnemonics.o \
+	opcmap.o \
+	source.o \
+	decode.o \
+	syn.o \
+	syn-intel.o \
+	syn-att.o \
+	udis86.o
+
+libudis86.a: $(OBJS)
+	$(AR) -r libudis86.a $(OBJS)
+
+mnemonics.c: mnemonics.dat
+	$(PERL) mnemonics.pl < mnemonics.dat
+mnemonics.h: mnemonics.dat
+	$(PERL) mnemonics.pl < mnemonics.dat
+source.c: source.h types.h
+opcmap.c: opcmap.h source.h types.h macros.h
+decode.c: source.h types.h macros.h extern.h
+syn.c: syn.h opcmap.h types.h
+syn-intel.c: syn.h types.h opcmap.h 
+syn-att.c: syn.h types.h opcmap.h 
+udis86.c: source.h syn.h types.h macros.h extern.h
+
+install: libudis86.a
+	$(INSTALL_PROGRAM) $(srcdir)/libudis86.a $(INSTALLROOT)$(libdir)/libudis86.a
+	$(srcdir)/../mkinstalldirs $(INSTALLROOT)$(includedir)/libudis86
+	$(INSTALL_DATA) $(srcdir)/../udis86.h $(INSTALLROOT)$(includedir)/udis86.h
+	$(INSTALL_DATA) $(srcdir)/types.h $(INSTALLROOT)$(includedir)/libudis86/types.h
+	$(INSTALL_DATA) $(srcdir)/macros.h $(INSTALLROOT)$(includedir)/libudis86/macros.h
+	$(INSTALL_DATA) $(srcdir)/extern.h $(INSTALLROOT)$(includedir)/libudis86/extern.h
+	$(INSTALL_DATA) $(srcdir)/mnemonics.h $(INSTALLROOT)$(includedir)/libudis86/mnemonics.h
+
+uninstall:
+	$(RM) -f $(INSTALLROOT)$(libdir)/libudis86.a
+	$(RM) -frd $(INSTALLROOT)$(includedir)/libudis86
+	$(RM) -f $(INSTALLROOT)$(includedir)/udis86.h
+clean:
+	$(RM) -f core $(srcdir)/*.o $(srcdir)/*.a *~
+
+distclean: clean
+	$(RM) -f config.h Makefile *~ *.log

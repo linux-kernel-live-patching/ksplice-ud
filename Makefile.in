@@ -1,0 +1,21 @@
+# Makefile
+# udis86 - udis86 disassembler for x86(x86-64)
+#
+
+all:
+	cd libudis86 && $(MAKE)
+	cd udcli && $(MAKE)
+install:
+	cd libudis86 && $(MAKE) install
+	cd udcli && $(MAKE) install
+uninstall:
+	cd libudis86 && $(MAKE) uninstall
+	cd udcli && $(MAKE) uninstall
+clean:
+	cd libudis86 && $(MAKE) clean
+	cd udcli && $(MAKE) clean
+distclean: clean
+	cd libudis86 && $(MAKE) distclean
+	cd udcli && $(MAKE) distclean
+	$(RM) -f config.h Makefile *.log *~
+	$(RM) -rf autom4te*.cache

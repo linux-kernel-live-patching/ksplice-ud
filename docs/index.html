@@ -1,0 +1,302 @@
+<html>
+<head>
+	<title>Udis86 - Disassembler Library for x86/x86-64 (AMD64)</title>
+	
+<style type="text/css">
+body {
+	font: 76%, sans-serif, "trebuchet ms", verdana;
+	background-color: #eee;
+	margin: 0;
+	padding: 0;
+}
+
+#wrapper {
+	width: 650px;
+	margin: 0px auto;
+	border-right: 1px solid #bbb;
+	border-left: 1px solid #bbb;
+	padding: 0px;
+	padding-right: 20px;
+	padding-left: 20px;
+	padding-bottom: 20px;
+	background-color: #fff;
+	font-size:1.2em;
+}
+
+#wrapper h1 {
+	font-family: georgia, "trebuchet ms", sans-serif;
+	font-size: 1.5em;
+	text-align: center;
+	padding: 0;
+	margin: 0;
+	padding-top: 40px;
+	margin-bottom: 10px;
+	border-bottom: 2px solid;
+}
+
+#wrapper h2 {
+	font-family: georgia, "trebuchet ms", serif, verdana, sans-serif;
+	font-size: 1.1em;
+	border-bottom: 1px solid;
+	padding: 0;
+}
+
+#wrapper h3 {
+	font-family: georgia, "trebuchet ms", serif, verdana, sans-serif;
+	font-size: 1.2em;
+	font-weight: normal;
+	padding: 0;
+	margin: 0;
+}
+#wrapper h4 {
+	font-family: georgia, "trebuchet ms", serif, verdana, sans-serif;
+}
+#toplinks {
+	margin-left: auto;
+	margin-top: 5px;
+	margin-bottom: 20px;
+	padding: 2px;
+	font-weight: bold;
+	font-size: 0.8em;
+	text-align: center;
+}
+#toplinks a {
+	text-decoration: underline;
+}
+
+#wrapper p {
+	font-size: 1.0em;
+
+}
+
+#news {
+	background-color: #eee;
+	padding: 5px;
+}
+
+td { font-size: 0.8em; }
+pre {
+	background-color: #eee;
+	font-size: 1.1em;
+	padding: 5px;
+}
+</style>
+
+</head>
+<body>
+<div id="wrapper">
+
+	<h1>Udis86 Disassembler for x86 and x86-64 (AMD64)</h1>
+
+	<div id="toplinks">
+
+	<a href="#down">Download</a> &middot; 
+	<a href="#use">Using libudis86</a> &middot;
+	<a href="#api">API</a> &middot;
+	<a href="http://sourceforge.net/projects/udis86">Project Page</a>
+	</div>
+
+	<p>Udis86 is an easy-to-use minimalistic disassembler library (<i>libudis86</i>) for the x86 
+	and x86-64 (AMD64) range of instruction set architectures. The primary intent
+	of the design and development of udis86 is to aid software development 
+	projects that entail binary code analysis.</p>
+
+	<p>Salient features of <i>libudis86</i>: </p>
+	<ul>
+	<li>Full support for the <i>x86 and x86-64 (AMD64)</i> ISAs.</li>
+	<li>Includes support for all <i> MMX, SSE, FPU(x87), and AMD 3Dnow! </i>
+	Instructions</li>
+	<li>Supports 16/32/64 Bits disassembly modes.</li>
+	<li>Capable of generating output in <i>AT&T or INTEL</i> assembly language syntax.</li>
+	<li>Plugin-in based model for customizing ouput syntax.</li>
+	<li>Supports different types of inputs - File, Buffered, and Hooks.</li>
+	<li>Thread-safe and Reentrant.</li>
+	<li>API consists of multi-level wrappers for fine-grained control
+	over the decoder.</li>
+	</ul>
+
+	<p>The package also includes <i>udcli</i> - a tiny command line tool based on 
+	<i>libudis86</i>, which accepts binary input from STDIN and prints the 
+	disassembled output to STDOUT. The code	serves as a good example of 
+	how you can use <i>libudis86</i>.</p>
+
+	<p>You can reach me at <i>vivek[at]sig9[dot]com</i>. Please let
+	me know if you are using udis86, have ideas for it, or would like
+	to comment on it.</p>
+
+<a name="down"><h2>Download</h2></a>
+
+&raquo; Download latest release from <a href="">sourceforge.net</a> or <a href="">sarovar.org</a>.<br/>
+&raquo; For the latest source from <a href="">Udis86 Project CVS</a>, checkout module <i>current</i>.<br/>
+&raquo; <a href="http://cvs.sourceforge.net/viewcvs.py/udis86/current/">Browse</a> the source code.</a>
+
+
+<a name="use"><h2>Using <i>libudis86</i></h2></a>
+
+<h4>Headers & Library</h4>
+
+
+The following C header files are copied to your local include directory upon
+installation of udis86:
+
+<pre>	libudis86/types.h
+	libudis86/extern.h
+	libudis86/macros.h
+	libudis86/mnemonics.h
+</pre>
+
+and a wrapper that includes all of the above:
+
+<pre>	udis86.h</pre>
+
+So, to interface your program with libudis86, include udis86.h
+
+<pre>	#include &lt;udis86.h&gt;</pre>
+
+And, finally when building your program, link it to libudis86, with the 
+following command line option in the case of GCC:
+	
+<pre>	-ludis86</pre>
+
+<h4>Udis86 Object (ud_t)</h4>
+
+To maintain reentrancy and thread safety, udis86 does not use static data. All
+data associated with the disassembly are encapsulated into a structure called
+the udis86 object. To use libudis86, you must create an instance of this object,
+
+<pre>	ud_t my_ud_obj;</pre>
+
+and initalize it,
+
+<pre>	ud_init(&my_ud_obj);</pre>
+
+Ofcourse, you can create multiple instances of libudis86 and spawn multiple 
+threads of disassembly. Thats entirely upto how you want to use the library.
+libudis86 guarantees reentrancy and thread safety.
+
+<a name="api"><h2>API</h2></a>
+
+The whole of API can be divided into three levels of wrappers. Level-1 wraps
+level-2 and level-2 wraps level-3. The choice of level depends on the kind of
+control you want over the decoding process. It is recommended that you stick to
+a single level.
+
+<pre><u><b>Level-1 Wrappers</b></u>
+
+void ud_init(ud_t *ud);
+
+	ud_t object initializer.
+
+void ud_set_input_hook(ud_t* ud, int (*hook)());
+
+	Sets the input source for the  disassembler. Utilizes a callback 
+	mechanism. To retrieve each byte in the stream, libudis86 calls 
+	back the hook() function.
+
+void ud_set_input_buffered(ud_t* ud, char* buffer, size_t size);
+
+	Sets the input source for the disassembler to a buffer of fixed size.
+
+void ud_set_input_file(ud_t* ud, FILE* filep);
+
+	Sets the input source for the disassembler to a file pointed to by
+	the passed FILE pointer. Note that the file pointer must be initialized.
+
+void ud_set_dis_mode(ud_t* ud, ud_mode_t mode);
+	
+	Sets the disassembly mode. Possible values are -
+ 	MODE16, MODE32, MODE64.
+
+void ud_set_origin(ud_t* ud, ud_origin_t origin);
+
+	Sets code origin. Can be any positive integer (32 bits).
+
+unsigned int ud_disassemble(ud_t* ud, ud_syntax_t s);
+
+	Disassembles one instruction and returns the number of bytes 
+	disassembled. The object must be initialized to a source. 
+	This wraps ud_decode() and other translator functions. Once it returns
+	successfully, the ud_t object contains details of the decoded 
+	instruction, although in a relatively raw state. The following fields
+	can be used to examine the instructions,
+
+	ud_t.prefix; see <libudis86/mnemonics.h>
+	ud_t.mnemonic; see <libudis86/types.h (struct ud_prefix_t)>
+	ud_t.operand[3]; see <libudis86/types.h (struct ud_operand_t)>
+
+	For more information on this, see <libudis86/types.h>
+
+unsigned int ud_asmout_offset(ud_t* ud);
+const char* ud_asmout_insn(ud_t* ud);
+const char* ud_asmout_hex(ud_t* ud);
+
+	Ouput access functions. As the names suggest, they return the offset,
+ 	the instruction, and the hex form of the codes respectively. These
+	functions must be called after a ud_disassemble().
+
+<u><b>Level-2 Wrappers</b></u>
+
+void ud_src_init(register ud_t *ud);
+
+	Initializes the source buffer pointers. fill_ptr and curr_ptr 
+	are both set to -1, indicating an  uninitiated state. This function must 
+	be called before the disassembly session.
+
+
+void ud_src_start(ud_t* ud);
+
+	Initializes the source buffering unit for a single instruction 
+	disassembly. This must be called every time before calling the decoding
+	functions.
+
+void ud_decode(ud_t* ud);
+
+	This wraps ud_search_opcmap, by searching the map first and then proceeds
+	to decode the prefixes and the instruction operands. It generates an
+	intermediate form (see ud-types.h) which can be translated to different
+	syntax forms.
+
+void ud_translate_intel(ud_t *ud);
+void ud_translate_att(ud_t *ud);
+
+	Translates decoded instruction to the intel/att syntax. Once ud_decode 
+	generates the intermediate form, the object can be translated to generate 
+	an assembly output (ud_t.asmout).
+
+void ud_src_nomore(ud_t* ud);
+
+	Returns a non zero if there are no more bytes to be disassembled.
+
+<u><b>Level-3 Wrappers</u></b>
+
+void ud_clear_insn(ud_t *ud);
+
+	Clears the attributes/flags and data fields of ud associated with 
+	decoding a map entry. This function is called internally by the decoder 
+	before decoding.
+
+int ud_extract_prefixes(register ud_t* ud);
+
+	Reads the source for possible prefixes and sets flags associated with 
+	"ud". This function is called internally by the decoder before decoding.
+
+void ud_search_opcmap(ud_t *ud);
+
+	Finds the entry in the opcode map which corresponds to the bytes in source.
+	The functions pulls 1 or 2 bytes from source to search the map and fills
+	ud->opcmap_entry.
+
+
+ud_mnemonic_code_t ud_get_3dnow_insn_mnemonic(uint8_t suffix);
+
+	3dnow! instructions mnemonics can be resolved only based on the 
+	instruction suffix. This function returns the mneomnic code based on 
+	that.
+
+const char* ud_lookup_mnemonic(ud_mnemonic_code_t c);
+
+	lookup the string form of a mnemonic code.
+</pre>
+</div>
+</body>
+</html>
