@@ -126,9 +126,9 @@ pre {
 
 <a name="down"><h2>Download</h2></a>
 
-&raquo; Download latest release from <a href="">sourceforge.net</a> or <a href="">sarovar.org</a>.<br/>
-&raquo; For the latest source from <a href="">Udis86 Project CVS</a>, checkout module <i>current</i>.<br/>
-&raquo; <a href="http://cvs.sourceforge.net/viewcvs.py/udis86/current/">Browse</a> the source code.</a>
+&raquo; Download latest release from <a href="http://sourceforge.net/project/showfiles.php?group_id=96233">sourceforge.net</a> or <a href="http://sarovar.org/project/showfiles.php?group_id=76">sarovar.org</a>.<br/>
+&raquo; For the latest source from <a href="http://sourceforge.net/cvs/?group_id=96233">Udis86 Project CVS</a>, checkout module <i>ud</i>.<br/>
+&raquo; <a href="http://cvs.sourceforge.net/viewcvs.py/udis86/ud/">Browse</a> the source code.</a>
 
 
 <a name="use"><h2>Using <i>libudis86</i></h2></a>
@@ -220,9 +220,9 @@ unsigned int ud_disassemble(ud_t* ud, ud_syntax_t s);
 	instruction, although in a relatively raw state. The following fields
 	can be used to examine the instructions,
 
-	ud_t.prefix; see <libudis86/mnemonics.h>
-	ud_t.mnemonic; see <libudis86/types.h (struct ud_prefix_t)>
-	ud_t.operand[3]; see <libudis86/types.h (struct ud_operand_t)>
+	ud_t.prefix; see libudis86/mnemonics.h
+	ud_t.mnemonic; see libudis86/types.h (struct ud_prefix_t)
+	ud_t.operand[3]; see libudis86/types.h (struct ud_operand_t)
 
 	For more information on this, see <libudis86/types.h>
 
@@ -297,6 +297,9 @@ const char* ud_lookup_mnemonic(ud_mnemonic_code_t c);
 
 	lookup the string form of a mnemonic code.
 </pre>
+
+<div style="text-align:center"><small>&copy; 2006 Vivek Mohan</small></div>
+
 </div>
 </body>
 </html>
