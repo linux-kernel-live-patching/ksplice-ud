@@ -6,8 +6,11 @@
  *
  * $Id$
  * $Log$
- * Revision 1.1  2006/02/04 09:14:10  vivek5797
- * Initial revision
+ * Revision 1.2  2006/02/20 17:48:19  vivek5797
+ * Fixed bug in opcmap.c
+ *
+ * Revision 1.1.1.1  2006/02/04 09:14:10  vivek5797
+ * Initial import of beta, after a major overhaul.
  *
  * Revision 1.1  2004/12/25 14:41:31  vivek
  * Initial revision
@@ -751,6 +754,12 @@ extern void ud_decode(register ud_t* ud)
 		else	ud->adr_mode = (ud->adr_mode == MODE32) ? MODE16 : MODE32 ;
 	}
 
+	/* check if the instruction if dependent on the mode */
+	if (P_DEP32(ud->opcmap_entry->prefix)) {
+		if (ud->opr_mode == MODE16)
+			ud->error = 1;
+	}
+
 	/* disassemble operands */
 	disasm_operands(ud);
 
@@ -786,5 +795,6 @@ extern void ud_decode(register ud_t* ud)
 		src_reset(ud); 
 		/* the first byte as operand */
 		ud->operand[0].lval.bits8 = src_uint8(ud);
+
 	} 
 }

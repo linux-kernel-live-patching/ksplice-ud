@@ -581,7 +581,7 @@ ud_opcmap_entry_t insntbl_2byte[0x100] = {
 /* B4 */ { Ilfs,	Gv,	E,	NOARG,	Po32 | Pa32 | REX(_W|_R|_X|_B) },
 /* B5 */ { Ilgs,	Gv,	E,	NOARG,	Po32 | Pa32 | REX(_W|_R|_X|_B) },
 /* B6 */ { Imovzx,	Gv,	Eb,	NOARG,	Po32 | Pa32 | REX(_W|_R|_X|_B) },
-/* B7 */ { Imovzx,	Gv,	Ew,	NOARG,	Po32 | Pa32 | REX(_W|_R|_X|_B) },
+/* B7 */ { Imovzx,	Gv,	Ew,	NOARG,	Pdep32 | Po32 | Pa32 | REX(_W|_R|_X|_B) },
 /* B8 */ { Iinvalid,	NOARG,	NOARG,	NOARG,	Pnone },
 /* B9 */ { Igrp,	NOARG,	NOARG,	NOARG,	Pnone },
 /* BA */ { Igrp,	NOARG,	NOARG,	NOARG,	Pnone },
@@ -589,7 +589,7 @@ ud_opcmap_entry_t insntbl_2byte[0x100] = {
 /* BC */ { Ibsf,	Ev,	Gv,	NOARG,	Po32 | Pa32 | REX(_W|_R|_X|_B) },
 /* BD */ { Ibsr,	Ev,	Gv,	NOARG,	Po32 | Pa32 | REX(_W|_R|_X|_B) },
 /* BE */ { Imovsx,	Gv,	Eb,	NOARG,	Po32 | Pa32 | REX(_W|_R|_X|_B) },
-/* BF */ { Imovsx,	Gv,	Ew,	NOARG,	Po32 | Pa32 | REX(_W|_R|_X|_B) },
+/* BF */ { Imovsx,	Gv,	Ew,	NOARG,	Pdep32 | Po32 | Pa32 | REX(_W|_R|_X|_B) },
 /* C0 */ { Ixadd,	Eb,	Gb,	NOARG,	Po32 | Pa32 | REX(_W|_R|_X|_B) },
 /* C1 */ { Ixadd,	Ev,	Gv,	NOARG,	Po32 | Pa32 | REX(_W|_R|_X|_B) },
 /* C2 */ { Icmpps,	V,	W,	Ib,	Pa32 | REX(_R|_X|_B) },
@@ -2581,7 +2581,8 @@ static void search_2byte_insn(register ud_t *ud)
 			ud->prefix.repne = 0;
 		else	ud->opcmap_entry = NULL;
 	}
-	
+
+
 	/* no prefix */
 	if (ud->opcmap_entry == NULL)	
 		/* get table entry */
@@ -2597,9 +2598,9 @@ static void search_2byte_insn(register ud_t *ud)
 	/* check if the opcode points to a group */
 	/* if not, RETURNS */
 	if ((ud->opcmap_entry)->mnemonic != Igrp) {
-		ud->error = 1;
 		return;
-	}		
+	}
+
 	switch (src_curr(ud)) {
 		/* group 6 */
 		case 0x00:

@@ -23,6 +23,7 @@
 #define P_DEF64(n)	((n) & 0x08)
 #define P_INV64(n)	((n) & 0x10)
 #define P_SUFF(n)	((n) & 0x20)
+#define P_DEP32(n)	((n) & 0x40)
 #define P_CAST(n)	((n) & 0x10000000)
 #define P_PRFX(n)	((n) & ~0x20)
 #define P_REX_W(r) 	((0xF & (r))  >> 3)

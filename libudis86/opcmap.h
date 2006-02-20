@@ -18,6 +18,7 @@
 #  define Pdef64	0x08
 #  define Pinv64	0x10
 #  define Psuff		0x20
+#  define Pdep32	0x40
 #  define Pcast		0x10000000
 #  define _W		8
 #  define _R		4
