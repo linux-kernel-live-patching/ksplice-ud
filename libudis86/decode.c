@@ -6,6 +6,9 @@
  *
  * $Id$
  * $Log$
+ * Revision 1.3  2006/02/20 19:44:29  vivek5797
+ * Fixed bug in decode.c, opcmap.c
+ *
  * Revision 1.2  2006/02/20 17:48:19  vivek5797
  * Fixed bug in opcmap.c
  *
@@ -403,13 +406,14 @@ static void disasm_operands(register ud_t* ud)
   /* iop = instruction operand */
   ud_operand_t* iop = ud->operand;
 
+
   switch(mop1t) {
 	case OP_A :
 		decode_a(ud, mop1s, &(iop[0]));
 		break;
 	/* M[b] */
 	case OP_M :
-		if (MODRM_RM(src_peek(ud)) == 3)
+		if (MODRM_MOD(src_peek(ud)) == 3)
 			ud->error= 1;
 
 	/* E, G/P/V/I/CL/1/S */
@@ -630,6 +634,7 @@ static void disasm_operands(register ud_t* ud)
 		
 	case OP_ST0 : case OP_ST1 : case OP_ST2 : case OP_ST3 :
 	case OP_ST4 : case OP_ST5 : case OP_ST6 : case OP_ST7 :
+
 		iop[0].type = (mop1t-OP_ST0)  + R_ST0;
 		if (mop2t >= OP_ST0 && mop2t <= OP_ST7)
 			iop[1].type = (mop2t-OP_ST0) + R_ST0;

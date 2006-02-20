@@ -262,13 +262,13 @@ ud_opcmap_entry_t insntbl_1byte[0x100] = {
 /* 80 */ { Igrp,	NOARG,	NOARG,	NOARG,	Pnone },
 /* 81 */ { Igrp,	NOARG,	NOARG,	NOARG,	Pnone },
 /* 82 */ { Igrp,	NOARG,	NOARG,	NOARG,	Pinv64 },
-/* 83 */ { Igrp,	Ev,	Isb,	NOARG,	Po32 |Pa32 | REX(_R|_X|_B) },
+/* 83 */ { Igrp,	Ev,	Isb,	NOARG,	Po32 | Pa32 | REX(_R|_X|_B) },
 /* 84 */ { Itest,	Eb,	Gb,	NOARG,	Pa32 | REX(_R|_X|_B) },
-/* 85 */ { Itest,	Ev,	Gv,	NOARG,	Po32 |Pa32 | REX(_W|_R|_X|_B) },
+/* 85 */ { Itest,	Ev,	Gv,	NOARG,	Po32 | Pa32 | REX(_W|_R|_X|_B) },
 /* 86 */ { Ixchg,	Eb,	Gb,	NOARG,	Pa32 | REX(_R|_X|_B) },
-/* 87 */ { Ixchg,	Ev,	Gv,	NOARG,	Pa32 | REX(_W|_R|_X|_B) },
+/* 87 */ { Ixchg,	Ev,	Gv,	NOARG,	Po32 | Pa32 | REX(_W|_R|_X|_B) },
 /* 88 */ { Imov,	Eb,	Gb,	NOARG,	Pa32 | REX(_R|_X|_B) },
-/* 89 */ { Imov,	Ev,	Gv,	NOARG,	Pa32 | REX(_W|_R|_X|_B) },
+/* 89 */ { Imov,	Ev,	Gv,	NOARG,	Po32 | Pa32 | REX(_W|_R|_X|_B) },
 /* 8A */ { Imov,	Gb,	Eb,	NOARG,	Pa32 | REX(_R|_X|_B) },
 /* 8B */ { Imov,	Gv,	Ev,	NOARG,	Po32 | Pa32 | REX(_W|_R|_X|_B) },
 /* 8C */ { Imov,	Ev,	S,	NOARG,	Po32 |Pa32 | REX(_R|_X|_B) },
@@ -1770,98 +1770,98 @@ ud_opcmap_entry_t insntbl_groupE_op0F73_prefix66[0x8] = {
 
 /* D8 Opcode Map */
 ud_opcmap_entry_t insntbl_x87_opD8reg[0x8] = {
-	{ Ifadd,	Md,	NOARG,	NOARG,	Pa32 | REX(_R|_X|_B) },
-	{ Ifmul,	Md,	NOARG,	NOARG,	Pa32 | REX(_R|_X|_B) },
-	{ Ifcom,	Md,	NOARG,	NOARG,	Pa32 | REX(_R|_X|_B) },
-	{ Ifcomp,	Md,	NOARG,	NOARG,	Pa32 | REX(_R|_X|_B) },
-	{ Ifsub,	Md,	NOARG,	NOARG,	Pa32 | REX(_R|_X|_B) },
-	{ Ifsubr,	Md,	NOARG,	NOARG,	Pa32 | REX(_R|_X|_B) },
-	{ Ifdiv,	Md,	NOARG,	NOARG,	Pa32 | REX(_R|_X|_B) },
-	{ Ifdivr,	Md,	NOARG,	NOARG,	Pa32 | REX(_R|_X|_B) }
+	{ Ifadd,	Md,	NOARG,	NOARG,	Pcast | Pa32 | REX(_R|_X|_B) },
+	{ Ifmul,	Md,	NOARG,	NOARG,	Pcast | Pa32 | REX(_R|_X|_B) },
+	{ Ifcom,	Md,	NOARG,	NOARG,	Pcast | Pa32 | REX(_R|_X|_B) },
+	{ Ifcomp,	Md,	NOARG,	NOARG,	Pcast | Pa32 | REX(_R|_X|_B) },
+	{ Ifsub,	Md,	NOARG,	NOARG,	Pcast | Pa32 | REX(_R|_X|_B) },
+	{ Ifsubr,	Md,	NOARG,	NOARG,	Pcast | Pa32 | REX(_R|_X|_B) },
+	{ Ifdiv,	Md,	NOARG,	NOARG,	Pcast | Pa32 | REX(_R|_X|_B) },
+	{ Ifdivr,	Md,	NOARG,	NOARG,	Pcast | Pa32 | REX(_R|_X|_B) }
 };
 
 /* D9 Opcode Map */
 ud_opcmap_entry_t insntbl_x87_opD9reg[0x8] = {
-	{ Ifld,		Md,	NOARG,	NOARG,	Pa32 | REX(_R|_X|_B) },
+	{ Ifld,		Md,	NOARG,	NOARG,	Pcast | Pa32 | REX(_R|_X|_B) },
 	{ Iinvalid,	NOARG,	NOARG,	NOARG,	Pnone },
-	{ Ifst,		Md,	NOARG,	NOARG,	Pa32 | REX(_R|_X|_B) },
-	{ Ifstp,	Md,	NOARG,	NOARG,	Pa32 | REX(_R|_X|_B) },
-	{ Ifldenv,	M,	NOARG,	NOARG,	Pa32 | REX(_R|_X|_B) },
-	{ Ifldcw,	Mw,	NOARG,	NOARG,	Pa32 | REX(_R|_X|_B) },
-	{ Ifstenv,	M,	NOARG,	NOARG,	Pa32 | REX(_R|_X|_B) },
-	{ Ifstcw,	Mw,	NOARG,	NOARG,	Pa32 | REX(_R|_X|_B) }
+	{ Ifst,		Md,	NOARG,	NOARG,	Pcast | Pa32 | REX(_R|_X|_B) },
+	{ Ifstp,	Md,	NOARG,	NOARG,	Pcast | Pa32 | REX(_R|_X|_B) },
+	{ Ifldenv,	M,	NOARG,	NOARG,	Pcast | Pa32 | REX(_R|_X|_B) },
+	{ Ifldcw,	Mw,	NOARG,	NOARG,	Pcast | Pa32 | REX(_R|_X|_B) },
+	{ Ifstenv,	M,	NOARG,	NOARG,	Pcast | Pa32 | REX(_R|_X|_B) },
+	{ Ifstcw,	Mw,	NOARG,	NOARG,	Pcast | Pa32 | REX(_R|_X|_B) }
 };
 
 /* DA Opcode Map */
 ud_opcmap_entry_t insntbl_x87_opDAreg[0x8] = {
-	{ Ifiadd,	Md,	NOARG,	NOARG,	Pa32 | REX(_R|_X|_B) },
-	{ Ifimul,	Md,	NOARG,	NOARG,	Pa32 | REX(_R|_X|_B) },
-	{ Ificom,	Md,	NOARG,	NOARG,	Pa32 | REX(_R|_X|_B) },
-	{ Ificomp,	Md,	NOARG,	NOARG,	Pa32 | REX(_R|_X|_B) },
-	{ Ifisub,	Md,	NOARG,	NOARG,	Pa32 | REX(_R|_X|_B) },
-	{ Ifisubr,	Md,	NOARG,	NOARG,	Pa32 | REX(_R|_X|_B) },
-	{ Ifidiv,	Md,	NOARG,	NOARG,	Pa32 | REX(_R|_X|_B) },
-	{ Ifidivr,	Md,	NOARG,	NOARG,	Pa32 | REX(_R|_X|_B) }
+	{ Ifiadd,	Md,	NOARG,	NOARG,	Pcast | Pa32 | REX(_R|_X|_B) },
+	{ Ifimul,	Md,	NOARG,	NOARG,	Pcast | Pa32 | REX(_R|_X|_B) },
+	{ Ificom,	Md,	NOARG,	NOARG,	Pcast | Pa32 | REX(_R|_X|_B) },
+	{ Ificomp,	Md,	NOARG,	NOARG,	Pcast | Pa32 | REX(_R|_X|_B) },
+	{ Ifisub,	Md,	NOARG,	NOARG,	Pcast | Pa32 | REX(_R|_X|_B) },
+	{ Ifisubr,	Md,	NOARG,	NOARG,	Pcast | Pa32 | REX(_R|_X|_B) },
+	{ Ifidiv,	Md,	NOARG,	NOARG,	Pcast | Pa32 | REX(_R|_X|_B) },
+	{ Ifidivr,	Md,	NOARG,	NOARG,	Pcast | Pa32 | REX(_R|_X|_B) }
 };
 
 /* DB Opcode Map */
 ud_opcmap_entry_t insntbl_x87_opDBreg[0x8] = {
-	{ Ifild,	Md,	NOARG,	NOARG,	Pa32 | REX(_R|_X|_B) },
+	{ Ifild,	Md,	NOARG,	NOARG,	Pcast | Pa32 | REX(_R|_X|_B) },
 	{ Iinvalid,	NOARG,	NOARG,	NOARG,	Pnone },
-	{ Ifist,	Md,	NOARG,	NOARG,	Pa32 | REX(_R|_X|_B) },
-	{ Ifistp,	Md,	NOARG,	NOARG,	Pa32 | REX(_R|_X|_B) },
+	{ Ifist,	Md,	NOARG,	NOARG,	Pcast | Pa32 | REX(_R|_X|_B) },
+	{ Ifistp,	Md,	NOARG,	NOARG,	Pcast | Pa32 | REX(_R|_X|_B) },
 	{ Iinvalid,	NOARG,	NOARG,	NOARG,	Pnone },
-	{ Ifld,		M,	NOARG,	NOARG,	Pa32 | REX(_R|_X|_B) },
+	{ Ifld,		M,	NOARG,	NOARG,	Pcast | Pa32 | REX(_R|_X|_B) },
 	{ Iinvalid,  	NOARG,	NOARG,	NOARG,	Pnone },
-	{ Ifstp,	M,	NOARG,	NOARG,	Pa32 | REX(_R|_X|_B) }
+	{ Ifstp,	M,	NOARG,	NOARG,	Pcast | Pa32 | REX(_R|_X|_B) }
 };
 
 /* DC Opcode Map */
 ud_opcmap_entry_t insntbl_x87_opDCreg[0x8] = {
-	{ Ifadd,	Mq,	NOARG,	NOARG,	Pa32 | REX(_R|_X|_B) },
-	{ Ifmul,	Mq,	NOARG,	NOARG,	Pa32 | REX(_R|_X|_B) },
-	{ Ifcom,	Mq,	NOARG,	NOARG,	Pa32 | REX(_R|_X|_B) },
-	{ Ifcomp,	Mq,	NOARG,	NOARG,	Pa32 | REX(_R|_X|_B) },
-	{ Ifsub,	Mq,	NOARG,	NOARG,	Pa32 | REX(_R|_X|_B) },
-	{ Ifsubr,	Mq,	NOARG,	NOARG,	Pa32 | REX(_R|_X|_B) },
-	{ Ifdiv,	Mq,	NOARG,	NOARG,	Pa32 | REX(_R|_X|_B) },
-	{ Ifdivr,	Mq,	NOARG,	NOARG,	Pa32 | REX(_R|_X|_B) }
+	{ Ifadd,	Mq,	NOARG,	NOARG,	Pcast | Pa32 | REX(_R|_X|_B) },
+	{ Ifmul,	Mq,	NOARG,	NOARG,	Pcast | Pa32 | REX(_R|_X|_B) },
+	{ Ifcom,	Mq,	NOARG,	NOARG,	Pcast | Pa32 | REX(_R|_X|_B) },
+	{ Ifcomp,	Mq,	NOARG,	NOARG,	Pcast | Pa32 | REX(_R|_X|_B) },
+	{ Ifsub,	Mq,	NOARG,	NOARG,	Pcast | Pa32 | REX(_R|_X|_B) },
+	{ Ifsubr,	Mq,	NOARG,	NOARG,	Pcast | Pa32 | REX(_R|_X|_B) },
+	{ Ifdiv,	Mq,	NOARG,	NOARG,	Pcast | Pa32 | REX(_R|_X|_B) },
+	{ Ifdivr,	Mq,	NOARG,	NOARG,	Pcast | Pa32 | REX(_R|_X|_B) }
 };
 
 /* DD Opcode Map */
 ud_opcmap_entry_t insntbl_x87_opDDreg[0x8] = {
-	{ Ifld,		Mq,	NOARG,	NOARG,	Pa32 | REX(_R|_X|_B) },
+	{ Ifld,		Mq,	NOARG,	NOARG,	Pcast | Pa32 | REX(_R|_X|_B) },
 	{ Iinvalid,	NOARG,	NOARG,	NOARG,	Pnone },
-	{ Ifst,		Mq,	NOARG,	NOARG,	Pa32 | REX(_R|_X|_B) },
-	{ Ifstp,	Mq,	NOARG,	NOARG,	Pa32 | REX(_R|_X|_B) },
-	{ Ifrstor,	M,	NOARG,	NOARG,	Pa32 | REX(_R|_X|_B) },
+	{ Ifst,		Mq,	NOARG,	NOARG,	Pcast | Pa32 | REX(_R|_X|_B) },
+	{ Ifstp,	Mq,	NOARG,	NOARG,	Pcast | Pa32 | REX(_R|_X|_B) },
+	{ Ifrstor,	M,	NOARG,	NOARG,	Pcast | Pa32 | REX(_R|_X|_B) },
 	{ Iinvalid,	NOARG,	NOARG,	NOARG,	Pnone },
-	{ Ifsave,	M,	NOARG,	NOARG,	Pa32 | REX(_R|_X|_B) },
-	{ Ifstsw,	M,	NOARG,	NOARG,	Pa32 | REX(_R|_X|_B) }
+	{ Ifsave,	M,	NOARG,	NOARG,	Pcast | Pa32 | REX(_R|_X|_B) },
+	{ Ifstsw,	M,	NOARG,	NOARG,	Pcast | Pa32 | REX(_R|_X|_B) }
 };
 
 /* DE Opcode Map */
 ud_opcmap_entry_t insntbl_x87_opDEreg[0x8] = {
-	{ Ifiadd,	Mw,	NOARG,	NOARG,	Pa32 | REX(_R|_X|_B) },
-	{ Ifimul,	Mw,	NOARG,	NOARG,	Pa32 | REX(_R|_X|_B) },
-	{ Ificom,	Mw,	NOARG,	NOARG,	Pa32 | REX(_R|_X|_B) },
-	{ Ificomp,	Mw,	NOARG,	NOARG,	Pa32 | REX(_R|_X|_B) },
-	{ Ifisub,	Mw,	NOARG,	NOARG,	Pa32 | REX(_R|_X|_B) },
-	{ Ifisubr,	Mw,	NOARG,	NOARG,	Pa32 | REX(_R|_X|_B) },
-	{ Ifidiv,	Mw,	NOARG,	NOARG,	Pa32 | REX(_R|_X|_B) },
-	{ Ifidivr,	Mw,	NOARG,	NOARG,	Pa32 | REX(_R|_X|_B) }
+	{ Ifiadd,	Mw,	NOARG,	NOARG,	Pcast | Pa32 | REX(_R|_X|_B) },
+	{ Ifimul,	Mw,	NOARG,	NOARG,	Pcast | Pa32 | REX(_R|_X|_B) },
+	{ Ificom,	Mw,	NOARG,	NOARG,	Pcast | Pa32 | REX(_R|_X|_B) },
+	{ Ificomp,	Mw,	NOARG,	NOARG,	Pcast | Pa32 | REX(_R|_X|_B) },
+	{ Ifisub,	Mw,	NOARG,	NOARG,	Pcast | Pa32 | REX(_R|_X|_B) },
+	{ Ifisubr,	Mw,	NOARG,	NOARG,	Pcast | Pa32 | REX(_R|_X|_B) },
+	{ Ifidiv,	Mw,	NOARG,	NOARG,	Pcast | Pa32 | REX(_R|_X|_B) },
+	{ Ifidivr,	Mw,	NOARG,	NOARG,	Pcast | Pa32 | REX(_R|_X|_B) }
 };
 
 /* DF Opcode Map */
 ud_opcmap_entry_t insntbl_x87_opDFreg[0x8] = {
-	{ Ifild,	Mw,	NOARG,	NOARG,	Pa32 | REX(_R|_X|_B) },
+	{ Ifild,	Mw,	NOARG,	NOARG,	Pcast | Pa32 | REX(_R|_X|_B) },
 	{ Iinvalid,	NOARG,	NOARG,	NOARG,	Pnone },
-	{ Ifist,	Mw,	NOARG,	NOARG,	Pa32 | REX(_R|_X|_B) },
-	{ Ifistp,	Mw,	NOARG,	NOARG,	Pa32 | REX(_R|_X|_B) },
-	{ Ifbld,	M,	NOARG,	NOARG,	Pa32 | REX(_R|_X|_B) },
-	{ Ifild,	Mq,	NOARG,	NOARG,	Pa32 | REX(_R|_X|_B) },
-	{ Ifbstp,	M,	NOARG,	NOARG,	Pa32 | REX(_R|_X|_B) },
-	{ Ifistp,	Mq,	NOARG,	NOARG,	Pa32 | REX(_R|_X|_B) }
+	{ Ifist,	Mw,	NOARG,	NOARG,	Pcast | Pa32 | REX(_R|_X|_B) },
+	{ Ifistp,	Mw,	NOARG,	NOARG,	Pcast | Pa32 | REX(_R|_X|_B) },
+	{ Ifbld,	M,	NOARG,	NOARG,	Pcast | Pa32 | REX(_R|_X|_B) },
+	{ Ifild,	Mq,	NOARG,	NOARG,	Pcast | Pa32 | REX(_R|_X|_B) },
+	{ Ifbstp,	M,	NOARG,	NOARG,	Pcast | Pa32 | REX(_R|_X|_B) },
+	{ Ifistp,	Mq,	NOARG,	NOARG,	Pcast | Pa32 | REX(_R|_X|_B) }
 };
 
 /* D8 Opcode Map */
@@ -2538,6 +2538,7 @@ static void search_1byte_insn(register ud_t *ud)
 	else
 	/* check if the opcode points to an x87 instruction */
 	if ((ud->opcmap_entry)->mnemonic == Ix87) {
+
 		/* When the ModRM byte value falls within the range of
 		 * 0x00 - 0xBF, then the reg field selects the inst.
 		 */

@@ -75,7 +75,7 @@ int main(int argc, char **argv)
 		const char* hex = ud_asmout_hex(&ud_obj);
 
 		/* if the hex code is too long, split it */
-		if (strlen(hex) >= 16) {
+		if (strlen(hex) > 16) {
 			char part_1[25];
 			char part_2[25];
 			strncpy(part_1, hex,  16);
