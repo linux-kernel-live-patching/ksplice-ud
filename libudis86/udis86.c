@@ -36,8 +36,8 @@ extern void ud_set_input(ud_t* ud, ud_input_t input_type,
 			ud->source.input_type = INPUT_HOOK;
 			break;
 		case INPUT_BUFFERED:
-			ud->source.input.buffered.start = (char*) input;
-			ud->source.input.buffered.end = (char*)end;
+			ud->source.input.buffered.start = (uint8_t*) input;
+			ud->source.input.buffered.end = (uint8_t*) end;
 			ud->source.input_type = INPUT_BUFFERED;
 			break;
 		case INPUT_FILE:

@@ -502,8 +502,8 @@ typedef struct ud_src_t {
 	union {
 		int (*hook)();
 		struct {
-			char* start;
-			char* end;
+			uint8_t* start;
+			uint8_t* end;
 		} buffered;
 		FILE* file;		
 	} input;
