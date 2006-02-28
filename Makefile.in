@@ -14,8 +14,13 @@ uninstall:
 clean:
 	cd libudis86 && $(MAKE) clean
 	cd udcli && $(MAKE) clean
+test:
+	nasm test32.asm -f bin -o test.bin
+	udcli -32 < test.bin
+	@read
+	udcli -32 -att < test.bin
 distclean: clean
 	cd libudis86 && $(MAKE) distclean
 	cd udcli && $(MAKE) distclean
-	$(RM) -f config.h Makefile *.log *~ docs/*~
+	$(RM) -f config.h test.bin Makefile *.log *~ docs/*~
 	$(RM) -rf autom4te*.cache

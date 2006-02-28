@@ -6,6 +6,9 @@
  *
  * $Id$
  * $Log$
+ * Revision 1.4  2006/02/28 18:07:13  vivek5797
+ * More bugs eliminated.
+ *
  * Revision 1.3  2006/02/20 19:44:29  vivek5797
  * Fixed bug in decode.c, opcmap.c
  *
@@ -288,8 +291,12 @@ static void decode_modrm (
 	 * purpose register or mmx/sse/control/debug register
 	 */
 	if (mod == 3) {
+
+		/* determine the operand sizes */
+	  	op->size = resolve_operand_size(ud, size);
+
 		if (rm_type == 	T_GPR)	/* general purpose register */
-			op->type = decode_gpr(ud, size, rm);
+			op->type = decode_gpr(ud, op->size, rm);
 		else	op->type = resolve_reg(ud, rm_type, rm);
 	} else {
 		/* if in 64 bit mode, only 32/64 bit reg addressing is 
@@ -357,12 +364,12 @@ static void decode_modrm (
 		if (reg_type == T_GPR) /* general purpose register */
 			opreg->type = decode_gpr(ud, reg_size, reg);
 		else opreg->type = resolve_reg(ud, reg_type, reg);
-	}
-	
-  	/* determine the operand sizes */
-  	op->size = resolve_operand_size(ud, size);
-  	if (opreg)
+
 		opreg->size = resolve_operand_size(ud, reg_size);
+	}
+
+	/* determine the operand sizes */
+  	op->size = resolve_operand_size(ud, size);
 }
 
 /* decode_o() - Decodes offset */

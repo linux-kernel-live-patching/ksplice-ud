@@ -249,7 +249,13 @@ ud_syntax_map_t att_smap[] = {
   { J_IMM, 		"\1$\1\5"   },
   { P_32,		"\1$\1\30\1, $\1\31" },
   { P_48,		"\1$\1\32\1, $\1\33" },
-  { PRINT_I,		"\1$\1\50" }
+  { PRINT_I,		"\1$\1\50" },
+  { M_ESP,              "\60\6\1(%esp)\1" },
+  { M_ESP_OFF8,         "\60\6\2\1(%esp)\1" },
+  { M_ESP_OFF32,        "\60\6\4\1(%esp)\1" },
+  { M_RSP,              "\60\6\1(%rsp)\1" },
+  { M_RSP_OFF8,         "\60\6\2\1(%rsp)\1" },
+  { M_RSP_OFF32,        "\60\6\4\1(%rsp)\1" }
 };
 
 
@@ -339,6 +345,9 @@ extern void ud_translate_att(ud_t *ud)
 {
 	int syn_cast;
 
+	/* all instructions specify an operand cast */
+	ud->cast = 0;
+
 	/* address mode override */
 	if (ud->prefix.opr)
 		mkasm(ud,  "o32 ");
@@ -361,29 +370,34 @@ extern void ud_translate_att(ud_t *ud)
 	if (ud->mnemonic == Idb) {
 		mkasm(ud, ".byte 0x%x", ud->operand[0].lval.bits8u);
 		return;
-	 }  else {
-		if (ud->mnemonic == Ijmp || ud->mnemonic == Icall ) {
-			if ( ud->operand[0].size == SZ_dp || ud->operand[0].size == SZ_wp )
-				mkasm(ud,  "l");
-			syn_cast = 1;
-		}
+	 }
+
+	if (ud->mnemonic == Ijmp || ud->mnemonic == Icall ) {
+		if ( ud->operand[0].size == SZ_dp || ud->operand[0].size == SZ_wp )
+			mkasm(ud,  "l");
+		syn_cast = 1;
+		ud->cast = 1;
 		/* print the instruction mnemonic */
 		mkasm(ud, "%s", ud_mnemonics[ud->mnemonic]);
-	}
+	} else {
 
-	/* att instruction suffix */
-	if ( ud->operand[0].size == SZ_b || ud->operand[1].size == SZ_b)
-		mkasm(ud, "b");
-	else
-	if (ud->operand[0].size == SZ_w || ud->operand[1].size == SZ_w)
-		mkasm(ud, "w");
-	else
-	if (ud->operand[0].size == SZ_d  || ud->operand[1].size == SZ_d ||
-		ud->operand[1].size == SZ_dp || ud->operand[0].size == SZ_dp)
-		mkasm(ud, "l");
-	else
-	if (ud->operand[0].size == SZ_q  || ud->operand[1].size == SZ_q )
-		mkasm(ud, "q");
+		/* print the instruction mnemonic */
+		mkasm(ud, "%s", ud_mnemonics[ud->mnemonic]);
+
+		/* att instruction suffix */
+		if ( ud->operand[0].size == SZ_b || ud->operand[1].size == SZ_b)
+			mkasm(ud, "b");
+		else
+		if (ud->operand[0].size == SZ_w || ud->operand[1].size == SZ_w)
+			mkasm(ud, "w");
+		else
+		if (ud->operand[0].size == SZ_d  || ud->operand[1].size == SZ_d ||
+			ud->operand[1].size == SZ_dp || ud->operand[0].size == SZ_dp)
+			mkasm(ud, "l");
+		else
+		if (ud->operand[0].size == SZ_q  || ud->operand[1].size == SZ_q )
+			mkasm(ud, "q");
+	}
 
 	mkasm(ud, " ");
 
