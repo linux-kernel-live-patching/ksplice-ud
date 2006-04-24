@@ -1,154 +1,124 @@
-/* udis86.c
+/* -----------------------------------------------------------------------------
+ * udis86.c
  *
- * Copyright (c) 2002, 2003, 2004 Vivek Mohan <vivek@sig9.com>
- * All rights reserved.
- * See (LICENSE)
+ * Copyright (c) 2004, 2005, 2006, Vivek Mohan <vivek@sig9.com>
+ * All rights reserved. See LICENSE
+ * -----------------------------------------------------------------------------
  */
 
 #include <stdlib.h>
 #include <stdio.h>
-#include <stdarg.h>
-#include <assert.h>
-#include <udis86.h>
 #include <string.h>
-#include "source.h"
+#include <udis86.h>
 
-/* ud_init(ud_t *ud) - Initializes ud_t object.
+#include "input.h"
+#include "extern.h"
+
+/* =============================================================================
+ * ud_init() - Initializes ud_t object.
+ * =============================================================================
  */
-extern void ud_init(ud_t *ud)
+extern void ud_init(struct ud* u)
 {
-	memset((void*)ud, 0, sizeof(ud_t));
-	ud->dis_mode = MODE16;
-	ud->mnemonic = Iinvalid;
-	ud_src_init(ud);
-	ud_clear_insn(ud);
+  memset((void*)u, 0, sizeof(struct ud));
+  u->dis_mode = UD_MODE16;
+  u->mnemonic = UD_Iinvalid;
+  
+  ud_set_input_file(u, stdin);
 }
 
-/* ud_set_intput(ud_t, type, input, end) - Sets the input source for the 
- * disassembler.
+/* =============================================================================
+ * ud_disassemble() - disassembles one instruction and returns the number of 
+ * bytes disassembled. A zero means end of disassembly.
+ * =============================================================================
  */
-extern void ud_set_input(ud_t* ud, ud_input_t input_type, 
-				void *input, void *end)
+extern unsigned int ud_disassemble(struct ud* u, ud_type_t syn)
 {
-	switch(input_type) {
-		case INPUT_HOOK:
-			ud->source.input.hook = (int (*)())input;
-			ud->source.input_type = INPUT_HOOK;
-			break;
-		case INPUT_BUFFERED:
-			ud->source.input.buffered.start = (uint8_t*) input;
-			ud->source.input.buffered.end = (uint8_t*) end;
-			ud->source.input_type = INPUT_BUFFERED;
-			break;
-		case INPUT_FILE:
-			ud->source.input.file = (FILE*) input;
-			ud->source.input_type = INPUT_FILE;
-			break;
-		default:
-			ud->source.input.file = stdin;
-			ud->source.input_type = INPUT_FILE;
-			break;
-	}	
+  if (ud_input_end(u))
+	return 0;
+
+  if (ud_decode(u) == 0)
+	return 0;
+ 
+  if (syn == UD_SYN_ATT)
+	ud_translate_att(u);
+  else  ud_translate_intel(u);
+
+  return ud_asm_count(u);
 }
 
-/* wrappers */
-extern void ud_set_input_hook(ud_t* ud, int (*hook)()) 
-{ 
-	ud_set_input(ud, INPUT_HOOK, hook, NULL); 
-}
-
-extern void ud_set_input_buffered(ud_t* ud, char* buffer, size_t size) 
-{ 
-	ud_set_input(ud, INPUT_BUFFERED, buffer, buffer + size); 
-}
-
-extern void ud_set_input_file(ud_t* ud, FILE* filep) 
-{ 
-	ud_set_input(ud, INPUT_FILE, filep, NULL); 
-}
-
-
-/* ud_set_dis_mode(ud, mode) - sets the disassembly mode.
+/* =============================================================================
+ * ud_set_dis_mod() - Set Disassemly Mode.
+ * =============================================================================
  */
-extern void ud_set_dis_mode(ud_t* ud, ud_mode_t mode)
+extern void ud_set_dis_mode(struct ud* u, ud_type_t mode)
 {
-	switch(mode) {
-		case MODE16:
-		case MODE32:
-		case MODE64:
-			ud->dis_mode = mode;
-			break;
-		default:
-			ud->dis_mode = MODE16;
-	}
+  switch(mode) {
+	case UD_MODE16:
+	case UD_MODE32:
+	case UD_MODE64:
+		u->dis_mode = mode;
+		break;
+	default:
+		u->dis_mode = UD_MODE16;
+  }
 }
 
-/* ud_set_origin(ud, origin) - sets code origin.
+
+/* =============================================================================
+ * ud_set_origin() - Sets code origin. 
+ * =============================================================================
  */
-extern void ud_set_origin(ud_t* ud, unsigned int origin)
+extern void ud_set_origin(struct ud* u, unsigned int origin)
 {
-	ud->pc = origin;
+  u->pc = origin;
 }
 
-/* ud_asmout_offset(ud) - returns the offset.
+
+/* =============================================================================
+ * ud_asm() - returns the disassembled instruction
+ * =============================================================================
  */
-extern unsigned int ud_asmout_offset(ud_t* ud) 
+extern char* ud_asm(struct ud* u) 
 {
-	return ud->asmout.offset;
+  return u->asm_buffer;
 }
 
-/* ud_asmout_hex(ud) - returns the hex form of bytes disassembled.
+/* =============================================================================
+ * ud_asm_offset() - Returns the offset.
+ * =============================================================================
  */
-extern const char* ud_asmout_hex(ud_t* ud) 
+extern unsigned int ud_asm_offset(struct ud* u) 
 {
-	return ud->asmout.hexcode;
+  return u->asm_offset;
 }
 
-/* ud_asmout_insn(ud) - returns the translated assembly instrution.
+
+/* =============================================================================
+ * ud_asm_next() - Returns hex form of disassembled instruction.
+ * =============================================================================
  */
-extern const char* ud_asmout_insn(ud_t* ud) 
+extern char* ud_asm_hex(struct ud* u) 
 {
-	return ud->asmout.buffer;
+  return u->asm_hexcode;
 }
 
-/* disassembles one instruction and returns the number of bytes disassembled */
-extern unsigned int ud_disassemble(ud_t* ud, ud_syntax_t s)
+
+/* =============================================================================
+ * ud_asm_code() - Returns code disassembled.
+ * =============================================================================
+ */
+extern unsigned char* ud_asm_code(struct ud* u) 
 {
-	char* src_hex;
-	uint8_t* src_ptr;
-	unsigned int i = 0;
-	unsigned int src_bytes;
+  return u->inp_sess;
+}
 
-	/* if no more bytes to disassemble, leave */
-	if (ud_src_nomore(ud))
-		return 0;
 
-	/* decode */
-	ud_src_start(ud);
-	ud_decode(ud);
-
-	/* determine the number of bytes disassembled */
-	if ((src_bytes = ud->source.counter) == 0)
-		return(0);
-
-	/* set offset */
-	ud->asmout.fill_ptr = 0;
-	ud->asmout.offset = ud->pc;
-	ud->pc += src_bytes;
-
-	/* call syntax translator */
-	if (s == SYNTAX_ATT)
-		ud_translate_att(ud);
-	else ud_translate_intel(ud);
-
-	/* compose hex code */
-	src_ptr = ud->source.sess_ptr;
-	src_hex = ud->asmout.hexcode;
-	for (i = 0; i < src_bytes; ++i, ++src_ptr) {
-		sprintf(src_hex, "%02x", *src_ptr);
-		src_hex += 2;
-	}
-
-	/* return number of bytes disassembled */
-	return src_bytes;
+/* =============================================================================
+ * ud_asm_count() - Returns the count of bytes disassembled.
+ * =============================================================================
+ */
+extern unsigned int ud_asm_count(struct ud* u) 
+{
+  return u->inp_ctr;
 }
