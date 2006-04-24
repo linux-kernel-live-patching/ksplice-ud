@@ -5,13 +5,12 @@
  * See (LICENSE)
  */
 
-#ifndef _UDIS86_H_
-#define _UDIS86_H_
+#ifndef UDIS86_H
+#define UDIS86_H
 
-#define UDIS86_VERSION "1.0"
+#define UDIS86_VERSION 1
 
 #include <libudis86/types.h>
-#include <libudis86/macros.h>
 #include <libudis86/extern.h>
 
 #endif
