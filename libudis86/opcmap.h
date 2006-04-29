@@ -10,6 +10,8 @@
 
 #include "types.h"
 
+	/* Prefixes/Macros */
+
 #define Pnone		0x00
 #define Pa32		0x01
 #define P_A32(n)	((n) & 0x01)
@@ -19,13 +21,14 @@
 #define P_DEF64(n)	((n) & 0x08)
 #define Pinv64		0x10
 #define P_INV64(n)	((n) & 0x10)
-#define Psuff		0x20
-#define P_SUFF(n)	((n) & 0x20)
-#define Pdep32		0x40
-#define P_DEP32(n)	((n) & 0x40)
-#define Pcast		0x10000000
-#define P_CAST(n)	((n) & 0x10000000)
-#define P_PRFX(n)	((n) & ~0x20)
+#define Pc1		0x20
+#define P_C1(n)		((n) & 0x20)
+#define Pc2		0x40
+#define P_C2(n)		((n) & 0x40)
+#define Pc3		0x80
+#define P_C3(n)		((n) & 0x80)
+#define PdepM		0x100
+#define P_DEPM(n)	((n) & 0x100)
 #define REX(c)	((40 | c) << 16)
 #define P_REX_MASK(n)	(0x40 | (0xF & ((n) >> 16)))
 #define _W		8
@@ -43,6 +46,18 @@
 #define MODRM_NNN(b)	(((b) >> 3) & 7)
 #define MODRM_MOD(b)	(((b) >> 6) & 3)
 #define MODRM_RM(b)	((b) & 7)
+
+#define SZ_Z		1
+#define SZ_V		2
+#define SZ_P		3
+#define	SZ_WP		4
+#define SZ_DP		5
+#define	SZ_MDQ		6
+#define SZ_RDQ		7
+#define SZ_B 		8
+#define SZ_W 		16
+#define SZ_D		32
+#define SZ_Q 		64
 
 /* -----------------------------------------------------------------------------
  * Enumeration of types of the operands in the opcode map. The naming was 
@@ -137,8 +152,8 @@ enum map_operand_type
 
 struct map_operand 
 {
-  enum map_operand_type	type;
-  enum ud_type			size;
+  enum map_operand_type		type;
+  uint8_t 			size;
 };
 
 struct map_entry 
@@ -149,5 +164,8 @@ struct map_entry
   struct map_operand		operand3;		
   uint32_t 			prefix;
 };
+
+void ud_search_map(struct ud*);
+enum ud_mnemonic_code ud_map_get_3dnow(uint8_t);
 
 #endif

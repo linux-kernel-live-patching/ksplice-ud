@@ -1,104 +1,214 @@
-/* udcli.c
+/* -----------------------------------------------------------------------------
+ * udcli.c - front end to udis86.
  *
- * Copyright (c) 2002, 2003, 2004, 2005, 2006 Vivek Mohan <vivek@sig9.com>
+ * Copyright (c) 2004, 2005, 2006 Vivek Mohan <vivek@sig9.com>
  * All rights reserved.
  * See (LICENSE)
+ * -----------------------------------------------------------------------------
  */
 
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <ctype.h>
+#include <inttypes.h>
 #include <udis86.h>
 
 /* help string */
-static char help[] = {
- "usage: %s [-option[s]]\n"
- "This udis86 front-end reads bytes from STDIN.\n"
- "options:\n"
- "  -16         : 16-bit code.\n"
- "  -32         : 32-bit code.\n"
- "  -64         : 64-bit code.\n"
- "  -o <origin> : code origin in decimal system.\n"
- "  -intel      : Intel (NASM like) syntax.\n"
- "  -att        : AT&T (GNU as) syntax.\n"
- "\n"
- "Udis86 Disassembler for x86 and x86-64 (AMD64)\n" 
- "http://udis86.sourceforge.net/\n"
- "Author: Vivek Mohan, (http://sig9.com/~vivek/)\n"
+static char help[] = 
+{
+  "Usage: %s [-option[s]]\n"
+  "Takes input from <STDIN>\n"
+  "Options:\n"
+  "    -16      : Set the disassembly mode to 16 bits. \n"
+  "    -32      : Set the disassembly mode to 32 bits. (default)\n"
+  "    -64      : Set the disassembly mode to 64 bits.\n"
+  "    -intel   : Set the output to INTEL (NASM like) syntax. (default)\n"
+  "    -att     : Set the output to AT&T (GAS like) syntax.\n"
+  "    -o <pc>  : Set the value of program counter to <pc>. (default = 0)\n"
+  "    -s <n>   : Set the number of bytes to skip before disassembly to <n>.\n"
+  "    -c <n>   : Set the number of bytes to disassemble to <n>.\n"
+  "    -x       : Set the input mode to whitespace seperated 8-bit numbers in\n"
+  "               hexadecimal representation. Example: 0f 01 ae 00\n"
+  "    -noff    : Do not display the offset of instructions.\n"
+  "    -nohex   : Do not display the hexadecimal code of instructions.\n"
+  "    -h       : Display this help message.\n"
+  "\n"
+  "Udcli is a front-end to the Udis86 Disassembler Library.\n" 
+  "http://udis86.sourceforge.net/\n"
 };
 
-	
+FILE* fptr = NULL;
+uint64_t o_skip = 0;
+uint64_t o_count = 0;
+unsigned char o_do_count= 0;
+unsigned char o_do_off = 1;
+unsigned char o_do_hex = 1;
+unsigned char o_do_x = 0;
 
-/* main */
+int input_hook_x(ud_t* u);
+int input_hook_file(ud_t* u);
+
 int main(int argc, char **argv)
 {
-	char *prog_path = *argv;
-	
-	ud_type_t syntax = UD_SYN_INTEL;
+  char *prog_path = *argv;
+  ud_t ud_obj;
+  int mode = 0;
 
-	/* udis86 object */
-	ud_t ud_obj;
+  /* initialize */
+  ud_init(&ud_obj);
+  ud_set_mode(&ud_obj, 32);
+  ud_set_syntax(&ud_obj, UD_SYN_INTEL);
 
-	/* initialize */
-	ud_init(&ud_obj);
+  fptr = stdin;
 
-	argv++;
+  argv++;
 
-	/* loop through the args */
-	while(--argc > 0) {
-		if (strcmp(*argv,"-16") == 0)
-			ud_set_dis_mode(&ud_obj, UD_MODE16);
-		else if (strcmp(*argv,"-32") == 0)
-			ud_set_dis_mode(&ud_obj, UD_MODE32);
-		else if (strcmp(*argv,"-64") == 0)
-			ud_set_dis_mode(&ud_obj, UD_MODE64);
-		else if (strcmp(*argv,"-intel") == 0)
-			syntax = UD_SYN_INTEL;
-		else if (strcmp(*argv,"-att") == 0)
-			syntax = UD_SYN_ATT;
-		else if (strcmp(*argv,"-o") == 0) {
-			if (--argc)
-				ud_set_origin(&ud_obj, atoi(*(++argv)));
-			else 	printf("-o <origin>\n");
-
-		} else {
+  /* loop through the args */
+  while(--argc > 0) {
+	if (strcmp(*argv,"-16") == 0) {
+		ud_set_mode(&ud_obj, 16);
+		mode = 16;
+	} else if (strcmp(*argv,"-32") == 0) {
+		ud_set_mode(&ud_obj, 32);
+		mode = 32;
+	} else if (strcmp(*argv,"-64") == 0) {
+		ud_set_mode(&ud_obj, 64);
+		mode = 64;
+	} else if (strcmp(*argv,"-intel") == 0)
+		ud_set_syntax(&ud_obj, UD_SYN_INTEL);
+	else if (strcmp(*argv,"-att") == 0)
+		ud_set_syntax(&ud_obj, UD_SYN_ATT);
+	else if (strcmp(*argv,"-noff") == 0)
+		o_do_off = 0;
+	else if (strcmp(*argv,"-nohex") == 0)
+		o_do_hex = 0;
+	else if (strcmp(*argv,"-x") == 0)
+		o_do_x = 1;
+	else if (strcmp(*argv,"-s") == 0)
+		if (--argc) {
+			char* s = *(++argv);
+			if (sscanf(s, "%lld", &o_skip) == 0)
+				fprintf(stderr, "Invalid value given for -s.\n");
+		} else { 
+			fprintf(stderr, "No value given for -s.\n");
 			printf(help, prog_path);
-			return 0;
-		} 
-		argv++;
-	}
-
-	/* set input to STDIN */
-	ud_set_input_file(&ud_obj, stdin);
-
-	/* disassembly loop */
-	while (ud_disassemble(&ud_obj, syntax)) {
-
-		/* get hex code */
-		char* hex = ud_asm_hex(&ud_obj);
-
-		/* if the hex code is too long, split it */
-		if (strlen(hex) > 16) {
-			char part_1[25];
-			char part_2[25];
-			strncpy(part_1, hex,  16);
-			strcpy (part_2, hex + 16);
-
-			/* print part 1 */
-			printf("%08x %-16s %-24s\n", 
-				ud_asm_offset(&ud_obj),
-				part_1,
-				ud_asm(&ud_obj)	);
-			/* print part 2 */
-			printf("%8s %-16s\n", "", part_2);
-		} else {
-			printf("%08x %-16s %-24s\n", 
-				ud_asm_offset(&ud_obj),
-				hex,
-				ud_asm(&ud_obj));
+			exit(EXIT_FAILURE);
+		}
+	else if (strcmp(*argv,"-c") == 0)
+		if (--argc) {
+			o_do_count= 1;
+			char* s = *(++argv);
+			if (sscanf(s, "%lld", &o_count) == 0)
+				fprintf(stderr, "Invalid value given for -c.\n");
+		} else { 
+			fprintf(stderr, "No value given for -c.\n");
+			printf(help, prog_path);
+			exit(EXIT_FAILURE);
+		}
+	else if (strcmp(*argv,"-o") == 0) {
+		if (--argc) {
+			uint64_t pc = 0;
+			char* s = *(++argv);
+			if (sscanf(s, "%llx", &pc) == 0)
+				fprintf(stderr, "Invalid value given for -o.\n");
+			ud_set_pc(&ud_obj, pc);
+		} else { 
+			fprintf(stderr, "No value given for -o.\n");
+			printf(help, prog_path);
+			exit(EXIT_FAILURE);
+		}
+	} else if((*argv)[0] == '-') {
+		fprintf(stderr, "Invalid option %s.\n", *argv);
+		printf(help, prog_path);
+		exit(EXIT_FAILURE);
+	} else {
+		static int i = 0;
+		char *f = *argv;
+		if (i) {
+			fprintf(stderr, "Multiple files specified.\n");
+			exit(EXIT_FAILURE);
+		} else i = 1;
+		if ((fptr = fopen(f, "rb")) == NULL) {
+			fprintf(stderr, "Failed to open file: %s.\n", f);
+				exit(EXIT_FAILURE);
 		}
 	}
+	argv++;
+  }
+
+  if (o_do_x)
+	ud_set_input_hook(&ud_obj, input_hook_x);
+  else	ud_set_input_hook(&ud_obj, input_hook_file);	
+
+  if (o_skip) {
+	o_count += o_skip;
+	ud_input_skip(&ud_obj, o_skip);
+  }
+
+  /* disassembly loop */
+  while (ud_disassemble(&ud_obj)) {
+	if (o_do_off)
+		printf("%016llx ", ud_insn_off(&ud_obj));
+	if (o_do_hex) {
+		char* hex1, *hex2;
+		char c;
+		hex1 = ud_insn_hex(&ud_obj);
+		hex2 = hex1 + 16;
+		c = hex1[16];
+		hex1[16] = 0;
+		printf("%-16s %-24s", hex1, ud_insn_asm(&ud_obj));
+		hex1[16] = c;
+		if (strlen(hex1) > 16) {
+			printf("\n");
+			if (o_do_off)
+				printf("%15s -", "");
+			printf("%-16s", hex2);
+		}
+	} 
+	else printf(" %-24s", ud_insn_asm(&ud_obj));
 
 	printf("\n");
-	return 0;
+  }
+  
+  exit(EXIT_SUCCESS);
+  return 0;
+}
+
+int input_hook_x(ud_t* u)
+{
+  unsigned int c, i;
+
+  if (o_do_count) {
+	if (! o_count)
+		return UD_EOI;
+	else --o_count;
+  }
+
+  i = fscanf(fptr, "%x", &c);
+
+  if (i == EOF)
+	return UD_EOI;
+  if (i == 0) {
+	fprintf(stderr, "Error: Invalid input, should be in hexadecimal form (8-bit).\n");
+	return UD_EOI;
+  }
+  if (c > 0xFF)
+	fprintf(stderr, "Warning: Casting non-8-bit input (%x), to %x.\n", c, c & 0xFF);
+  return (int) (c & 0xFF);
+}	
+
+int input_hook_file(ud_t* u)
+{
+  int c;
+
+  if (o_do_count) {
+	  if (! o_count) {
+		return -1;
+	  } else o_count -- ;
+  }
+
+  if ((c = fgetc(fptr)) == EOF)
+	return UD_EOI;
+  return c;
 }

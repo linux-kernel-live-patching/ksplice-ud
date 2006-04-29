@@ -1,16 +1,10 @@
-/* syn.c
+/* -----------------------------------------------------------------------------
+ * syn.c
  *
  * Copyright (c) 2002, 2003, 2004 Vivek Mohan <vivek@sig9.com>
- * All rights reserved.
- * See (LICENSE)
+ * All rights reserved. See (LICENSE)
+ * -----------------------------------------------------------------------------
  */
-
-#include <stdarg.h>
-#include <stdlib.h>
-#include <stdio.h>
-#include <udis86.h>
-#include "syn.h"
-#include "opcmap.h"
 
 /* -----------------------------------------------------------------------------
  * Intel Register Table - Order Matters (types.h)!

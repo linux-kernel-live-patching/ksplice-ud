@@ -24,7 +24,6 @@ btr
 bts
 call
 cbw
-cdq
 cdqe
 clc
 cld
@@ -90,6 +89,7 @@ cvttsi2ss
 cvttss2si
 cwd
 cwde
+cdq
 daa
 das
 dec
@@ -215,7 +215,7 @@ int
 into
 invd
 invlpg
-iret
+iretw
 iretd
 iretq
 jcxz
@@ -389,7 +389,7 @@ pmuludq
 pop
 popa
 popad
-popf
+popfw
 popfd
 popfq
 por
@@ -430,7 +430,7 @@ punpcklwd
 push
 pusha
 pushad
-pushf
+pushfw
 pushfd
 pushfq
 pxor
@@ -544,4 +544,19 @@ ss
 x87
 3dnow
 db
+cmpxchg16b
+stosq
+int3
+movsldup
+movshdup
+movddup
+rdtscp
+vmrun
+vmmcall
+vmload
+vmsave
+stgi
+clgi
+skinit
+invlpga
 none

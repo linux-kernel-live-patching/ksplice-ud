@@ -5,7 +5,6 @@
  * All rights reserved. See LICENSE
  * -----------------------------------------------------------------------------
  */
-
 #ifndef UD_TYPES_H
 #define UD_TYPES_H
 
@@ -75,27 +74,8 @@ enum ud_type
   UD_R_RIP,
 
   /* Operand Types */
-  UD_OP_IMM8,	UD_OP_IMM16,	UD_OP_IMM32,	UD_OP_IMM64,
-  UD_OP_JIMM, 	UD_OP_PTR32, 	UD_OP_PTR48,	UD_OP_CONST, 	
-  UD_OP_MEM,	UD_OP_REG,	UD_OP_OFF8,	UD_OP_OFF16,
-  UD_OP_OFF32,	UD_OP_OFF64,	UD_OP_SIB,	UD_OP_RSIB,
-  UD_OP_SID,	UD_OP_RSID,
-
-  /* Mode */
-  UD_MODE16,	UD_MODE32,	UD_MODE64,
-
-  /* Input Type */
-  UD_INP_HOOK,	UD_INP_BUFF,
-	
-  /* Syntax Type */
-  UD_SYN_INTEL,	UD_SYN_ATT,
-
-  /* Operand Size Types */
-  UD_SZ_BYTE,	UD_SZ_SBYTE,	UD_SZ_WORD,	UD_SZ_DWORD,
-  UD_SZ_QWORD,	UD_SZ_Z,	UD_SZ_V,	UD_SZ_VW,
-  UD_SZ_P,	UD_SZ_WP, 	UD_SZ_DP,	UD_SZ_JBYTE,
-  UD_SZ_JWORD,	UD_SZ_JDWORD,	UD_SZ_X,	UD_SZ_M
-
+  UD_OP_REG,	UD_OP_MEM,	UD_OP_PTR,	UD_OP_IMM,	
+  UD_OP_JIMM,	UD_OP_CONST
 };
 
 /* -----------------------------------------------------------------------------
@@ -104,9 +84,8 @@ enum ud_type
  */
 struct ud_operand 
 {
-  enum ud_type		size;
   enum ud_type		type;
-
+  uint8_t		size;
   union {
 	int8_t		sbyte;
 	uint8_t		ubyte;
@@ -136,44 +115,46 @@ struct ud_operand
 struct ud
 {
   struct map_entry*	opcmap_entry;
+  enum ud_mnemonic_code	mnemonic;
   struct ud_operand	operand[3];
 
-  unsigned long		pc;
-  int			error;
+  uint64_t		pc;
+  uint8_t		error;
 
   int 			(*inp_hook) (struct ud*);
-  int 			inp_ctr;
-  unsigned char 	inp_cache[64];
-  unsigned char*	inp_curr;
-  unsigned char*	inp_fill;
-  unsigned char*	inp_buff;
-  unsigned char*	inp_buff_end;
-  unsigned char*	inp_sess;
-  int			inp_end;
   FILE*			inp_file;
+  uint8_t		inp_ctr;
+  uint8_t 		inp_cache[64];
+  uint8_t*		inp_curr;
+  uint8_t*		inp_fill;
+  uint8_t*		inp_buff;
+  uint8_t*		inp_buff_end;
+  uint8_t*		inp_sess;
+  uint8_t		inp_end;
 
-  unsigned char 	pfx_rex;
-  unsigned char 	pfx_seg;
-  unsigned char 	pfx_opr;
-  unsigned char 	pfx_adr;
-  unsigned char 	pfx_lock;
-  unsigned char 	pfx_rep;
-  unsigned char 	pfx_repe;
-  unsigned char 	pfx_repne;
+  uint8_t	 	pfx_rex;
+  uint8_t 		pfx_seg;
+  uint8_t 		pfx_opr;
+  uint8_t 		pfx_adr;
+  uint8_t 		pfx_lock;
+  uint8_t 		pfx_rep;
+  uint8_t 		pfx_repe;
+  uint8_t 		pfx_repne;
+  uint8_t		default64;
+  uint8_t		dis_mode;
+  uint8_t		opr_mode;
+  uint8_t		adr_mode;
+  uint8_t		br_far;
+  uint8_t		br_near;
+  uint8_t		c1;
+  uint8_t		c2;
+  uint8_t		c3;
 
-  unsigned char		sfx;
-  unsigned char		default64;
-  unsigned char		cast;
-  enum ud_type		dis_mode;
-  enum ud_type		opr_mode;
-  enum ud_type		adr_mode;
-
-  unsigned int		asm_offset;
-  char			asm_hexcode[32];
-  char			asm_buffer[64];
-  unsigned int		asm_fill;
-
-  enum ud_mnemonic_code	mnemonic;
+  void			(*translator)(struct ud*);
+  uint64_t		insn_offset;
+  char			insn_hexcode[32];
+  char			insn_buffer[64];
+  unsigned int		insn_fill;
 };
 
 /* -----------------------------------------------------------------------------
@@ -185,5 +166,9 @@ typedef enum ud_mnemonic_code	ud_mnemonic_code_t;
 
 typedef struct ud 		ud_t;
 typedef struct ud_operand 	ud_operand_t;
+
+#define UD_SYN_INTEL		ud_translate_intel
+#define UD_SYN_ATT		ud_translate_att
+#define UD_EOI			-1
 
 #endif

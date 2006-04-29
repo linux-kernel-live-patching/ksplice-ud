@@ -9,14 +9,14 @@
 #define UD_INPUT_H
 
 #include <inttypes.h>
-#include <udis86.h>
+#include "types.h"
 
-extern unsigned char inp_next(struct ud*);
-extern unsigned char inp_peek(struct ud*);
-extern uint8_t inp_uint8(struct ud*);
-extern uint16_t inp_uint16(struct ud*);
-extern uint32_t inp_uint32(struct ud*);
-extern uint64_t inp_uint64(struct ud*);
+uint8_t inp_next(struct ud*);
+uint8_t inp_peek(struct ud*);
+uint8_t inp_uint8(struct ud*);
+uint16_t inp_uint16(struct ud*);
+uint32_t inp_uint32(struct ud*);
+uint64_t inp_uint64(struct ud*);
 
 /* inp_init() - Initializes the input system. */
 static inline void inp_init(struct ud* u)
@@ -58,12 +58,25 @@ static inline void inp_reset(struct ud* u)
   u->inp_ctr = 0;
 }
 
-/* inp_cur() - Returns the current input byte. */
-static inline unsigned char inp_curr(struct ud* u)
+/* inp_sess() - Returns the pointer to current session. */
+static inline uint8_t* inp_sess(struct ud* u)
 {
-	if (u->inp_curr == NULL) 
-		return(0);
-	return *(u->inp_curr);
+  return u->inp_sess;
+}
+
+/* inp_cur() - Returns the current input byte. */
+static inline uint8_t inp_curr(struct ud* u)
+{
+  if (u->inp_curr == NULL) 
+	return(0);
+  return *(u->inp_curr);
+}
+
+/* inp_move() - move ahead n input bytes. */
+static inline void inp_move(struct ud* u, size_t n)
+{
+  while (n--)
+	inp_next(u);
 }
 
 #endif

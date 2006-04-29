@@ -1,5 +1,5 @@
 /* -----------------------------------------------------------------------------
- * input.h
+ * input.c
  *
  * Copyright (c) 2004, 2005, 2006, Vivek Mohan <vivek@sig9.com>
  * All rights reserved. See LICENSE
@@ -15,7 +15,8 @@
  * inp_buff_hook() - Hook for buffered inputs.
  * -----------------------------------------------------------------------------
  */
-static int inp_buff_hook(struct ud* u)
+static int 
+inp_buff_hook(struct ud* u)
 {
   if (u->inp_buff < u->inp_buff_end)
 	return *u->inp_buff++;
@@ -26,7 +27,8 @@ static int inp_buff_hook(struct ud* u)
  * inp_buff_hook() - Hook for FILE inputs.
  * -----------------------------------------------------------------------------
  */
-static int inp_file_hook(struct ud* u)
+static int 
+inp_file_hook(struct ud* u)
 {
   return fgetc(u->inp_file);
 }
@@ -35,7 +37,8 @@ static int inp_file_hook(struct ud* u)
  * ud_inp_set_hook() - Sets input hook.
  * =============================================================================
  */
-extern void ud_set_input_hook(register struct ud* u, int (*hook)(struct ud*))
+extern void 
+ud_set_input_hook(register struct ud* u, int (*hook)(struct ud*))
 {
   u->inp_hook = hook;
   inp_init(u);
@@ -45,8 +48,8 @@ extern void ud_set_input_hook(register struct ud* u, int (*hook)(struct ud*))
  * ud_inp_set_buffer() - Set buffer as input.
  * =============================================================================
  */
-extern void ud_set_input_buffer(register struct ud* u, unsigned char* buf, 
-				unsigned int len)
+extern void 
+ud_set_input_buffer(register struct ud* u, uint8_t* buf, size_t len)
 {
   u->inp_hook = inp_buff_hook;
   u->inp_buff = buf;
@@ -58,7 +61,8 @@ extern void ud_set_input_buffer(register struct ud* u, unsigned char* buf,
  * ud_input_set_file() - Set buffer as input.
  * =============================================================================
  */
-extern void ud_set_input_file(register struct ud* u, FILE* f)
+extern void 
+ud_set_input_file(register struct ud* u, FILE* f)
 {
   u->inp_hook = inp_file_hook;
   u->inp_file = f;
@@ -69,10 +73,11 @@ extern void ud_set_input_file(register struct ud* u, FILE* f)
  * ud_input_skip() - Skip n input bytes.
  * =============================================================================
  */
-extern void ud_input_skip(struct ud* u, size_t n)
+extern void 
+ud_input_skip(struct ud* u, size_t n)
 {
   while (n--) {
-	inp_next(u);
+	u->inp_hook(u);
   }
 }
 
@@ -80,7 +85,8 @@ extern void ud_input_skip(struct ud* u, size_t n)
  * ud_input_end() - Test for end of input.
  * =============================================================================
  */
-extern int ud_input_end(struct ud* u)
+extern int 
+ud_input_end(struct ud* u)
 {
   return (u->inp_curr == u->inp_fill) && u->inp_end;
 }
@@ -89,7 +95,8 @@ extern int ud_input_end(struct ud* u)
  * inp_next() - Loads and returns the next byte from input.
  * -----------------------------------------------------------------------------
  */
-extern unsigned char inp_next(struct ud* u) 
+extern uint8_t
+inp_next(struct ud* u) 
 {
   int c;
 	
@@ -128,7 +135,8 @@ extern unsigned char inp_next(struct ud* u)
  * inp_cur() - Peek into the next byte in source. 
  * -----------------------------------------------------------------------------
  */
-extern unsigned char inp_peek(struct ud* u) 
+extern uint8_t
+inp_peek(struct ud* u) 
 {
 	unsigned char r = inp_next(u);
 	inp_back(u);
@@ -139,7 +147,8 @@ extern unsigned char inp_peek(struct ud* u)
  *  inp_uintN() - return uintN from source.
  *------------------------------------------------------------------------------
  */
-extern uint8_t inp_uint8(struct ud* u)
+extern uint8_t 
+inp_uint8(struct ud* u)
 {
 	uint8_t *ref;
 	return inp_next(u);
@@ -147,24 +156,26 @@ extern uint8_t inp_uint8(struct ud* u)
 	return *((uint8_t*)ref);
 }
 
-extern uint16_t inp_uint16(struct ud* u)
+extern uint16_t 
+inp_uint16(struct ud* u)
 {
 	uint8_t *ref;
 
 	inp_next(u);
 	ref = u->inp_curr;
-	ud_input_skip(u, sizeof(uint16_t) - 1);
+	inp_move(u, sizeof(uint16_t) - 1);
 
 	return *((uint8_t*)ref) | (*((uint8_t*)(ref+1)) << 8);
 }
 
-extern uint32_t inp_uint32(struct ud* u)
+extern uint32_t 
+inp_uint32(struct ud* u)
 {
 	uint8_t *ref;
 	inp_next(u);
 	ref = u->inp_curr;
 
-	ud_input_skip(u, sizeof(uint32_t) - 1);
+	inp_move(u, sizeof(uint32_t) - 1);
 
 	return *((uint32_t*)ref);
 
@@ -174,14 +185,15 @@ extern uint32_t inp_uint32(struct ud* u)
 		(*((uint8_t*)(ref+3)) << 24);
 }
 
-extern uint64_t inp_uint64(struct ud* u)
+extern uint64_t 
+inp_uint64(struct ud* u)
 {
 	uint8_t *ref;
 	uint64_t ret, r;
 
 	inp_next(u);
 	ref = u->inp_curr;
-	ud_input_skip(u, sizeof(uint64_t) - 1);
+	inp_move(u, sizeof(uint64_t) - 1);
 
 	ret = *((uint8_t*)ref) | 
 		(*((uint8_t*)(ref+1)) << 8) |

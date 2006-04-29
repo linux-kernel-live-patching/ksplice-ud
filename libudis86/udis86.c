@@ -18,12 +18,13 @@
  * ud_init() - Initializes ud_t object.
  * =============================================================================
  */
-extern void ud_init(struct ud* u)
+extern void 
+ud_init(struct ud* u)
 {
   memset((void*)u, 0, sizeof(struct ud));
-  u->dis_mode = UD_MODE16;
+  ud_set_mode(u, 16);
   u->mnemonic = UD_Iinvalid;
-  
+  ud_set_pc(u, 0);
   ud_set_input_file(u, stdin);
 }
 
@@ -32,93 +33,100 @@ extern void ud_init(struct ud* u)
  * bytes disassembled. A zero means end of disassembly.
  * =============================================================================
  */
-extern unsigned int ud_disassemble(struct ud* u, ud_type_t syn)
+extern unsigned int
+ud_disassemble(struct ud* u)
 {
   if (ud_input_end(u))
 	return 0;
-
   if (ud_decode(u) == 0)
 	return 0;
- 
-  if (syn == UD_SYN_ATT)
-	ud_translate_att(u);
-  else  ud_translate_intel(u);
-
-  return ud_asm_count(u);
+  if (u->translator)
+	u->translator(u);
+  return ud_insn_len(u);
 }
 
 /* =============================================================================
- * ud_set_dis_mod() - Set Disassemly Mode.
+ * ud_set_mode() - Set Disassemly Mode.
  * =============================================================================
  */
-extern void ud_set_dis_mode(struct ud* u, ud_type_t mode)
+extern void 
+ud_set_mode(struct ud* u, uint8_t m)
 {
-  switch(mode) {
-	case UD_MODE16:
-	case UD_MODE32:
-	case UD_MODE64:
-		u->dis_mode = mode;
-		break;
-	default:
-		u->dis_mode = UD_MODE16;
+  switch(m) {
+	case 16:
+	case 32:
+	case 64: u->dis_mode = m ; return;
+	default: u->dis_mode = 16; return;
   }
 }
 
-
 /* =============================================================================
- * ud_set_origin() - Sets code origin. 
+ * ud_set_pc() - Sets code origin. 
  * =============================================================================
  */
-extern void ud_set_origin(struct ud* u, unsigned int origin)
+extern void 
+ud_set_pc(struct ud* u, uint64_t o)
 {
-  u->pc = origin;
+  u->pc = o;
+}
+
+/* =============================================================================
+ * ud_set_syntax() - Sets the output syntax.
+ * =============================================================================
+ */
+extern void 
+ud_set_syntax(struct ud* u, void (*t)(struct ud*))
+{
+  u->translator = t;
+}
+
+/* =============================================================================
+ * ud_insn() - returns the disassembled instruction
+ * =============================================================================
+ */
+extern char* 
+ud_insn_asm(struct ud* u) 
+{
+  return u->insn_buffer;
+}
+
+/* =============================================================================
+ * ud_insn_offset() - Returns the offset.
+ * =============================================================================
+ */
+extern uint64_t
+ud_insn_off(struct ud* u) 
+{
+  return u->insn_offset;
 }
 
 
 /* =============================================================================
- * ud_asm() - returns the disassembled instruction
+ * ud_insn_hex() - Returns hex form of disassembled instruction.
  * =============================================================================
  */
-extern char* ud_asm(struct ud* u) 
+extern char* 
+ud_insn_hex(struct ud* u) 
 {
-  return u->asm_buffer;
+  return u->insn_hexcode;
 }
 
 /* =============================================================================
- * ud_asm_offset() - Returns the offset.
+ * ud_insn_ptr() - Returns code disassembled.
  * =============================================================================
  */
-extern unsigned int ud_asm_offset(struct ud* u) 
-{
-  return u->asm_offset;
-}
-
-
-/* =============================================================================
- * ud_asm_next() - Returns hex form of disassembled instruction.
- * =============================================================================
- */
-extern char* ud_asm_hex(struct ud* u) 
-{
-  return u->asm_hexcode;
-}
-
-
-/* =============================================================================
- * ud_asm_code() - Returns code disassembled.
- * =============================================================================
- */
-extern unsigned char* ud_asm_code(struct ud* u) 
+extern uint8_t* 
+ud_insn_ptr(struct ud* u) 
 {
   return u->inp_sess;
 }
 
-
 /* =============================================================================
- * ud_asm_count() - Returns the count of bytes disassembled.
+ * ud_insn_len() - Returns the count of bytes disassembled.
  * =============================================================================
  */
-extern unsigned int ud_asm_count(struct ud* u) 
+extern unsigned int 
+ud_insn_len(struct ud* u) 
 {
   return u->inp_ctr;
 }
