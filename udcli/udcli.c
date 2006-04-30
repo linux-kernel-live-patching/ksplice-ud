@@ -17,8 +17,7 @@
 /* help string */
 static char help[] = 
 {
-  "Usage: %s [-option[s]]\n"
-  "Takes input from <STDIN>\n"
+  "Usage: %s [-option[s]] file\n"
   "Options:\n"
   "    -16      : Set the disassembly mode to 16 bits. \n"
   "    -32      : Set the disassembly mode to 32 bits. (default)\n"

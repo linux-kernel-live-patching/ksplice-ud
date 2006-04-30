@@ -37,10 +37,14 @@ const char* ud_reg_tab[] =
   "fs",		"gs",	
 
   "cr0",	"cr1",		"cr2",		"cr3",
-  "cr4",	"cr5_INV",	"cr6_INV",	"cr7_INV",
+  "cr4",	"cr5",		"cr6",		"cr7",
+  "cr8",	"cr9",		"cr10",		"cr11",
+  "cr12",	"cr13",		"cr14",		"cr15",
 	
   "dr0",	"dr1",		"dr2",		"dr3",
-  "dr4_inv",	"dr5_INV",	"dr6",		"dr7",
+  "dr4",	"dr5",		"dr6",		"dr7",
+  "dr8",	"dr9",		"dr10",		"dr11",
+  "dr12",	"dr13",		"dr14",		"dr15",
 
   "mm0",	"mm1",		"mm2",		"mm3",
   "mm4",	"mm5",		"mm6",		"mm7",

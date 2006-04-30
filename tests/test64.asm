@@ -71,6 +71,7 @@
 	ret 0x10
 	pop rax
 	pop r11
+	pop qword [eax]
 	insd 
 	outsd 
 	mov [r14d], cs
@@ -106,6 +107,7 @@
 	movnti [rax], rax
 	movd dword [eax], xmm0
 	movd qword [eax], xmm0
+	movd xmm11, qword [eax]
 	vmmcall 
 	vmrun 
 	clgi 
@@ -114,3 +116,6 @@
 	lfence 
 	sfence 
 	clflush [rax]
+	mov cr8, rax
+	push qword [eax]
+	push word [eax]

@@ -51,11 +51,15 @@ enum ud_type
 
   /* control registers*/
   UD_R_CR0,	UD_R_CR1,	UD_R_CR2,	UD_R_CR3,
-  UD_R_CR4,	UD_R_CR5_INV,	UD_R_CR6_INV,	UD_R_CR7_INV,
+  UD_R_CR4,	UD_R_CR5,	UD_R_CR6,	UD_R_CR7,
+  UD_R_CR8,	UD_R_CR9,	UD_R_CR10,	UD_R_CR11,
+  UD_R_CR12,	UD_R_CR13,	UD_R_CR14,	UD_R_CR15,
 	
   /* debug registers */
   UD_R_DR0,	UD_R_DR1,	UD_R_DR2,	UD_R_DR3,
-  UD_R_DR4_INV,	UD_R_DR5_INV,	UD_R_DR6,	UD_R_DR7,
+  UD_R_DR4,	UD_R_DR5,	UD_R_DR6,	UD_R_DR7,
+  UD_R_DR8,	UD_R_DR9,	UD_R_DR10,	UD_R_DR11,
+  UD_R_DR12,	UD_R_DR13,	UD_R_DR14,	UD_R_DR15,
 
   /* mmx registers */
   UD_R_MM0,	UD_R_MM1,	UD_R_MM2,	UD_R_MM3,

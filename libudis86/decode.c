@@ -197,14 +197,14 @@ resolve_gpr32(struct ud* u, enum map_operand_type gpr_op)
  * -----------------------------------------------------------------------------
  */
 static inline enum ud_type 
-resolve_reg(struct ud* u, unsigned int type, unsigned char rm)
+resolve_reg(struct ud* u, unsigned int type, unsigned char i)
 {
   switch (type) {
-	case T_MMX :	return UD_R_MM0  + (rm & 7);
-	case T_XMM :	return UD_R_XMM0 + rm;
-	case T_CRG :	return UD_R_CR0  + rm;
-	case T_DBG :	return UD_R_DR0  + rm;
-	case T_SEG :	return UD_R_ES   + rm;
+	case T_MMX :	return UD_R_MM0  + (i & 7);
+	case T_XMM :	return UD_R_XMM0 + i;
+	case T_CRG :	return UD_R_CR0  + i;
+	case T_DBG :	return UD_R_DR0  + i;
+	case T_SEG :	return UD_R_ES   + (i & 7);
 	case T_NONE:
 	default:	return UD_NONE;
   }
@@ -254,7 +254,9 @@ decode_modrm(struct ud* u, struct ud_operand *op, unsigned int s,
 	op->type = UD_OP_REG;
 	if (rm_type == 	T_GPR)
 		op->base = decode_gpr(u, op->size, rm);
-	else op->base = resolve_reg(u, rm_type, rm);	
+	else { 
+		op->base = resolve_reg(u, rm_type, (P_REX_R(u->pfx_rex) << 3) | (rm&7));
+	}
   } 
   /* else its memory addressing */  
   else {
@@ -642,7 +644,7 @@ disasm_operands(register struct ud* u)
 		decode_modrm(u, &(iop[0]), mop1s, T_XMM, &(iop[1]), mop2s, T_XMM);
 		break;
 
-	/* V, W[,I]/Q/M */
+	/* V, W[,I]/Q/M/E */
 	case OP_V :
 		if (mop2t == OP_W) {
 			decode_modrm(u, &(iop[1]), mop2s, T_XMM, &(iop[0]), mop1s, T_XMM);
@@ -653,6 +655,8 @@ disasm_operands(register struct ud* u)
 		else if (mop2t == OP_M) {
 			if (MODRM_MOD(inp_peek(u)) == 3)
 				u->error= 1;
+			decode_modrm(u, &(iop[1]), mop2s, T_GPR, &(iop[0]), mop1s, T_XMM);
+		} else if (mop2t == OP_E) {
 			decode_modrm(u, &(iop[1]), mop2s, T_GPR, &(iop[0]), mop1s, T_XMM);
 		}
 		break;

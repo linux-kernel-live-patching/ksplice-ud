@@ -90,13 +90,13 @@ static void gen_operand(struct ud* u, struct ud_operand* op, int syn_cast)
 		if (syn_cast) opr_cast(u, op);
 		switch (op->size) {
 			case  8:
-				mkasm(u, "0x%x", u->pc + op->lval.sbyte); 
+				mkasm(u, "0x%x", (u->pc + op->lval.sbyte) & 0xFF); 
 				break;
 			case 16:
-				mkasm(u, "0x%lx", u->pc + op->lval.sword); 
+				mkasm(u, "0x%lx", (u->pc + op->lval.sword) & 0xFFFF ); 
 				break;
 			case 32:
-				mkasm(u, "0x%lx", u->pc + op->lval.sdword);
+				mkasm(u, "0x%lx", (u->pc + op->lval.sdword) & 0xFFFFFFFF );
 				break;
 			default:break;
 		}
@@ -142,8 +142,9 @@ extern void ud_translate_intel(struct ud* u)
   mkasm(u, "%s ", ud_lookup_mnemonic(u->mnemonic));
 
   /* operand 1 */
-  if (u->operand[0].type != UD_NONE) 
+  if (u->operand[0].type != UD_NONE) {
 	gen_operand(u, &u->operand[0], u->c1);
+  }
 
   /* operand 2 */
   if (u->operand[1].type != UD_NONE) {

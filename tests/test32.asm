@@ -203,3 +203,5 @@
 	movd dword [eax], xmm0
 	movzx eax, word [eax]
 	push word [0x10]
+	insw 
+	insd 

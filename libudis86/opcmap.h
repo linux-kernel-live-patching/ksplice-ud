@@ -15,8 +15,8 @@
 #define Pnone		0x00
 #define Pa32		0x01
 #define P_A32(n)	((n) & 0x01)
-#define Po32		0x02
-#define P_O32(n)	((n) & 0x02)
+#define Po32		0x04
+#define P_O32(n)	((n) & 0x04)
 #define Pdef64		0x08
 #define P_DEF64(n)	((n) & 0x08)
 #define Pinv64		0x10
@@ -29,7 +29,7 @@
 #define P_C3(n)		((n) & 0x80)
 #define PdepM		0x100
 #define P_DEPM(n)	((n) & 0x100)
-#define REX(c)	((40 | c) << 16)
+#define REX(c)	((0x40 | c) << 16)
 #define P_REX_MASK(n)	(0x40 | (0xF & ((n) >> 16)))
 #define _W		8
 #define _R		4
