@@ -9,7 +9,6 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-#include <udis86.h>
 
 #include "input.h"
 #include "extern.h"

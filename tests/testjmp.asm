@@ -10,6 +10,7 @@
 	jecxz x
 	jrcxz x
 	jmp near x
+	call x
 	jmp word x
 	jmp dword x
 	jmp word [eax]	

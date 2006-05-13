@@ -29,7 +29,7 @@
  * disassembly mode, effective operand sizes, etc.
  * -----------------------------------------------------------------------------
  */
-static inline unsigned int 
+static unsigned int 
 resolve_oprsize(register struct ud* u, unsigned int s)
 {
   switch (s) {
@@ -47,7 +47,7 @@ resolve_oprsize(register struct ud* u, unsigned int s)
  * current effective operand or address mode.
  * -----------------------------------------------------------------------------
  */
-static inline enum ud_mnemonic_code 
+static enum ud_mnemonic_code 
 resolve_mnemonic(register struct ud* u)
 {
   if (u->opr_mode == 32) {
@@ -111,7 +111,7 @@ resolve_mnemonic(register struct ud* u)
  * decode_a()- Decodes operands of the type seg:offset
  * -----------------------------------------------------------------------------
  */
-static inline void 
+static void 
 decode_a(struct ud* u, struct ud_operand *op)
 {
   if (u->opr_mode == 16) {	
@@ -133,7 +133,7 @@ decode_a(struct ud* u, struct ud_operand *op)
  * decode_gpr() - Returns decoded General Purpose Register 
  * -----------------------------------------------------------------------------
  */
-static inline enum ud_type 
+static enum ud_type 
 decode_gpr(register struct ud* u, unsigned int s, unsigned char rm)
 {
   s = resolve_oprsize(u, s);
@@ -161,7 +161,7 @@ decode_gpr(register struct ud* u, unsigned int s, unsigned char rm)
  * resolve_gpr64() - 64bit General Purpose Register-Selection. 
  * -----------------------------------------------------------------------------
  */
-static inline enum ud_type 
+static enum ud_type 
 resolve_gpr64(struct ud* u, enum map_operand_type gpr_op)
 {
   if (gpr_op >= OP_rAXr8 && gpr_op <= OP_rDIr15)
@@ -181,7 +181,7 @@ resolve_gpr64(struct ud* u, enum map_operand_type gpr_op)
  * resolve_gpr32 () - 32bit General Purpose Register-Selection. 
  * -----------------------------------------------------------------------------
  */
-static inline enum ud_type 
+static enum ud_type 
 resolve_gpr32(struct ud* u, enum map_operand_type gpr_op)
 {
   gpr_op = gpr_op - OP_eAX;
@@ -196,7 +196,7 @@ resolve_gpr32(struct ud* u, enum map_operand_type gpr_op)
  * resolve_reg() - Resolves the register type 
  * -----------------------------------------------------------------------------
  */
-static inline enum ud_type 
+static enum ud_type 
 resolve_reg(struct ud* u, unsigned int type, unsigned char i)
 {
   switch (type) {
@@ -214,7 +214,7 @@ resolve_reg(struct ud* u, unsigned int type, unsigned char i)
  * decode_imm() - Decodes Immediate values.
  * -----------------------------------------------------------------------------
  */
-static inline void 
+static void 
 decode_imm(struct ud* u, unsigned int s, struct ud_operand *op)
 {
   op->size = resolve_oprsize(u, s);
@@ -386,7 +386,7 @@ decode_modrm(struct ud* u, struct ud_operand *op, unsigned int s,
  * decode_o() - Decodes offset
  * -----------------------------------------------------------------------------
  */
-static inline void 
+static void 
 decode_o(struct ud* u, unsigned int s, struct ud_operand *op)
 {
   switch (u->adr_mode) {
@@ -413,7 +413,7 @@ decode_o(struct ud* u, unsigned int s, struct ud_operand *op)
  * disasm_operands() - Disassembles Operands.
  * -----------------------------------------------------------------------------
  */
-static inline void 
+static void 
 disasm_operands(register struct ud* u)
 {
 
@@ -431,7 +431,6 @@ disasm_operands(register struct ud* u)
   /* iop = instruction operand */
   register struct ud_operand* iop = u->operand;
 	
-
   switch(mop1t) {
 	
 	case OP_A :
@@ -574,7 +573,7 @@ disasm_operands(register struct ud* u)
 
 	/* J */
 	case OP_J :
-		decode_imm(u, mop1s, &(iop[0]));
+		decode_imm(u, mop1s, &(iop[0]));		
 		iop[0].type = UD_OP_JIMM;
 		break ;
 
@@ -737,7 +736,7 @@ disasm_operands(register struct ud* u)
  * clear_insn() - clear instruction pointer 
  * -----------------------------------------------------------------------------
  */
-static inline void
+static void
 clear_insn(register struct ud* u)
 {
   u->error = 0;
@@ -808,7 +807,7 @@ extract_prefixes(register struct ud* u)
  * set_mode_flags() - Sets mode dependent flags.
  * -----------------------------------------------------------------------------
  */
-static inline void 
+static void 
 set_mode_flags(register struct ud* u) 
 {
   /* set 64bit-mode flags */
@@ -858,7 +857,7 @@ set_mode_flags(register struct ud* u)
  * instruction
  * -----------------------------------------------------------------------------
  */
-static inline void 
+static void 
 set_mnemonic(register struct ud* u) 
 {
   /* resolve mode dependent mnemonic */
@@ -905,7 +904,7 @@ set_mnemonic(register struct ud* u)
  * do_error() - Performs error checking.
  * -----------------------------------------------------------------------------
  */
-static inline void 
+static void 
 do_error(register struct ud* u) 
 {
   if (u->error) {
@@ -932,7 +931,7 @@ do_error(register struct ud* u)
  * gen_hex() - Performs error checking.
  * -----------------------------------------------------------------------------
  */
-static inline void 
+static void 
 gen_hex(register struct ud* u) 
 {
   char* src_hex;

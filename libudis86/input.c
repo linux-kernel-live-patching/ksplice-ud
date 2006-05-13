@@ -5,8 +5,6 @@
  * All rights reserved. See LICENSE
  * -----------------------------------------------------------------------------
  */
-#include <inttypes.h>
-#include <udis86.h>
 #include "extern.h"
 #include "types.h"
 #include "input.h"
@@ -132,7 +130,7 @@ inp_next(struct ud* u)
 }
 
 /* -----------------------------------------------------------------------------
- * inp_cur() - Peek into the next byte in source. 
+ * inp_peek() - Peek into the next byte in source. 
  * -----------------------------------------------------------------------------
  */
 extern uint8_t
@@ -143,6 +141,17 @@ inp_peek(struct ud* u)
 	return r;
 }
 
+/* -----------------------------------------------------------------------------
+ * inp_move() - Move ahead n input bytes.
+ * -----------------------------------------------------------------------------
+ */
+extern void
+inp_move(struct ud* u, size_t n) 
+{
+  while (n--)
+	inp_next(u);
+}
+
 /*------------------------------------------------------------------------------
  *  inp_uintN() - return uintN from source.
  *------------------------------------------------------------------------------
@@ -150,63 +159,55 @@ inp_peek(struct ud* u)
 extern uint8_t 
 inp_uint8(struct ud* u)
 {
-	uint8_t *ref;
-	return inp_next(u);
-	ref = u->inp_curr;
-	return *((uint8_t*)ref);
+  uint8_t *ref;
+  return inp_next(u);
+  ref = u->inp_curr;
+  return *ref;
 }
 
 extern uint16_t 
 inp_uint16(struct ud* u)
 {
-	uint8_t *ref;
+  uint8_t *ref;
 
-	inp_next(u);
-	ref = u->inp_curr;
-	inp_move(u, sizeof(uint16_t) - 1);
+  inp_next(u);
+  ref = u->inp_curr;
+  inp_move(u, sizeof(uint16_t) - 1);
 
-	return *((uint8_t*)ref) | (*((uint8_t*)(ref+1)) << 8);
+  return *ref | (*(ref+1) << 8);
 }
 
 extern uint32_t 
 inp_uint32(struct ud* u)
 {
-	uint8_t *ref;
-	inp_next(u);
-	ref = u->inp_curr;
+  uint8_t *ref;
+  inp_next(u);
+  ref = u->inp_curr;
 
-	inp_move(u, sizeof(uint32_t) - 1);
+  inp_move(u, sizeof(uint32_t) - 1);
 
-	return *((uint32_t*)ref);
-
-	return *((uint8_t*)ref) | 
-		(*((uint8_t*)(ref+1)) << 8) |
-		(*((uint8_t*)(ref+2)) << 16) |
-		(*((uint8_t*)(ref+3)) << 24);
+  return *ref | (*(ref+1) << 8) | (*(ref+2) << 16) | (*(ref+3) << 24);
 }
 
 extern uint64_t 
 inp_uint64(struct ud* u)
 {
-	uint8_t *ref;
-	uint64_t ret, r;
+  uint8_t *ref;
+  uint64_t ret, r;
 
-	inp_next(u);
-	ref = u->inp_curr;
-	inp_move(u, sizeof(uint64_t) - 1);
+  inp_next(u);
+  ref = u->inp_curr;
+  inp_move(u, sizeof(uint64_t) - 1);
 
-	ret = *((uint8_t*)ref) | 
-		(*((uint8_t*)(ref+1)) << 8) |
-		(*((uint8_t*)(ref+2)) << 16) |
-		(*((uint8_t*)(ref+3)) << 24);
-	r = *((uint8_t*)(ref+4));
-	ret = ret |  (r << 32);
-	r = *((uint8_t*)(ref+4));
-	ret = ret |  (r << 40);
-	r = *((uint8_t*)(ref+4));
-	ret = ret |  (r << 48);
-	r = *((uint8_t*)(ref+4));
-	ret = ret |  (r << 56);
-
-	return ret;
+  ret = *ref | (*(ref+1) << 8) | (*(ref+2) << 16) | (*(ref+3) << 24);
+  r = *(ref+4);
+  ret = ret | (r << 32);
+  r = *(ref+5);
+  ret = ret | (r << 40);
+  r = *(ref+6);
+  ret = ret | (r << 48);
+  r = *(ref+7);
+  ret = ret | (r << 56);
+  
+  return ret;
 }

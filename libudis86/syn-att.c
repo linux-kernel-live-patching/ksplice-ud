@@ -51,7 +51,7 @@ gen_operand(struct ud* u, struct ud_operand* op)
 		else if (op->offset == 32) 
 			mkasm(u, "0x%lx", op->lval.udword);
 		else if (op->offset == 64) 
-			mkasm(u, "0x%llx", op->lval.udword);
+			mkasm(u, "0x" FMT64 "x", op->lval.uqword);
 
 		if (op->base)
 			mkasm(u, "(%%%s", ud_reg_tab[op->base - UD_R_AL]);
@@ -72,7 +72,7 @@ gen_operand(struct ud* u, struct ud_operand* op)
 			case  8: mkasm(u, "$0x%x", op->lval.ubyte);    break;
 			case 16: mkasm(u, "$0x%x", op->lval.uword);    break;
 			case 32: mkasm(u, "$0x%lx", op->lval.udword);  break;
-			case 64: mkasm(u, "$0x%llx", op->lval.uqword); break;
+			case 64: mkasm(u, "$0x" FMT64 "x", op->lval.uqword); break;
 			default: break;
 		}
 		break;
@@ -80,13 +80,13 @@ gen_operand(struct ud* u, struct ud_operand* op)
 	case UD_OP_JIMM:
 		switch (op->size) {
 			case  8:
-				mkasm(u, "0x%x", (u->pc + op->lval.sbyte) & 0xFF); 
+				mkasm(u, "0x%x", (uint8_t)((u->pc + op->lval.sbyte) & 0xFF)); 
 				break;
 			case 16:
-				mkasm(u, "0x%lx", (u->pc + op->lval.sword) & 0xFFFF); 
+				mkasm(u, "0x%x", (uint16_t)((u->pc + op->lval.sword) & 0xFFFF));
 				break;
 			case 32:
-				mkasm(u, "0x%lx", (u->pc + op->lval.sdword) & 0xFFFFFFFF);
+				mkasm(u, "0x%lx", (uint32_t)((u->pc + op->lval.sdword) & 0xFFFFFFFF));
 				break;
 			default:break;
 		}

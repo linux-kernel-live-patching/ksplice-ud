@@ -14,7 +14,7 @@
 
 extern const char* ud_reg_tab[];
 
-static inline void mkasm(struct ud* u, const char* fmt, ...)
+static void mkasm(struct ud* u, const char* fmt, ...)
 {
   va_list ap;
   va_start(ap, fmt);

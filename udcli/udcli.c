@@ -11,8 +11,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <ctype.h>
-#include <inttypes.h>
-#include <udis86.h>
+#include "../udis86.h"
 
 /* help string */
 static char help[] = 

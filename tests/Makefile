@@ -13,7 +13,7 @@ OBJS =	gen.o
 gen: $(OBJS)
 	$(CC) $(OBJS) -ludis86 -o gen
 test16: gen
-	nasm -f bin -o test16.bin test16.asm
+	yasm -f bin -o test16.bin test16.asm
 	echo "[bits 16]" > test16.out
 	./gen -16 < test16.bin >> test16.out
 	diff test16.asm test16.out | more

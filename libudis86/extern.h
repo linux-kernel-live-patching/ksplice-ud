@@ -13,7 +13,6 @@ extern "C" {
 #endif
 
 #include <stdio.h>
-#include <inttypes.h>
 #include "types.h"
 
 /* ============================= PUBLIC API ================================= */
