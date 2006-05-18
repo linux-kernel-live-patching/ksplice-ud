@@ -199,7 +199,7 @@ inp_uint64(struct ud* u)
   ref = u->inp_curr;
   inp_move(u, sizeof(uint64_t) - 1);
 
-  ret = *ref | (*(ref+1) << 8) | (*(ref+2) << 16) | (*(ref+3) << 24);
+  ret = (*ref | (*(ref+1) << 8) | (*(ref+2) << 16) | (*(ref+3) << 24)) & 0xFFFFFFFF;
   r = *(ref+4);
   ret = ret | (r << 32);
   r = *(ref+5);
