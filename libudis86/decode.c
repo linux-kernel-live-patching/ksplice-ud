@@ -50,6 +50,7 @@ resolve_oprsize(register struct ud* u, unsigned int s)
 static enum ud_mnemonic_code 
 resolve_mnemonic(register struct ud* u)
 {
+
   if (u->opr_mode == 32) {
 	switch(u->mnemonic) {
 		case UD_Icbw: 		return UD_Icwde;
@@ -79,12 +80,12 @@ resolve_mnemonic(register struct ud* u)
 		case UD_Icmpsw: 	return UD_Icmpsq;
 		case UD_Iinsw:		return UD_Iinsd;
 		case UD_Ioutsw:		return UD_Ioutsd;
-		case UD_Icmpxchg8b:	return UD_Icmpxchg16b;
-		case UD_Ipushfw:	return UD_Ipushfq;
-		case UD_Ipopfw:		return UD_Ipopfq;
+		case UD_Icmpxchg8b:	return UD_Icmpxchg16b;		
 		case UD_Istosw:		return UD_Istosq;
 		case UD_Iscasw:		return UD_Iscasq;
 		case UD_Iiretw:		return UD_Iiretq;
+		case UD_Ipushfw:	return UD_Ipushfq;
+		case UD_Ipopfw:		return UD_Ipopfq;
 		default: 		break; 
 	} 
   }
@@ -146,12 +147,11 @@ decode_gpr(register struct ud* u, unsigned int s, unsigned char rm)
 	case 16:
 		return UD_R_AX  + rm;
 	case  8:
-		if (u->dis_mode == 64) {
+		if (u->dis_mode == 64 && u->pfx_rex) {
 			if (rm >= 4)
 				return UD_R_SPL + (rm-4);
 			return UD_R_AL + rm;
-		}
-		return UD_R_AL + rm;
+		} else return UD_R_AL + rm;
 	default:
 		return 0;
   }
@@ -821,7 +821,7 @@ set_mode_flags(register struct ud* u)
 	u->error = P_INV64(u->opcmap_entry->prefix);
 
 	/* set effective operand size */
-	if (P_REX_W(u->pfx_rex))
+	if (P_REX(u->opcmap_entry->prefix) && P_REX_W(u->pfx_rex))
 		u->opr_mode = 64;
 	else if (u->pfx_opr)
 		u->opr_mode = 16;

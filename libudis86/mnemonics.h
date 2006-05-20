@@ -568,6 +568,12 @@ enum ud_mnemonic_code
   UD_Iclgi,
   UD_Iskinit,
   UD_Iinvlpga,
+  UD_Ija,
+  UD_Ijae,
+  UD_Ijg,
+  UD_Ijge,
+  UD_Ijc,
+  UD_Ijnc,
   UD_Inone,
   UD_I3vil
 };

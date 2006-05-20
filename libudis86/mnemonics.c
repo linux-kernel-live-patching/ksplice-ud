@@ -562,6 +562,12 @@ const char* ud_mnemonics[] =
   "clgi",
   "skinit",
   "invlpga",
+  "ja",
+  "jae",
+  "jg",
+  "jge",
+  "jc",
+  "jnc",
   "none",
   "I3vil",
 };

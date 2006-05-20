@@ -559,4 +559,10 @@ stgi
 clgi
 skinit
 invlpga
+ja
+jae
+jg
+jge
+jc
+jnc
 none

@@ -76,7 +76,6 @@
 	outsd 
 	mov [r14d], cs
 	mov cs, [ebx+ecx]
-	pushfd 
 	pushfq 
 	scasq 
 	lar rax, [eax]
@@ -119,3 +118,7 @@
 	mov cr8, rax
 	push qword [eax]
 	push word [eax]
+	add bh, bh
+	add dil, dil
+	add sil, bpl
+	add al, sil

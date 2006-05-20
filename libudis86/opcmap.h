@@ -29,7 +29,8 @@
 #define P_C3(n)		((n) & 0x80)
 #define PdepM		0x100
 #define P_DEPM(n)	((n) & 0x100)
-#define REX(c)	((0x40 | c) << 16)
+#define REX(c)		((0x40 | c) << 16)
+#define P_REX(c)	(c & 0xFF0000)
 #define P_REX_MASK(n)	(0x40 | (0xF & ((n) >> 16)))
 #define _W		8
 #define _R		4

@@ -1,3 +1,8 @@
+ * [May/18/06] Fixed issues with handling of 64-bit values. 
+               Fixed bug in syntax generation for immediate operands in branch
+               instructions.
+               Fixed decoding of (G, W) operands.
  * [May/12/06] Added support for data types in MS VC++.
  * [May/11/06] Fixed portability issues concerning inp_uintXX functions in 
-   input.c and 64-bit casting in syn-intel/syn-att.c (Thanks to Sanjay Patel)
+               input.c and 64-bit casting in syn-intel/syn-att.c (Thanks to 
+               Sanjay Patel)
