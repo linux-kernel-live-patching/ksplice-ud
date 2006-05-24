@@ -254,9 +254,7 @@ decode_modrm(struct ud* u, struct ud_operand *op, unsigned int s,
 	op->type = UD_OP_REG;
 	if (rm_type == 	T_GPR)
 		op->base = decode_gpr(u, op->size, rm);
-	else { 
-		op->base = resolve_reg(u, rm_type, (P_REX_R(u->pfx_rex) << 3) | (rm&7));
-	}
+	else	op->base = resolve_reg(u, rm_type, (P_REX_R(u->pfx_rex) << 3) | (rm&7));
   } 
   /* else its memory addressing */  
   else {
@@ -376,7 +374,7 @@ decode_modrm(struct ud* u, struct ud_operand *op, unsigned int s,
   if (opreg) {
 	opreg->type = UD_OP_REG;
 	opreg->size = resolve_oprsize(u, reg_size);
-	if (reg_type == T_GPR)
+	if (reg_type == T_GPR) 
 		opreg->base = decode_gpr(u, opreg->size, reg);
 	else opreg->base = resolve_reg(u, reg_type, reg);
   }
@@ -725,9 +723,16 @@ disasm_operands(register struct ud* u)
 
 		if (mop2t >= OP_ST0 && mop2t <= OP_ST7) {
 			iop[1].type = UD_OP_REG;
-			iop[1].base = (mop1t-OP_ST0) + UD_R_ST0;
+			iop[1].base = (mop2t-OP_ST0) + UD_R_ST0;
 			iop[1].size = 0;
 		}
+		break;
+
+	/* AX */
+	case OP_AX:
+		iop[0].type = UD_OP_REG;
+		iop[0].base = UD_R_AX;
+		iop[0].size = 16;
 		break;
 
 	/* none */
@@ -752,6 +757,7 @@ clear_insn(register struct ud* u)
   u->pfx_rep = 0;
   u->pfx_seg = 0;
   u->pfx_rex = 0;
+  u->pfx_insn= 0;
   u->mnemonic = 0;
 
   memset(&u->operand[0], 0, sizeof(u->operand[0]));
@@ -768,19 +774,19 @@ clear_insn(register struct ud* u)
 static void
 extract_prefixes(register struct ud* u) 
 {
-  int prefixflag = 0;	/* (bool) denotes end of prefixes */
-  int i;		/* prefix counter */
+  int p = 0;	/* (bool) denotes end of prefixes */
+  int i = 0;	/* prefix counter */
 
   inp_next(u);
 	
   /* search for prefixes */
-  for (i = 0; prefixflag == 0; ++i) {	
+  for (i = 0; p == 0; ++i) {	
 	/* check for rex bit in 64 bits mode */		
 	if (0x40 <= inp_curr(u) && inp_curr(u) <= 0x4F) {
 		if (u->dis_mode == 64) {
 			u->pfx_rex = inp_curr(u);
 			inp_next(u); 
-		} else prefixflag = 1;
+		} else p = 1;
 	} else switch(inp_curr(u)) {
 		case 0x2E : u->pfx_seg = UD_R_CS; inp_next(u); break;
 		case 0x36 : u->pfx_seg = UD_R_SS; inp_next(u); break;
@@ -788,15 +794,15 @@ extract_prefixes(register struct ud* u)
 		case 0x26 : u->pfx_seg = UD_R_ES; inp_next(u); break;
 		case 0x64 : u->pfx_seg = UD_R_FS; inp_next(u); break;
 		case 0x65 : u->pfx_seg = UD_R_GS; inp_next(u); break;
-		case 0x66 : u->pfx_opr = 0x66; inp_next(u); break;
-		case 0x67 : u->pfx_adr = 0x67; inp_next(u); break;
-		case 0xF0 : u->pfx_lock= 0xF0; inp_next(u); break;
-		case 0xF2 : u->pfx_repne=0xF2; inp_next(u); break;
-		case 0xF3 : u->pfx_rep = 0xF3; inp_next(u); break;
-		default   : prefixflag = 1;
+		case 0x66 : u->pfx_insn = u->pfx_opr = 0x66; inp_next(u); break;
+		case 0x67 : u->pfx_adr = 0x67;    inp_next(u); break;
+		case 0xF0 : u->pfx_lock= 0xF0;    inp_next(u); break;
+		case 0xF2 : u->pfx_insn = u->pfx_repne=0xF2; inp_next(u); break;
+		case 0xF3 : u->pfx_insn = u->pfx_rep = 0xF3; inp_next(u); break;
+		default   : p = 1;
 	}
 
-	/* if > MAX_PREFIXES, disintegrate */
+	/* if >= MAX_PREFIXES, disintegrate */
 	if (i >= MAX_PREFIXES) {
 		u->error= 1;
 		break;	/* break from loop */

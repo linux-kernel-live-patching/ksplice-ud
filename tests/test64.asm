@@ -122,3 +122,8 @@
 	add dil, dil
 	add sil, bpl
 	add al, sil
+	prefetcht0 [eax]
+	prefetchnta [eax]
+	prefetch [eax]
+	add [r8], r9b
+	mov [rax+0x8fffffff], eax

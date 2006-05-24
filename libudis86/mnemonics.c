@@ -568,6 +568,11 @@ const char* ud_mnemonics[] =
   "jge",
   "jc",
   "jnc",
+  "fisttp",
+  "prefetchnta",
+  "prefetcht0",
+  "prefetcht1",
+  "prefetcht2",
   "none",
   "I3vil",
 };

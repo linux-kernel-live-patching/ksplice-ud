@@ -159,6 +159,7 @@ struct ud
   uint8_t 		pfx_rep;
   uint8_t 		pfx_repe;
   uint8_t 		pfx_repne;
+  uint8_t 		pfx_insn;
   uint8_t		default64;
   uint8_t		dis_mode;
   uint8_t		opr_mode;

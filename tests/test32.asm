@@ -205,3 +205,30 @@
 	push word [0x10]
 	insw 
 	insd 
+	fnstsw ax
+	fucomip st0, st1
+	fcomip st0, st7
+	fucomp st4
+	fucom st5
+	fstp st3
+	fst st1
+	ffree st0
+	fdiv st7, st0
+	fdivr st2, st0
+	fsub st4, st0
+	fsubr st6, st0
+	fmul st0, st0
+	fadd st5, st0
+	ficom word [eax]
+	fidivr word [eax]
+	fimul word [ebx]
+	fisub word [ecx]
+	fld qword [bx+si]
+	fisttp qword [edx+0x100]
+	fnstsw [eax]
+	frstor [ebx]
+	prefetch [bx+si]
+	psrlq xmm0, 0x10
+	psrldq xmm0, 0x10
+	movsldup xmm0, [eax]
+	add [0xffffffff], eax
