@@ -59,6 +59,7 @@
 #define SZ_W 		16
 #define SZ_D		32
 #define SZ_Q 		64
+#define SZ_T 		80
 
 /* -----------------------------------------------------------------------------
  * Enumeration of types of the operands in the opcode map. The naming was 

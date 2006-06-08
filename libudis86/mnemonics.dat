@@ -577,4 +577,13 @@ cmovg
 seta
 setge
 setg
+pause
+na
+haddpd
+hsubpd
+addsubpd
+haddps
+hsubps
+addsubps
+lddqu
 none

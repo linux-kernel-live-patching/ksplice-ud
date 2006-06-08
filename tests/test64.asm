@@ -26,7 +26,7 @@
 	cdq 
 	cqo 
 	cmovl rax, [rax]
-	cmovnl eax, [rax]
+	cmovge eax, [rax]
 	clflush [r14]
 	cmp [rax], rax
 	cmp rbx, r12
@@ -136,3 +136,7 @@
 	mov rax, 0x102030405060708
 	nop 
 	xchg r8, rax
+	push ax
+	push rax
+	push r11
+	mov rax, [0x100]

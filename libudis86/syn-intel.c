@@ -23,6 +23,7 @@ opr_cast(struct ud* u, struct ud_operand* op)
 	case 16: mkasm(u, "word " ); break;
 	case 32: mkasm(u, "dword "); break;
 	case 64: mkasm(u, "qword "); break;
+	case 80: mkasm(u, "tbyte "); break;
 	default: break;
   }
   if (u->br_far)
@@ -161,7 +162,6 @@ extern void ud_translate_intel(struct ud* u)
   if (u->operand[0].type != UD_NONE) {
 	gen_operand(u, &u->operand[0], u->c1);
   }
-
   /* operand 2 */
   if (u->operand[1].type != UD_NONE) {
 	mkasm(u, ", ");

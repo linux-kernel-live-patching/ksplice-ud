@@ -133,15 +133,7 @@ struct ud_operand
  */
 struct ud
 {
-  struct map_entry*	mapen;
-  enum ud_mnemonic_code	mnemonic;
-  struct ud_operand	operand[3];
-
-  uint64_t		pc;
-  uint8_t		error;
   int 			(*inp_hook) (struct ud*);
-  uint8_t 		inp_cache[256];
-  uint8_t		inp_sess[64];
   uint8_t		inp_curr;
   uint8_t		inp_fill;
   FILE*			inp_file;
@@ -149,6 +141,17 @@ struct ud
   uint8_t*		inp_buff;
   uint8_t*		inp_buff_end;
   uint8_t		inp_end;
+  void			(*translator)(struct ud*);
+  uint64_t		insn_offset;
+  char			insn_hexcode[32];
+  char			insn_buffer[64];
+  unsigned int		insn_fill;
+  uint8_t		dis_mode;
+  uint64_t		pc;
+  struct map_entry*	mapen;
+  enum ud_mnemonic_code	mnemonic;
+  struct ud_operand	operand[3];
+  uint8_t		error;
   uint8_t	 	pfx_rex;
   uint8_t 		pfx_seg;
   uint8_t 		pfx_opr;
@@ -159,7 +162,6 @@ struct ud
   uint8_t 		pfx_repne;
   uint8_t 		pfx_insn;
   uint8_t		default64;
-  uint8_t		dis_mode;
   uint8_t		opr_mode;
   uint8_t		adr_mode;
   uint8_t		br_far;
@@ -167,12 +169,8 @@ struct ud
   uint8_t		c1;
   uint8_t		c2;
   uint8_t		c3;
-
-  void			(*translator)(struct ud*);
-  uint64_t		insn_offset;
-  char			insn_hexcode[32];
-  char			insn_buffer[64];
-  unsigned int		insn_fill;
+  uint8_t 		inp_cache[256];
+  uint8_t		inp_sess[64];
 
 };
 

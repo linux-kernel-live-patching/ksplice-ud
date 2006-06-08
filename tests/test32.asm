@@ -233,3 +233,5 @@
 	movsldup xmm0, [eax]
 	add [0xffffffff], eax
 	cvtsi2ss xmm1, dword [eax]
+	pause 
+	pop dword [eax]

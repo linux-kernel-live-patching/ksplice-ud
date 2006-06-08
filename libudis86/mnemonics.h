@@ -586,6 +586,15 @@ enum ud_mnemonic_code
   UD_Iseta,
   UD_Isetge,
   UD_Isetg,
+  UD_Ipause,
+  UD_Ina,
+  UD_Ihaddpd,
+  UD_Ihsubpd,
+  UD_Iaddsubpd,
+  UD_Ihaddps,
+  UD_Ihsubps,
+  UD_Iaddsubps,
+  UD_Ilddqu,
   UD_Inone,
   UD_I3vil
 };

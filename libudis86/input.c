@@ -107,7 +107,7 @@ inp_next(struct ud* u)
 
   if (u->inp_curr != u->inp_fill)
 	c = u->inp_cache[++u->inp_curr];
-  else if ((c = u->inp_hook(u)) == -1 || u->inp_end) {
+  else if (u->inp_end || (c = u->inp_hook(u)) == -1) {
 	u->error = 1;
 	u->inp_end = 1;
 	return 0;

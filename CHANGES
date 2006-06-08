@@ -1,3 +1,7 @@
+ * [June/8/06] Missing instructions added. (As per AMD64 Manual Vol3 Rev 3.11 
+               Dec 2005)
+               Fixed minor decoder issues. (Thanks to Sanjay Patel)
+               Fixed issues with input stream buffer. (Thanks to Sanjay Patel)
  * [May/18/06] Fixed issues with handling of 64-bit values. 
                Fixed bug in syntax generation for immediate operands in branch
                instructions.

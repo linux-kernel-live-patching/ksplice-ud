@@ -43,6 +43,6 @@ do { \
 #define inp_sess(u) (u->inp_sess)
 
 /* inp_cur() - Returns the current input byte. */
-static uint8_t inp_curr(struct ud* u) {return ((u)->inp_cache[(u)->inp_curr]); }
+#define inp_curr(u) ((u)->inp_cache[(u)->inp_curr])
 
 #endif
