@@ -42,38 +42,54 @@ static void gen_operand(struct ud* u, struct ud_operand* op, int syn_cast)
 		mkasm(u, ud_reg_tab[op->base - UD_R_AL]);
 		break;
 
-	case UD_OP_MEM:
-		if (syn_cast) opr_cast(u, op);
+	case UD_OP_MEM: {
+
+		int op_f = 0;
+
+		if (syn_cast) 
+			opr_cast(u, op);
+
 		mkasm(u, "[");
+
 		if (u->pfx_seg)
 			mkasm(u, "%s:", ud_reg_tab[u->pfx_seg - UD_R_AL]);
-		if (op->base)
+
+		if (op->base) {
 			mkasm(u, "%s", ud_reg_tab[op->base - UD_R_AL]);
+			op_f = 1;
+		}
+
 		if (op->index) {
-			if (op->base)
+			if (op_f)
 				mkasm(u, "+");
 			mkasm(u, "%s", ud_reg_tab[op->index - UD_R_AL]);
+			op_f = 1;
 		}
+
 		if (op->scale)
 			mkasm(u, "*%d", op->scale);
-		if (op->offset && (op->base || op->index)) {
-			mkasm(u, "+");
-		}
 
 		if (op->offset == 8) {
 			if (op->lval.sbyte < 0)
-				mkasm(u, "(-0x%x)", (-op->lval.sbyte) & 0xFF);
-			else	mkasm(u, "0x%x", op->lval.sbyte);
-		} 
-		else if (op->offset == 16) 
-			mkasm(u, "0x%x", op->lval.uword);
-		else if (op->offset == 32) 
-			mkasm(u, "0x%lx", op->lval.udword);
+				mkasm(u, "-0x%x", -op->lval.sbyte);
+			else	mkasm(u, "%s0x%x", (op_f) ? "+" : "", op->lval.sbyte);
+		}
+		else if (op->offset == 16)
+			mkasm(u, "%s0x%x", (op_f) ? "+" : "", op->lval.uword);
+		else if (op->offset == 32) {
+			if (u->adr_mode == 64) {
+				if (op->lval.sdword < 0)
+					mkasm(u, "-0x%x", -op->lval.sdword);
+				else	mkasm(u, "%s0x%x", (op_f) ? "+" : "", op->lval.sdword);
+			} 
+			else	mkasm(u, "%s0x%lx", (op_f) ? "+" : "", op->lval.udword);
+		}
 		else if (op->offset == 64) 
-			mkasm(u, "0x" FMT64 "x", op->lval.uqword);
+			mkasm(u, "%s0x" FMT64 "x", (op_f) ? "+" : "", op->lval.uqword);
+
 		mkasm(u, "]");
 		break;
-
+	}
 			
 	case UD_OP_IMM:
 		if (syn_cast) opr_cast(u, op);
@@ -90,13 +106,13 @@ static void gen_operand(struct ud* u, struct ud_operand* op, int syn_cast)
 		if (syn_cast) opr_cast(u, op);
 		switch (op->size) {
 			case  8:
-				mkasm(u, "0x%lx", u->pc + op->lval.sbyte); 
+				mkasm(u, "0x" FMT64 "x", u->pc + op->lval.sbyte); 
 				break;
 			case 16:
-				mkasm(u, "0x%lx", u->pc + op->lval.sword);
+				mkasm(u, "0x" FMT64 "x", u->pc + op->lval.sword);
 				break;
 			case 32:
-				mkasm(u, "0x%lx", u->pc + op->lval.sdword);
+				mkasm(u, "0x" FMT64 "x", u->pc + op->lval.sdword);
 				break;
 			default:break;
 		}

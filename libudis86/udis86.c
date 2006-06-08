@@ -37,6 +37,11 @@ ud_disassemble(struct ud* u)
 {
   if (ud_input_end(u))
 	return 0;
+
+ 
+  u->insn_buffer[0] = u->insn_hexcode[0] = 0;
+
+ 
   if (ud_decode(u) == 0)
 	return 0;
   if (u->translator)

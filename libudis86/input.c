@@ -91,42 +91,47 @@ ud_input_end(struct ud* u)
 
 /* -----------------------------------------------------------------------------
  * inp_next() - Loads and returns the next byte from input.
+ *
+ * inp_curr and inp_fill are pointers to the cache. The program is written based
+ * on the property that they are 8-bits in size, and will eventually wrap around
+ * forminh a circular buffer. So, the size of the cache is 256 in size, kind of
+ * unnecessary yet optimized.
+ *
+ * A buffer inp_sess stores the bytes disassembled for a single session.
  * -----------------------------------------------------------------------------
  */
-extern uint8_t
+extern uint8_t 
 inp_next(struct ud* u) 
 {
   int c;
-	
-  if (u->inp_curr < u->inp_fill) {
-	++u->inp_curr;
-	++u->inp_ctr;
-	return *u->inp_curr;
-  }
 
-  if (u->inp_end) {
-	u->error = 1;
-	return 0;
-  }
-
-  if ( (c = u->inp_hook(u)) == -1) {
+  if (u->inp_curr != u->inp_fill)
+	c = u->inp_cache[++u->inp_curr];
+  else if ((c = u->inp_hook(u)) == -1 || u->inp_end) {
 	u->error = 1;
 	u->inp_end = 1;
 	return 0;
-  }
-
-  if (u->inp_fill == NULL) {
-	u->inp_curr = u->inp_cache;
-	u->inp_fill = u->inp_cache;
   } else {
-	++u->inp_curr;
-	++u->inp_fill;
+	u->inp_curr = ++u->inp_fill;
+	u->inp_cache[u->inp_fill] = c;
   }
 
-  ++u->inp_ctr;
-  *(u->inp_fill) = c;
+  u->inp_sess[u->inp_ctr++] = c;
 
-  return (unsigned char)c;
+  return (uint8_t)c;
+}
+
+/* -----------------------------------------------------------------------------
+ * inp_back() - Move back a single byte in the stream.
+ * -----------------------------------------------------------------------------
+ */
+extern void
+inp_back(struct ud* u) 
+{
+  if (u->inp_ctr > 0) {
+	--u->inp_curr;
+	--u->inp_ctr;
+  }
 }
 
 /* -----------------------------------------------------------------------------
@@ -136,9 +141,9 @@ inp_next(struct ud* u)
 extern uint8_t
 inp_peek(struct ud* u) 
 {
-	unsigned char r = inp_next(u);
-	inp_back(u);
-	return r;
+  uint8_t r = inp_next(u);
+  inp_back(u);
+  return r;
 }
 
 /* -----------------------------------------------------------------------------
@@ -159,55 +164,51 @@ inp_move(struct ud* u, size_t n)
 extern uint8_t 
 inp_uint8(struct ud* u)
 {
-  uint8_t *ref;
   return inp_next(u);
-  ref = u->inp_curr;
-  return *ref;
 }
 
 extern uint16_t 
 inp_uint16(struct ud* u)
 {
-  uint8_t *ref;
+  uint16_t r, ret;
 
-  inp_next(u);
-  ref = u->inp_curr;
-  inp_move(u, sizeof(uint16_t) - 1);
-
-  return *ref | (*(ref+1) << 8);
+  ret = inp_next(u);
+  r = inp_next(u);
+  return ret | (r << 8);
 }
 
 extern uint32_t 
 inp_uint32(struct ud* u)
 {
-  uint8_t *ref;
-  inp_next(u);
-  ref = u->inp_curr;
+  uint32_t r, ret;
 
-  inp_move(u, sizeof(uint32_t) - 1);
-
-  return *ref | (*(ref+1) << 8) | (*(ref+2) << 16) | (*(ref+3) << 24);
+  ret = inp_next(u);
+  r = inp_next(u);
+  ret = ret | (r << 8);
+  r = inp_next(u);
+  ret = ret | (r << 16);
+  r = inp_next(u);
+  return ret | (r << 24);
 }
 
 extern uint64_t 
 inp_uint64(struct ud* u)
 {
-  uint8_t *ref;
-  uint64_t ret, r;
+  uint64_t r, ret;
 
-  inp_next(u);
-  ref = u->inp_curr;
-  inp_move(u, sizeof(uint64_t) - 1);
-
-  ret = (*ref | (*(ref+1) << 8) | (*(ref+2) << 16) | (*(ref+3) << 24)) & 0xFFFFFFFF;
-  r = *(ref+4);
+  ret = inp_next(u);
+  r = inp_next(u);
+  ret = ret | (r << 8);
+  r = inp_next(u);
+  ret = ret | (r << 16);
+  r = inp_next(u);
+  ret = ret | (r << 24);
+  r = inp_next(u);
   ret = ret | (r << 32);
-  r = *(ref+5);
+  r = inp_next(u);
   ret = ret | (r << 40);
-  r = *(ref+6);
+  r = inp_next(u);
   ret = ret | (r << 48);
-  r = *(ref+7);
-  ret = ret | (r << 56);
-  
-  return ret;
+  r = inp_next(u);
+  return ret | (r << 56);
 }

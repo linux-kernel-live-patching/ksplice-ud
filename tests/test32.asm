@@ -131,12 +131,12 @@
 	cmovo eax, [eax]
 	cmovno eax, [bx]
 	cmovb eax, [eax]
-	cmovnb eax, [bx]
+	cmovae eax, [bx]
 	cmovo eax, [eax]
 	cmovz eax, ebx
 	cmovnz eax, [eax]
 	cmovbe eax, [bx]
-	cmovnbe eax, [bx]
+	cmova eax, [bx]
 	movmskps eax, xmm0
 	movmskpd eax, xmm0
 	sqrtps xmm1, xmm0
@@ -232,3 +232,4 @@
 	psrldq xmm0, 0x10
 	movsldup xmm0, [eax]
 	add [0xffffffff], eax
+	cvtsi2ss xmm1, dword [eax]

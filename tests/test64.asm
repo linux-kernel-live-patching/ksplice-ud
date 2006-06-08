@@ -1,4 +1,5 @@
 [bits 64]
+	mov rax, 0x102030405060708
 	mov [eax+0x10], ax
 	mov [eax+0x1000], ebx
 	mov [ebp+eax+0x0], esi
@@ -126,4 +127,12 @@
 	prefetchnta [eax]
 	prefetch [eax]
 	add [r8], r9b
-	mov [rax+0x8fffffff], eax
+	mov [rax-0x1], eax
+	inc rax
+	jmp qword near [eax]
+	jmp rax
+	mov [0x10], rax
+	mov rax, [0x10]
+	mov rax, 0x102030405060708
+	nop 
+	xchg r8, rax

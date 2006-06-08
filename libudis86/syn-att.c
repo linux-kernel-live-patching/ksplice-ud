@@ -80,13 +80,13 @@ gen_operand(struct ud* u, struct ud_operand* op)
 	case UD_OP_JIMM:
 		switch (op->size) {
 			case  8:
-				mkasm(u, "0x%lx", u->pc + op->lval.sbyte); 
+				mkasm(u, "0x" FMT64 "x", u->pc + op->lval.sbyte); 
 				break;
 			case 16:
-				mkasm(u, "0x%lx", u->pc + op->lval.sword);
+				mkasm(u, "0x" FMT64 "x", u->pc + op->lval.sword);
 				break;
 			case 32:
-				mkasm(u, "0x%lx", u->pc + op->lval.sdword);
+				mkasm(u, "0x" FMT64 "x", u->pc + op->lval.sdword);
 				break;
 			default:break;
 		}

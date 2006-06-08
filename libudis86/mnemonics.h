@@ -579,6 +579,13 @@ enum ud_mnemonic_code
   UD_Iprefetcht0,
   UD_Iprefetcht1,
   UD_Iprefetcht2,
+  UD_Icmovae,
+  UD_Icmova,
+  UD_Icmovge,
+  UD_Icmovg,
+  UD_Iseta,
+  UD_Isetge,
+  UD_Isetg,
   UD_Inone,
   UD_I3vil
 };

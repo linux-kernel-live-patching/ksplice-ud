@@ -319,7 +319,7 @@ struct map_entry itab_1byte[0x100] =
 /* 9E */ { UD_Isahf,	NOARG,	NOARG,	NOARG,	Pnone },
 /* 9F */ { UD_Ilahf,	NOARG,	NOARG,	NOARG,	Pnone },
 /* A0 */ { UD_Imov,	AL,	Ob,	NOARG,	Pnone },
-/* A1 */ { UD_Imov,	rAX,	Ov,	NOARG,	Po32 | Pa32 },
+/* A1 */ { UD_Imov,	rAX,	Ov,	NOARG,	Po32 | Pa32 | REX(_W) },
 /* A2 */ { UD_Imov,	Ob,	AL,	NOARG,	Pnone },
 /* A3 */ { UD_Imov,	Ov,	rAX, 	NOARG,	Po32 | Pa32 },
 /* A4 */ { UD_Imovsb,	NOARG,	NOARG,	NOARG,	Pnone },
@@ -491,19 +491,19 @@ struct map_entry itab_2byte[0x100] =
 /* 40 */ { UD_Icmovo,	Gv,	Ev,	NOARG,	Po32 | Pa32 | REX(_W|_R|_X|_B) },
 /* 41 */ { UD_Icmovno,	Gv,	Ev,	NOARG,	Po32 | Pa32 | REX(_W|_R|_X|_B) },
 /* 42 */ { UD_Icmovb,	Gv,	Ev,	NOARG,	Po32 | Pa32 | REX(_W|_R|_X|_B) },
-/* 43 */ { UD_Icmovnb,	Gv,	Ev,	NOARG,	Po32 | Pa32 | REX(_W|_R|_X|_B) },
+/* 43 */ { UD_Icmovae,	Gv,	Ev,	NOARG,	Po32 | Pa32 | REX(_W|_R|_X|_B) },
 /* 44 */ { UD_Icmovz,	Gv,	Ev,	NOARG,	Po32 | Pa32 | REX(_W|_R|_X|_B) },
 /* 45 */ { UD_Icmovnz,	Gv,	Ev,	NOARG,	Po32 | Pa32 | REX(_W|_R|_X|_B) },
 /* 46 */ { UD_Icmovbe,	Gv,	Ev,	NOARG,	Po32 | Pa32 | REX(_W|_R|_X|_B) },
-/* 47 */ { UD_Icmovnbe,	Gv,	Ev,	NOARG,	Po32 | Pa32 | REX(_W|_R|_X|_B) },
+/* 47 */ { UD_Icmova,	Gv,	Ev,	NOARG,	Po32 | Pa32 | REX(_W|_R|_X|_B) },
 /* 48 */ { UD_Icmovs,	Gv,	Ev,	NOARG,	Po32 | Pa32 | REX(_W|_R|_X|_B) },
 /* 49 */ { UD_Icmovns,	Gv,	Ev,	NOARG,	Po32 | Pa32 | REX(_W|_R|_X|_B) },
 /* 4A */ { UD_Icmovp,	Gv,	Ev,	NOARG,	Po32 | Pa32 | REX(_W|_R|_X|_B) },
 /* 4B */ { UD_Icmovnp,	Gv,	Ev,	NOARG,	Po32 | Pa32 | REX(_W|_R|_X|_B) },
 /* 4C */ { UD_Icmovl,	Gv,	Ev,	NOARG,	Po32 | Pa32 | REX(_W|_R|_X|_B) },
-/* 4D */ { UD_Icmovnl,	Gv,	Ev,	NOARG,	Po32 | Pa32 | REX(_W|_R|_X|_B) },
+/* 4D */ { UD_Icmovge,	Gv,	Ev,	NOARG,	Po32 | Pa32 | REX(_W|_R|_X|_B) },
 /* 4E */ { UD_Icmovle,	Gv,	Ev,	NOARG,	Po32 | Pa32 | REX(_W|_R|_X|_B) },
-/* 4F */ { UD_Icmovnle,	Gv,	Ev,	NOARG,	Po32 | Pa32 | REX(_W|_R|_X|_B) },
+/* 4F */ { UD_Icmovg,	Gv,	Ev,	NOARG,	Po32 | Pa32 | REX(_W|_R|_X|_B) },
 /* 50 */ { UD_Imovmskps,Gd,	VR,	NOARG,	Po32 | REX(_W|_R|_B) },
 /* 51 */ { UD_Isqrtps,	V,	W,	NOARG,	Pa32 | REX(_R|_X|_B) },
 /* 52 */ { UD_Irsqrtps,	V,	W,	NOARG,	Pa32 | REX(_R|_X|_B) },
@@ -575,15 +575,15 @@ struct map_entry itab_2byte[0x100] =
 /* 94 */ { UD_Isetz,	Eb,	NOARG,	NOARG,	Pa32 | REX(_R|_X|_B) },
 /* 95 */ { UD_Isetnz,	Eb,	NOARG,	NOARG,	Pa32 | REX(_R|_X|_B) },
 /* 96 */ { UD_Isetbe,	Eb,	NOARG,	NOARG,	Pa32 | REX(_R|_X|_B) },
-/* 97 */ { UD_Isetnbe,	Eb,	NOARG,	NOARG,	Pa32 | REX(_R|_X|_B) },
+/* 97 */ { UD_Iseta,	Eb,	NOARG,	NOARG,	Pa32 | REX(_R|_X|_B) },
 /* 98 */ { UD_Isets,	Eb,	NOARG,	NOARG,	Pa32 | REX(_R|_X|_B) },
 /* 99 */ { UD_Isetns,	Eb,	NOARG,	NOARG,	Pa32 | REX(_R|_X|_B) },
 /* 9A */ { UD_Isetp,	Eb,	NOARG,	NOARG,	Pa32 | REX(_R|_X|_B) },
 /* 9B */ { UD_Isetnp,	Eb,	NOARG,	NOARG,	Pa32 | REX(_R|_X|_B) },
 /* 9C */ { UD_Isetl,	Eb,	NOARG,	NOARG,	Pa32 | REX(_R|_X|_B) },
-/* 9D */ { UD_Isetnl,	Eb,	NOARG,	NOARG,	Pa32 | REX(_R|_X|_B) },
+/* 9D */ { UD_Isetge,	Eb,	NOARG,	NOARG,	Pa32 | REX(_R|_X|_B) },
 /* 9E */ { UD_Isetle,	Eb,	NOARG,	NOARG,	Pa32 | REX(_R|_X|_B) },
-/* 9F */ { UD_Isetnle,	Eb,	NOARG,	NOARG,	Pa32 | REX(_R|_X|_B) },
+/* 9F */ { UD_Isetg,	Eb,	NOARG,	NOARG,	Pa32 | REX(_R|_X|_B) },
 /* A0 */ { UD_Ipush,	FS,	NOARG,	NOARG,	Pnone },
 /* A1 */ { UD_Ipop,	FS,	NOARG,	NOARG,	Pnone },
 /* A2 */ { UD_Icpuid,	NOARG,	NOARG,	NOARG,	Pnone },
@@ -1531,14 +1531,14 @@ struct map_entry itab_g2_opC0[0x8] = {
 };
 
 struct map_entry itab_g2_opC1[0x8] = {
-  { UD_Irol,	Ev,	Ib,	NOARG,	Po32 | Pa32 | REX(_W|_R|_X|_B) },
-  { UD_Iror,	Ev,	Ib,	NOARG,	Po32 | Pa32 | REX(_W|_R|_X|_B) },
-  { UD_Ircl,	Ev,	Ib,	NOARG,	Po32 | Pa32 | REX(_W|_R|_X|_B) },
-  { UD_Ircr,	Ev,	Ib,	NOARG,	Po32 | Pa32 | REX(_W|_R|_X|_B) },
-  { UD_Ishl,	Ev,	Ib,	NOARG,	Po32 | Pa32 | REX(_W|_R|_X|_B) },
-  { UD_Ishr,	Ev,	Ib,	NOARG,	Po32 | Pa32 | REX(_W|_R|_X|_B) },
-  { UD_Isal,	Ev,	Ib,	NOARG,	Po32 | Pa32 | REX(_W|_R|_X|_B) },
-  { UD_Isar,	Ev,	Ib,	NOARG,	Po32 | Pa32 | REX(_W|_R|_X|_B) }
+  { UD_Irol,	Ev,	Ib,	NOARG,	Pc1 | Po32 | Pa32 | REX(_W|_R|_X|_B) },
+  { UD_Iror,	Ev,	Ib,	NOARG,	Pc1 | Po32 | Pa32 | REX(_W|_R|_X|_B) },
+  { UD_Ircl,	Ev,	Ib,	NOARG,	Pc1 | Po32 | Pa32 | REX(_W|_R|_X|_B) },
+  { UD_Ircr,	Ev,	Ib,	NOARG,	Pc1 | Po32 | Pa32 | REX(_W|_R|_X|_B) },
+  { UD_Ishl,	Ev,	Ib,	NOARG,	Pc1 | Po32 | Pa32 | REX(_W|_R|_X|_B) },
+  { UD_Ishr,	Ev,	Ib,	NOARG,	Pc1 | Po32 | Pa32 | REX(_W|_R|_X|_B) },
+  { UD_Isal,	Ev,	Ib,	NOARG,	Pc1 | Po32 | Pa32 | REX(_W|_R|_X|_B) },
+  { UD_Isar,	Ev,	Ib,	NOARG,	Pc1 | Po32 | Pa32 | REX(_W|_R|_X|_B) }
 };
 
 struct map_entry itab_g2_opD0[0x8] = {
@@ -1623,7 +1623,7 @@ struct map_entry itab_g5_opFF[0x8] = {
   { UD_Idec,		Ev,	NOARG,	NOARG,	Pc1 | Po32 | Pa32 | REX(_W|_R|_X|_B) },
   { UD_Icall,		Ev,	NOARG,	NOARG,	Pc1 | Po32 | Pa32 | Pdef64 | REX(_W|_R|_X|_B) },
   { UD_Icall,		Ep,	NOARG,	NOARG,	Pc1 | Po32 | Pa32 | REX(_W|_R|_X|_B) },
-  { UD_Ijmp,		Ev,	NOARG,	NOARG,	Pc1 | Po32 | Pa32 | REX(_W|_R|_X|_B) },
+  { UD_Ijmp,		Ev,	NOARG,	NOARG,	Pc1 | Po32 | Pa32 | Pdef64 | REX(_W|_R|_X|_B) },
   { UD_Ijmp,		Ep,	NOARG,	NOARG,	Pc1 | Po32 | Pa32 | REX(_W|_R|_X|_B) },
   { UD_Ipush,		Ev,	NOARG,	NOARG,	Pc1 | Pdef64 | Po32 | Pa32 | REX(_W|_R|_X|_B) },
   { UD_Iinvalid,	NOARG, 	NOARG,	NOARG,	Pnone }
@@ -2639,22 +2639,23 @@ ud_map_get_3dnow(unsigned char suffix)
 static void
 search_1byte_insn(register struct ud* u)
 {
-  u->opcmap_entry = &itab_1byte[inp_curr(u)];
+  u->mapen = &itab_1byte[inp_curr(u)];
 
-  if (inp_curr(u) == 0x90 && u->dis_mode == 32)
-	u->opcmap_entry = &nop;	
+  if (inp_curr(u) == 0x90) {
+	if (!(u->dis_mode == 64 && P_REX_B(u->pfx_rex)))
+		u->mapen = &nop;
+  } else if (u->dis_mode == 64 && (u->mapen)->mnemonic == UD_Iarpl)
+	u->mapen = &movsxd;
 
-  else if (u->dis_mode == 64 && (u->opcmap_entry)->mnemonic == UD_Iarpl)
-	u->opcmap_entry = &movsxd;
+  else if (u->mapen->mnemonic == UD_Igrp)
+	u->mapen = &itab_groups[u->mapen->prefix].me_pfx_none[MODRM_REG(inp_peek(u))];
 
-  else if (u->opcmap_entry->mnemonic == UD_Igrp)
-	u->opcmap_entry = &itab_groups[u->opcmap_entry->prefix].me_pfx_none[MODRM_REG(inp_peek(u))];
-
-  else if ((u->opcmap_entry)->mnemonic == UD_Ix87) {
-	if (inp_peek(u) <= 0xBF)
-		u->opcmap_entry = &itab_x87_reg[(inp_curr(u))-0xD8][MODRM_REG(inp_peek(u))];
+  else if ((u->mapen)->mnemonic == UD_Ix87) {
+	if (inp_peek(u) <= 0xBF) {
+		u->mapen = &itab_x87_reg[(inp_curr(u))-0xD8][MODRM_REG(inp_peek(u))];		
+	}
 	else {
-		u->opcmap_entry = &itab_x87[inp_curr(u)-0xD8][inp_peek(u)-0xC0];
+		u->mapen = &itab_x87[inp_curr(u)-0xD8][inp_peek(u)-0xC0];
 		inp_next(u);
 	}
   }  
@@ -2672,56 +2673,56 @@ search_2byte_insn(register struct ud* u)
   inp_next(u);
 
   if (u->pfx_insn == 0x66) {
-	u->opcmap_entry = &itab_2byte_prefix66[inp_curr(u)];
-	if (u->opcmap_entry != NULL && u->opcmap_entry->mnemonic != UD_Iinvalid)
+	u->mapen = &itab_2byte_prefix66[inp_curr(u)];
+	if (u->mapen != NULL && u->mapen->mnemonic != UD_Iinvalid)
 		u->pfx_opr = 0;
   } else if (u->pfx_insn == 0xF2) {
-	u->opcmap_entry = &itab_2byte_prefixF2[inp_curr(u)];
-	if (u->opcmap_entry != NULL && u->opcmap_entry->mnemonic != UD_Iinvalid)
+	u->mapen = &itab_2byte_prefixF2[inp_curr(u)];
+	if (u->mapen != NULL && u->mapen->mnemonic != UD_Iinvalid)
 		u->pfx_repne = 0;
   } else if (u->pfx_insn == 0xF3) {
-	u->opcmap_entry = &itab_2byte_prefixF3[inp_curr(u)];
-	if (u->opcmap_entry != NULL && u->opcmap_entry->mnemonic != UD_Iinvalid)
+	u->mapen = &itab_2byte_prefixF3[inp_curr(u)];
+	if (u->mapen != NULL && u->mapen->mnemonic != UD_Iinvalid)
 		u->pfx_rep = 0;
   }
 
-  if (u->opcmap_entry == NULL || u->opcmap_entry->mnemonic == UD_Iinvalid)
-	u->opcmap_entry = &itab_2byte[inp_curr(u)];
+  if (u->mapen == NULL || u->mapen->mnemonic == UD_Iinvalid)
+	u->mapen = &itab_2byte[inp_curr(u)];
 
-  if (u->opcmap_entry->mnemonic == UD_I3dnow)
-	u->opcmap_entry = &itab_3DNow;
+  if (u->mapen->mnemonic == UD_I3dnow)
+	u->mapen = &itab_3DNow;
 
-  if (u->opcmap_entry->mnemonic != UD_Igrp)
+  if (u->mapen->mnemonic != UD_Igrp)
 	return;
 
   /* If instruction is in a Group */
 
-  gindex = u->opcmap_entry->prefix;
+  gindex = u->mapen->prefix;
 
   if (u->pfx_insn == 0x66 && itab_groups[gindex].me_pfx_66) {
-	u->opcmap_entry = &itab_groups[gindex].me_pfx_66[MODRM_REG(inp_peek(u))];
-	if (u->opcmap_entry != NULL && u->opcmap_entry->mnemonic != UD_Iinvalid) {
+	u->mapen = &itab_groups[gindex].me_pfx_66[MODRM_REG(inp_peek(u))];
+	if (u->mapen != NULL && u->mapen->mnemonic != UD_Iinvalid) {
 		u->pfx_opr = 0;
 		return;
 	}
   }
   else if (u->pfx_insn == 0xF2 && itab_groups[gindex].me_pfx_f2) {
-	u->opcmap_entry = &itab_groups[gindex].me_pfx_f2[MODRM_REG(inp_peek(u))];
-	if (u->opcmap_entry != NULL && u->opcmap_entry->mnemonic != UD_Iinvalid) {
+	u->mapen = &itab_groups[gindex].me_pfx_f2[MODRM_REG(inp_peek(u))];
+	if (u->mapen != NULL && u->mapen->mnemonic != UD_Iinvalid) {
 		u->pfx_repne = 0;
 		return;
 	}
   }
   else if (u->pfx_insn == 0xF3 && itab_groups[gindex].me_pfx_f3) {
-	u->opcmap_entry = &itab_groups[gindex].me_pfx_f3[MODRM_REG(inp_peek(u))];
-	if (u->opcmap_entry != NULL && u->opcmap_entry->mnemonic != UD_Iinvalid) {
+	u->mapen = &itab_groups[gindex].me_pfx_f3[MODRM_REG(inp_peek(u))];
+	if (u->mapen != NULL && u->mapen->mnemonic != UD_Iinvalid) {
 		u->pfx_rep = 0;
 		return;
 	}
   }
 
-  if (! u->pfx_insn || u->opcmap_entry->mnemonic == UD_Igrp)
-	u->opcmap_entry = &itab_groups[gindex].me_pfx_none[MODRM_REG(inp_peek(u))];
+  if (! u->pfx_insn || u->mapen->mnemonic == UD_Igrp)
+	u->mapen = &itab_groups[gindex].me_pfx_none[MODRM_REG(inp_peek(u))];
 
   /* 0F01 - opcode extensions */
   if (inp_curr(u) == 0x01) {
@@ -2730,12 +2731,12 @@ search_2byte_insn(register struct ud* u)
 	uint8_t rm  = MODRM_RM(inp_peek(u));
 
 	if (reg == 3 && mod == 3) {
-		u->opcmap_entry = &itab_g7_op0F01_Reg3[rm];
+		u->mapen = &itab_g7_op0F01_Reg3[rm];
 		inp_next(u);
 	} else if (reg == 7 && mod == 3) {
-		u->opcmap_entry = &itab_g7_op0F01_Reg7[rm];
+		u->mapen = &itab_g7_op0F01_Reg7[rm];
 		inp_next(u);
-	} else u->opcmap_entry = &itab_g7_op0F01[reg];
+	} else u->mapen = &itab_g7_op0F01[reg];
   } 
   /* 0FAE - opcode extensions */
   else if (inp_curr(u) == 0xAE) {
@@ -2743,15 +2744,15 @@ search_2byte_insn(register struct ud* u)
 	uint8_t mod = MODRM_MOD(inp_peek(u));
 
 	if (reg == 5 && mod == 3) {
-		u->opcmap_entry = &itab_gF_op0FAE_Reg5;
+		u->mapen = &itab_gF_op0FAE_Reg5;
 		inp_next(u);
 	} else if (reg == 6 && mod == 3) {
-		u->opcmap_entry = &itab_gF_op0FAE_Reg6;
+		u->mapen = &itab_gF_op0FAE_Reg6;
 		inp_next(u);
 	} else if (reg == 7 && mod == 3) {
-		u->opcmap_entry = &itab_gF_op0FAE_Reg7;
+		u->mapen = &itab_gF_op0FAE_Reg7;
 		inp_next(u);
-	} else u->opcmap_entry = &itab_gF_op0FAE[reg];
+	} else u->mapen = &itab_gF_op0FAE[reg];
   }
 }
 
@@ -2769,7 +2770,7 @@ ud_search_map(register struct ud* u)
 	search_2byte_insn(u);
   else	search_1byte_insn(u);
 
-  u->mnemonic = u->opcmap_entry->mnemonic;
+  u->mnemonic = u->mapen->mnemonic;
 }
 
 /* =============================================================================

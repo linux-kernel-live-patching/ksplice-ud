@@ -573,6 +573,13 @@ const char* ud_mnemonics[] =
   "prefetcht0",
   "prefetcht1",
   "prefetcht2",
+  "cmovae",
+  "cmova",
+  "cmovge",
+  "cmovg",
+  "seta",
+  "setge",
+  "setg",
   "none",
   "I3vil",
 };

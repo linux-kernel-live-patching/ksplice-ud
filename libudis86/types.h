@@ -133,24 +133,22 @@ struct ud_operand
  */
 struct ud
 {
-  struct map_entry*	opcmap_entry;
+  struct map_entry*	mapen;
   enum ud_mnemonic_code	mnemonic;
   struct ud_operand	operand[3];
 
   uint64_t		pc;
   uint8_t		error;
-
   int 			(*inp_hook) (struct ud*);
+  uint8_t 		inp_cache[256];
+  uint8_t		inp_sess[64];
+  uint8_t		inp_curr;
+  uint8_t		inp_fill;
   FILE*			inp_file;
   uint8_t		inp_ctr;
-  uint8_t 		inp_cache[64];
-  uint8_t*		inp_curr;
-  uint8_t*		inp_fill;
   uint8_t*		inp_buff;
   uint8_t*		inp_buff_end;
-  uint8_t*		inp_sess;
   uint8_t		inp_end;
-
   uint8_t	 	pfx_rex;
   uint8_t 		pfx_seg;
   uint8_t 		pfx_opr;
@@ -175,6 +173,7 @@ struct ud
   char			insn_hexcode[32];
   char			insn_buffer[64];
   unsigned int		insn_fill;
+
 };
 
 /* -----------------------------------------------------------------------------
@@ -190,5 +189,6 @@ typedef struct ud_operand 	ud_operand_t;
 #define UD_SYN_INTEL		ud_translate_intel
 #define UD_SYN_ATT		ud_translate_att
 #define UD_EOI			-1
+#define UD_INP_CACHE_SZ		32
 
 #endif

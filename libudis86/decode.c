@@ -171,8 +171,9 @@ resolve_gpr64(struct ud* u, enum map_operand_type gpr_op)
   if (u->opr_mode == 16)
 	return gpr_op + UD_R_AX;
   if (u->dis_mode == 32 || 
-	(u->opr_mode == 32 && ! (P_REX_W(u->pfx_rex) || u->default64)))
+	(u->opr_mode == 32 && ! (P_REX_W(u->pfx_rex) || u->default64))) {
 	return gpr_op + UD_R_EAX;
+  }
 
   return gpr_op + UD_R_RAX;
 }
@@ -417,14 +418,14 @@ disasm_operands(register struct ud* u)
 
 
   /* mopXt = map entry, operand X, type; */
-  enum map_operand_type mop1t = u->opcmap_entry->operand1.type;
-  enum map_operand_type mop2t = u->opcmap_entry->operand2.type;
-  enum map_operand_type mop3t = u->opcmap_entry->operand3.type;
+  enum map_operand_type mop1t = u->mapen->operand1.type;
+  enum map_operand_type mop2t = u->mapen->operand2.type;
+  enum map_operand_type mop3t = u->mapen->operand3.type;
 
   /* mopXs = map entry, operand X, size */
-  unsigned int mop1s = u->opcmap_entry->operand1.size;
-  unsigned int mop2s = u->opcmap_entry->operand2.size;
-  unsigned int mop3s = u->opcmap_entry->operand3.size;
+  unsigned int mop1s = u->mapen->operand1.size;
+  unsigned int mop2s = u->mapen->operand2.size;
+  unsigned int mop3s = u->mapen->operand3.size;
 
   /* iop = instruction operand */
   register struct ud_operand* iop = u->operand;
@@ -764,7 +765,7 @@ clear_insn(register struct ud* u)
   memset(&u->operand[1], 0, sizeof(u->operand[1]));
   memset(&u->operand[2], 0, sizeof(u->operand[2]));
 
-  u->opcmap_entry = NULL;
+  u->mapen = NULL;
 }
 
 /* -----------------------------------------------------------------------------
@@ -778,7 +779,7 @@ extract_prefixes(register struct ud* u)
   int i = 0;	/* prefix counter */
 
   inp_next(u);
-	
+
   /* search for prefixes */
   for (i = 0; p == 0; ++i) {	
 	/* check for rex bit in 64 bits mode */		
@@ -787,6 +788,7 @@ extract_prefixes(register struct ud* u)
 			u->pfx_rex = inp_curr(u);
 			inp_next(u); 
 		} else p = 1;
+
 	} else switch(inp_curr(u)) {
 		case 0x2E : u->pfx_seg = UD_R_CS; inp_next(u); break;
 		case 0x36 : u->pfx_seg = UD_R_SS; inp_next(u); break;
@@ -822,12 +824,12 @@ set_mode_flags(register struct ud* u)
 {
   /* set 64bit-mode flags */
   if (u->dis_mode == 64) {
-	u->pfx_rex = u->pfx_rex & P_REX_MASK(u->opcmap_entry->prefix); 
-	u->default64 = P_DEF64(u->opcmap_entry->prefix); 
-	u->error = P_INV64(u->opcmap_entry->prefix);
+	u->pfx_rex = u->pfx_rex & P_REX_MASK(u->mapen->prefix); 
+	u->default64 = P_DEF64(u->mapen->prefix); 
+	u->error = P_INV64(u->mapen->prefix);
 
 	/* set effective operand size */
-	if (P_REX(u->opcmap_entry->prefix) && P_REX_W(u->pfx_rex))
+	if (P_REX(u->mapen->prefix) && P_REX_W(u->pfx_rex))
 		u->opr_mode = 64;
 	else if (u->pfx_opr)
 		u->opr_mode = 16;
@@ -850,16 +852,16 @@ set_mode_flags(register struct ud* u)
   }
 
   /* check if P_O32 prefix is used */
-  if (! P_O32(u->opcmap_entry->prefix) && u->pfx_opr)
+  if (! P_O32(u->mapen->prefix) && u->pfx_opr)
 	u->error = 1;
 
   /* check if P_A32 prefix was used */
-  if (! P_A32(u->opcmap_entry->prefix) && u->pfx_adr)
+  if (! P_A32(u->mapen->prefix) && u->pfx_adr)
 	u->error = 1;
 
-  u->c1 = (P_C1(u->opcmap_entry->prefix)) ? 1 : 0;
-  u->c2 = (P_C2(u->opcmap_entry->prefix)) ? 1 : 0;
-  u->c3 = (P_C3(u->opcmap_entry->prefix)) ? 1 : 0;
+  u->c1 = (P_C1(u->mapen->prefix)) ? 1 : 0;
+  u->c2 = (P_C2(u->mapen->prefix)) ? 1 : 0;
+  u->c3 = (P_C3(u->mapen->prefix)) ? 1 : 0;
 }
 
 /* -----------------------------------------------------------------------------
@@ -871,7 +873,7 @@ static void
 set_mnemonic(register struct ud* u) 
 {
   /* resolve mode dependent mnemonic */
-  if (P_DEPM(u->opcmap_entry->prefix))
+  if (P_DEPM(u->mapen->prefix))
 	u->mnemonic = resolve_mnemonic(u);
 	
   u->br_far = 0;
@@ -917,24 +919,21 @@ set_mnemonic(register struct ud* u)
 static void 
 do_error(register struct ud* u) 
 {
-  if (u->error) {
-	clear_insn(u);
-	inp_reset(u); 
-	switch(u->operand[0].lval.sbyte = inp_uint8(u)) {
-		case 0x66: 
-			u->mnemonic = UD_Io32; 
-			break;
-		case 0x67: 
-			u->mnemonic = UD_Ia32; 
-			break;
-		default:   
-			u->mnemonic = UD_Idb;
-			u->operand[0].type = UD_OP_IMM;
-			u->operand[0].size = 8;	
-			break;
-	}
-  } 
-
+  clear_insn(u);
+  inp_reset(u); 
+  switch(u->operand[0].lval.sbyte = inp_uint8(u)) {
+	case 0x66: 
+		u->mnemonic = UD_Io32; 
+		break;
+	case 0x67: 
+		u->mnemonic = UD_Ia32; 
+		break;
+	default:   
+		u->mnemonic = UD_Idb;
+		u->operand[0].type = UD_OP_IMM;
+		u->operand[0].size = 8;	
+		break;
+  }
 }
 
 /* -----------------------------------------------------------------------------
@@ -972,7 +971,8 @@ extern unsigned int ud_decode(register struct ud* u)
   set_mode_flags(u);
   disasm_operands(u);
   set_mnemonic(u);
-  do_error(u);
+  if (u->error)
+  	do_error(u);
   gen_hex(u);
 
   /* Update program counter */
