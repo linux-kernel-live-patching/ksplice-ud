@@ -1,4 +1,6 @@
- * [June/8/06] Missing instructions added. (As per AMD64 Manual Vol3 Rev 3.11 
+ * [Jul/15/06] Fixed: Wrongly printing "loopnz" as "loopn" (Thanks to Sanjay Patel)
+ 	       Fixed: Wrongly decoding "out Ib, AL" ((Thanks to Sanjay Patel)
+ * [Jun/8/06]  Missing instructions added. (As per AMD64 Manual Vol3 Rev 3.11 
                Dec 2005)
                Fixed minor decoder issues. (Thanks to Sanjay Patel)
                Fixed issues with input stream buffer. (Thanks to Sanjay Patel)

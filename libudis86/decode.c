@@ -701,7 +701,7 @@ disasm_operands(register struct ud* u)
 			decode_imm(u, mop2s, &(iop[1]));
 		else if (mop2t == OP_AL) {
 			iop[1].type = UD_OP_REG;
-			iop[1].base = UD_R_DX;
+			iop[1].base = UD_R_AL;
 			iop[1].size = 16;
 		} else if (mop2t == OP_eAX) {
 			iop[1].type = UD_OP_REG;	
@@ -903,27 +903,14 @@ extern unsigned int ud_decode(register struct ud* u)
 
   /* [7] Check for errors  */
 
-  if (! u->error)
-	goto no_errors;
-
-  clear_insn(u);
-  inp_reset(u);
+  if (! u->error) {
+	clear_insn(u);
+	inp_reset(u);
  
-  switch(u->operand[0].lval.sbyte = inp_uint8(u)) {
-	case 0x66: 
-		u->mnemonic = UD_Io32; 
-		break;
-	case 0x67: 
-		u->mnemonic = UD_Ia32; 
-		break;
-	default:   
-		u->mnemonic = UD_Idb;
-		u->operand[0].type = UD_OP_IMM;
-		u->operand[0].size = 8;	
-		break;
-  }
-
-no_errors:
+	u->mnemonic = UD_Idb;
+	u->operand[0].type = UD_OP_IMM;
+	u->operand[0].size = 8;
+ }
 
   /* [8] Generate hexadecimal code  */
 

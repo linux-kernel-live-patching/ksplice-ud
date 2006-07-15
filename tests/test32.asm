@@ -235,3 +235,4 @@
 	cvtsi2ss xmm1, dword [eax]
 	pause 
 	pop dword [eax]
+	out 0x0, al

@@ -383,7 +383,7 @@ struct map_entry itab_1byte[0x100] =
 /* DD */ { UD_Ix87,	NOARG,	NOARG,	NOARG,	Pnone },
 /* DE */ { UD_Ix87,	NOARG,	NOARG,	NOARG,	Pnone },
 /* DF */ { UD_Ix87,	NOARG,	NOARG,	NOARG,	Pnone },
-/* E0 */ { UD_Iloopn,	Jb,	NOARG,	NOARG,	Pnone },
+/* E0 */ { UD_Iloopnz,	Jb,	NOARG,	NOARG,	Pnone },
 /* E1 */ { UD_Iloope,	Jb,	NOARG,	NOARG,	Pnone },
 /* E2 */ { UD_Iloop,	Jb,	NOARG,	NOARG,	Pdef64 },
 /* E3 */ { UD_Ijcxz,	Jb,	NOARG,	NOARG,	Pa32 | PdepM  },
