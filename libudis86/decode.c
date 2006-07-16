@@ -861,14 +861,6 @@ extern unsigned int ud_decode(register struct ud* u)
 	u->adr_mode = (u->pfx_adr) ? 32 : 16;
   }
 
-  /* check if P_O32 prefix is used */
-  if (! P_O32(u->mapen->prefix) && u->pfx_opr)
-	u->error = 1;
-
-  /* check if P_A32 prefix was used */
-  if (! P_A32(u->mapen->prefix) && u->pfx_adr)
-	u->error = 1;
-
   u->c1 = (P_C1(u->mapen->prefix)) ? 1 : 0;
   u->c2 = (P_C2(u->mapen->prefix)) ? 1 : 0;
   u->c3 = (P_C3(u->mapen->prefix)) ? 1 : 0;
@@ -903,7 +895,7 @@ extern unsigned int ud_decode(register struct ud* u)
 
   /* [7] Check for errors  */
 
-  if (! u->error) {
+  if (u->error) {
 	clear_insn(u);
 	inp_reset(u);
  

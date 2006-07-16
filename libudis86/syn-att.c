@@ -118,6 +118,34 @@ ud_translate_att(struct ud *u)
 {
   int size = 0;
 
+  /* check if P_O32 prefix is used */
+  if (! P_O32(u->mapen->prefix) && u->pfx_opr) {
+	switch (u->dis_mode) {
+		case 16: 
+			mkasm(u, "o32 ");
+			break;
+		case 32:
+		case 64:
+ 			mkasm(u, "o16 ");
+			break;
+	}
+  }
+
+  /* check if P_A32 prefix was used */
+  if (! P_A32(u->mapen->prefix) && u->pfx_adr) {
+	switch (u->dis_mode) {
+		case 16: 
+			mkasm(u, "a32 ");
+			break;
+		case 32:
+ 			mkasm(u, "a16 ");
+			break;
+		case 64:
+ 			mkasm(u, "a32 ");
+			break;
+	}
+  }
+
   if (u->pfx_lock)
   	mkasm(u,  "lock ");
   if (u->pfx_rep)
