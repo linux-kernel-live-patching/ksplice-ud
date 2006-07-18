@@ -6,7 +6,7 @@ SHELL		= @SHELL@
 top_srcdir	= @top_srcdir@
 srcdir		= @srcdir@
 CC		= @CC@
-CFLAGS		= -Wall -O2
+CFLAGS		= @CFLAGS@ -Wall -O2
 LIBS		= @LIBS@
 INSTALL		= @INSTALL@
 INSTALL_PROGRAM	= @INSTALL_PROGRAM@
@@ -27,7 +27,7 @@ RM		= rm
 OBJS =	udcli.o ../libudis86/libudis86.a
 
 udcli: $(OBJS)
-	$(CC) $(OBJS) -o udcli
+	$(CC) $(CFLAGS) $(OBJS) -o udcli
 install: udcli
 	$(INSTALL_PROGRAM) $(srcdir)/udcli $(INSTALLROOT)$(bindir)/udcli
 uninstall:
