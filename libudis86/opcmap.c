@@ -1496,14 +1496,14 @@ struct map_entry itab_g1_op82[0x8] = {
 };
 
 struct map_entry itab_g1_op83[0x8] = {
-  { UD_Iadd,	Ev,	Ib,	NOARG,	Pc1 | Po32 | Pa32 | REX(_R|_X|_B) },
-  { UD_Ior,	Ev,	Ib,	NOARG,	Pc1 | Po32 | Pa32 | REX(_R|_X|_B) },
-  { UD_Iadc,	Ev,	Ib,	NOARG,	Pc1 | Po32 | Pa32 | REX(_R|_X|_B) },
-  { UD_Isbb,	Ev,	Ib,	NOARG,	Pc1 | Po32 | Pa32 | REX(_R|_X|_B) },
-  { UD_Iand,	Ev,	Ib,	NOARG,	Pc1 | Po32 | Pa32 | REX(_R|_X|_B) },
-  { UD_Isub,	Ev,	Ib,	NOARG,	Pc1 | Po32 | Pa32 | REX(_R|_X|_B) },
-  { UD_Ixor,	Ev,	Ib,	NOARG,	Pc1 | Po32 | Pa32 | REX(_R|_X|_B) },
-  { UD_Icmp,	Ev,	Ib,	NOARG,	Pc1 | Po32 | Pa32 | REX(_R|_X|_B) }
+  { UD_Iadd,	Ev,	Ib,	NOARG,	Pc1 | Po32 | Pa32 | REX(_R|_X|_B|_W) },
+  { UD_Ior,	Ev,	Ib,	NOARG,	Pc1 | Po32 | Pa32 | REX(_R|_X|_B|_W) },
+  { UD_Iadc,	Ev,	Ib,	NOARG,	Pc1 | Po32 | Pa32 | REX(_R|_X|_B|_W) },
+  { UD_Isbb,	Ev,	Ib,	NOARG,	Pc1 | Po32 | Pa32 | REX(_R|_X|_B|_W) },
+  { UD_Iand,	Ev,	Ib,	NOARG,	Pc1 | Po32 | Pa32 | REX(_R|_X|_B|_W) },
+  { UD_Isub,	Ev,	Ib,	NOARG,	Pc1 | Po32 | Pa32 | REX(_R|_X|_B|_W) },
+  { UD_Ixor,	Ev,	Ib,	NOARG,	Pc1 | Po32 | Pa32 | REX(_R|_X|_B|_W) },
+  { UD_Icmp,	Ev,	Ib,	NOARG,	Pc1 | Po32 | Pa32 | REX(_R|_X|_B|_W) }
 };
 
 struct map_entry itab_g1A_op8F[0x8] = {
