@@ -273,7 +273,7 @@ decode_modrm(struct ud* u, struct ud_operand *op, unsigned int s,
 			op->offset = 8;
 		else if (mod == 2)
 			op->offset = 32;
-		else if (mod == 0 && rm == 5) {			
+		else if (mod == 0 && (rm & 7) == 5) {			
 			op->base = UD_R_RIP;
 			op->offset = 32;
 		} else  op->offset = 0;
@@ -281,7 +281,7 @@ decode_modrm(struct ud* u, struct ud_operand *op, unsigned int s,
 		/* Scale-Index-Base (SIB) */
 		if ((rm & 7) == 4) {
 			inp_next(u);
-
+			
 			op->scale = (1 << SIB_S(inp_curr(u))) & ~1;
 			op->index = UD_R_RAX + (SIB_I(inp_curr(u)) | (P_REX_X(u->pfx_rex) << 3));
 			op->base  = UD_R_RAX + (SIB_B(inp_curr(u)) | (P_REX_B(u->pfx_rex) << 3));
