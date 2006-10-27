@@ -400,7 +400,7 @@ struct map_entry itab_1byte[0x100] =
 /* EE */ { UD_Iout,	DX,	AL,	NOARG,	Pnone },
 /* EF */ { UD_Iout,	DX,	eAX,	NOARG,	Po32 | Pnone },
 /* F0 */ { UD_Ilock,	NOARG,	NOARG,	NOARG,	Pnone },
-/* F1 */ { UD_Iinvalid,	NOARG,	NOARG,	NOARG,	Pnone },
+/* F1 */ { UD_Iint1,	NOARG,	NOARG,	NOARG,	Pnone },
 /* F2 */ { UD_Irepne,	NOARG,	NOARG,	NOARG,	Pnone },
 /* F3 */ { UD_Irep,	NOARG,	NOARG,	NOARG,	Pnone },
 /* F4 */ { UD_Ihlt,	NOARG,	NOARG,	NOARG,	Pnone },
@@ -1462,14 +1462,14 @@ struct map_entry itab_2byte_prefixF2[0x100] =
 
 struct map_entry itab_g1_op80[0x8] = 
 {
-  { UD_Iadd,	Eb,	Ib,	NOARG,	Pa32 | REX(_W|_R|_X|_B) },
-  { UD_Ior,	Eb,	Ib,	NOARG,	Pa32 | REX(_W|_R|_X|_B) },
-  { UD_Iadc,	Eb,	Ib,	NOARG,	Pa32 | REX(_W|_R|_X|_B) },
-  { UD_Isbb,	Eb,	Ib,	NOARG,	Pa32 | REX(_W|_R|_X|_B) },
-  { UD_Iand,	Eb,	Ib,	NOARG,	Pa32 | REX(_W|_R|_X|_B) },
-  { UD_Isub,	Eb,	Ib,	NOARG,	Pa32 | REX(_W|_R|_X|_B) },
-  { UD_Ixor,	Eb,	Ib,	NOARG,	Pa32 | REX(_W|_R|_X|_B) },
-  { UD_Icmp,	Eb,	Ib,	NOARG,	Pa32 | REX(_W|_R|_X|_B) }
+  { UD_Iadd,	Eb,	Ib,	NOARG,	Pc1 | Pa32 | REX(_W|_R|_X|_B) },
+  { UD_Ior,	Eb,	Ib,	NOARG,	Pc1 | Pa32 | REX(_W|_R|_X|_B) },
+  { UD_Iadc,	Eb,	Ib,	NOARG,	Pc1 | Pa32 | REX(_W|_R|_X|_B) },
+  { UD_Isbb,	Eb,	Ib,	NOARG,	Pc1 | Pa32 | REX(_W|_R|_X|_B) },
+  { UD_Iand,	Eb,	Ib,	NOARG,	Pc1 | Pa32 | REX(_W|_R|_X|_B) },
+  { UD_Isub,	Eb,	Ib,	NOARG,	Pc1 | Pa32 | REX(_W|_R|_X|_B) },
+  { UD_Ixor,	Eb,	Ib,	NOARG,	Pc1 | Pa32 | REX(_W|_R|_X|_B) },
+  { UD_Icmp,	Eb,	Ib,	NOARG,	Pc1 | Pa32 | REX(_W|_R|_X|_B) }
 };
 
 struct map_entry itab_g1_op81[0x8] = 
@@ -1485,14 +1485,14 @@ struct map_entry itab_g1_op81[0x8] =
 };
 
 struct map_entry itab_g1_op82[0x8] = {
-  { UD_Iadd,	Eb,	Ib,	NOARG,	Pinv64 | Pa32 | REX(_W|_R|_X|_B) },
-  { UD_Ior,	Eb,	Ib,	NOARG,	Pinv64 | Pa32 | REX(_W|_R|_X|_B) },
-  { UD_Iadc,	Eb,	Ib,	NOARG,	Pinv64 | Pa32 | REX(_W|_R|_X|_B) },
-  { UD_Isbb,	Eb,	Ib,	NOARG,	Pinv64 | Pa32 | REX(_W|_R|_X|_B) },
-  { UD_Iand,	Eb,	Ib,	NOARG,	Pinv64 | Pa32 | REX(_W|_R|_X|_B) },
-  { UD_Isub,	Eb,	Ib,	NOARG,	Pinv64 | Pa32 | REX(_W|_R|_X|_B) },
-  { UD_Ixor,	Eb,	Ib,	NOARG,	Pinv64 | Pa32 | REX(_W|_R|_X|_B) },
-  { UD_Icmp,	Eb,	Ib,	NOARG,	Pinv64 | Pa32 | REX(_W|_R|_X|_B) }
+  { UD_Iadd,	Eb,	Ib,	NOARG,	Pc1 | Pinv64 | Pa32 | REX(_W|_R|_X|_B) },
+  { UD_Ior,	Eb,	Ib,	NOARG,	Pc1 | Pinv64 | Pa32 | REX(_W|_R|_X|_B) },
+  { UD_Iadc,	Eb,	Ib,	NOARG,	Pc1 | Pinv64 | Pa32 | REX(_W|_R|_X|_B) },
+  { UD_Isbb,	Eb,	Ib,	NOARG,	Pc1 | Pinv64 | Pa32 | REX(_W|_R|_X|_B) },
+  { UD_Iand,	Eb,	Ib,	NOARG,	Pc1 | Pinv64 | Pa32 | REX(_W|_R|_X|_B) },
+  { UD_Isub,	Eb,	Ib,	NOARG,	Pc1 | Pinv64 | Pa32 | REX(_W|_R|_X|_B) },
+  { UD_Ixor,	Eb,	Ib,	NOARG,	Pc1 | Pinv64 | Pa32 | REX(_W|_R|_X|_B) },
+  { UD_Icmp,	Eb,	Ib,	NOARG,	Pc1 | Pinv64 | Pa32 | REX(_W|_R|_X|_B) }
 };
 
 struct map_entry itab_g1_op83[0x8] = {
@@ -1518,14 +1518,14 @@ struct map_entry itab_g1A_op8F[0x8] = {
 };
 
 struct map_entry itab_g2_opC0[0x8] = {
-  { UD_Irol,	Eb,	Ib,	NOARG,	Pa32 | REX(_W|_R|_X|_B) },
-  { UD_Iror,	Eb,	Ib,	NOARG,	Pa32 | REX(_W|_R|_X|_B) },
-  { UD_Ircl,	Eb,	Ib,	NOARG,	Pa32 | REX(_W|_R|_X|_B) },
-  { UD_Ircr,	Eb,	Ib,	NOARG,	Pa32 | REX(_W|_R|_X|_B) },
-  { UD_Ishl,	Eb,	Ib,	NOARG,	Pa32 | REX(_W|_R|_X|_B) },
-  { UD_Ishr,	Eb,	Ib,	NOARG,	Pa32 | REX(_W|_R|_X|_B) },
-  { UD_Isal,	Eb,	Ib,	NOARG,	Pa32 | REX(_W|_R|_X|_B) },
-  { UD_Isar,	Eb,	Ib,	NOARG,	Pa32 | REX(_W|_R|_X|_B) }
+  { UD_Irol,	Eb,	Ib,	NOARG,	Pc1 | Pa32 | REX(_W|_R|_X|_B) },
+  { UD_Iror,	Eb,	Ib,	NOARG,	Pc1 | Pa32 | REX(_W|_R|_X|_B) },
+  { UD_Ircl,	Eb,	Ib,	NOARG,	Pc1 | Pa32 | REX(_W|_R|_X|_B) },
+  { UD_Ircr,	Eb,	Ib,	NOARG,	Pc1 | Pa32 | REX(_W|_R|_X|_B) },
+  { UD_Ishl,	Eb,	Ib,	NOARG,	Pc1 | Pa32 | REX(_W|_R|_X|_B) },
+  { UD_Ishr,	Eb,	Ib,	NOARG,	Pc1 | Pa32 | REX(_W|_R|_X|_B) },
+  { UD_Isal,	Eb,	Ib,	NOARG,	Pc1 | Pa32 | REX(_W|_R|_X|_B) },
+  { UD_Isar,	Eb,	Ib,	NOARG,	Pc1 | Pa32 | REX(_W|_R|_X|_B) }
 };
 
 struct map_entry itab_g2_opC1[0x8] = {
@@ -1540,14 +1540,14 @@ struct map_entry itab_g2_opC1[0x8] = {
 };
 
 struct map_entry itab_g2_opD0[0x8] = {
-  { UD_Irol,	Eb,	I1,	NOARG,	Pa32 | REX(_W|_R|_X|_B) },
-  { UD_Iror,	Eb,	I1,	NOARG,	Pa32 | REX(_W|_R|_X|_B) },
-  { UD_Ircl,	Eb,	I1,	NOARG,	Pa32 | REX(_W|_R|_X|_B) },
-  { UD_Ircr,	Eb,	I1,	NOARG,	Pa32 | REX(_W|_R|_X|_B) },
-  { UD_Ishl,	Eb,	I1,	NOARG,	Pa32 | REX(_W|_R|_X|_B) },
-  { UD_Ishr,	Eb,	I1,	NOARG,	Pa32 | REX(_W|_R|_X|_B) },
-  { UD_Isal,	Eb,	I1,	NOARG,	Pa32 | REX(_W|_R|_X|_B) },
-  { UD_Isar,	Eb,	I1,	NOARG,	Pa32 | REX(_W|_R|_X|_B) }
+  { UD_Irol,	Eb,	I1,	NOARG,	Pc1 | Pa32 | REX(_W|_R|_X|_B) },
+  { UD_Iror,	Eb,	I1,	NOARG,	Pc1 | Pa32 | REX(_W|_R|_X|_B) },
+  { UD_Ircl,	Eb,	I1,	NOARG,	Pc1 | Pa32 | REX(_W|_R|_X|_B) },
+  { UD_Ircr,	Eb,	I1,	NOARG,	Pc1 | Pa32 | REX(_W|_R|_X|_B) },
+  { UD_Ishl,	Eb,	I1,	NOARG,	Pc1 | Pa32 | REX(_W|_R|_X|_B) },
+  { UD_Ishr,	Eb,	I1,	NOARG,	Pc1 | Pa32 | REX(_W|_R|_X|_B) },
+  { UD_Isal,	Eb,	I1,	NOARG,	Pc1 | Pa32 | REX(_W|_R|_X|_B) },
+  { UD_Isar,	Eb,	I1,	NOARG,	Pc1 | Pa32 | REX(_W|_R|_X|_B) }
 };
 
 struct map_entry itab_g2_opD1[0x8] = {
@@ -1648,7 +1648,7 @@ struct map_entry itab_g7_op0F01[0x8] = {
   { UD_Ilidt,		M,	NOARG,	NOARG,	Pa32 | REX(_R|_X|_B) },
   { UD_Ismsw,		M,	NOARG,	NOARG,	Pa32 | REX(_R|_X|_B) },
   { UD_Iinvalid,	NOARG,	NOARG,	NOARG,	Pnone },
-  { UD_Ilmsw,		M,	NOARG,	NOARG,	Pa32 | REX(_R|_X|_B) },
+  { UD_Ilmsw,		Ew,	NOARG,	NOARG,	Pa32 | REX(_R|_X|_B) },
   { UD_Iinvlpg,		M,	NOARG,	NOARG,	Pa32 | REX(_R|_X|_B) }
 };
 

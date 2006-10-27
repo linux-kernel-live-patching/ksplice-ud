@@ -21,8 +21,9 @@ inp_buff_hook(struct ud* u)
   else	return -1;
 }
 
+#ifndef __UD_STANDALONE__
 /* -----------------------------------------------------------------------------
- * inp_buff_hook() - Hook for FILE inputs.
+ * inp_file_hook() - Hook for FILE inputs.
  * -----------------------------------------------------------------------------
  */
 static int 
@@ -30,6 +31,7 @@ inp_file_hook(struct ud* u)
 {
   return fgetc(u->inp_file);
 }
+#endif /* __UD_STANDALONE__*/
 
 /* =============================================================================
  * ud_inp_set_hook() - Sets input hook.
@@ -55,6 +57,7 @@ ud_set_input_buffer(register struct ud* u, uint8_t* buf, size_t len)
   inp_init(u);
 }
 
+#ifndef __UD_STANDALONE__
 /* =============================================================================
  * ud_input_set_file() - Set buffer as input.
  * =============================================================================
@@ -66,6 +69,7 @@ ud_set_input_file(register struct ud* u, FILE* f)
   u->inp_file = f;
   inp_init(u);
 }
+#endif /* __UD_STANDALONE__ */
 
 /* =============================================================================
  * ud_input_skip() - Skip n input bytes.

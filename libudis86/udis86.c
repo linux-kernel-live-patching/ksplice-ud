@@ -24,7 +24,9 @@ ud_init(struct ud* u)
   ud_set_mode(u, 16);
   u->mnemonic = UD_Iinvalid;
   ud_set_pc(u, 0);
+#ifndef __UD_STANDALONE__
   ud_set_input_file(u, stdin);
+#endif /* __UD_STANDALONE__ */
 }
 
 /* =============================================================================

@@ -1,0 +1,24 @@
+# Standalone
+#
+#
+
+CC = gcc
+CFLAGS = -Wall -O2
+
+.SUFFIXES: .c .o
+.c.o:
+	$(CC) -c $(CFLAGS) -D__UD_STANDALONE__ -o $@ $<
+
+OBJS =	mnemonics.o \
+	opcmap.o \
+	input.o \
+	decode.o \
+	syn.o \
+	syn-intel.o \
+	syn-att.o \
+	udis86.o
+
+libudis86_standalone.o: clean $(OBJS)
+	ld $(OBJS) -r -o libudis86_standalone.o
+clean:
+	rm -f $(OBJS)

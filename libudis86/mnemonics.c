@@ -589,6 +589,7 @@ const char* ud_mnemonics[] =
   "hsubps",
   "addsubps",
   "lddqu",
+  "int1",
   "none",
   "I3vil",
 };

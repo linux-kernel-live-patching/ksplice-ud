@@ -36,7 +36,6 @@ OBJS =	mnemonics.o \
 
 libudis86.a: $(OBJS)
 	$(AR) -r libudis86.a $(OBJS)
-
 mnemonics.c: mnemonics.dat
 	$(PERL) mnemonics.pl < mnemonics.dat
 mnemonics.h: mnemonics.dat

@@ -355,8 +355,10 @@ decode_modrm(struct ud* u, struct ud_operand *op, unsigned int s,
 			case 7: op->base = UD_R_BX; break;
 		}
 
-		if (mod == 0 && rm == 6)
+		if (mod == 0 && rm == 6) {
 			op->offset= 16;
+			op->base = UD_NONE;
+		}
 		else if (mod == 1)
 			op->offset = 8;
 		else if (mod == 2) 
@@ -909,6 +911,7 @@ extern unsigned int ud_decode(register struct ud* u)
   u->insn_offset = u->pc;
   u->insn_fill = 0;  
   src_ptr = inp_sess(u);
+
   src_hex = (char*) u->insn_hexcode;
 
   for (i = 0; i < u->inp_ctr; ++i, ++src_ptr) {

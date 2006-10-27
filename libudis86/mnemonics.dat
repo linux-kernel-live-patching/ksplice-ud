@@ -586,4 +586,5 @@ haddps
 hsubps
 addsubps
 lddqu
+int1
 none

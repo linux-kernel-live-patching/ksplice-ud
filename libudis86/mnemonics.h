@@ -595,6 +595,7 @@ enum ud_mnemonic_code
   UD_Ihsubps,
   UD_Iaddsubps,
   UD_Ilddqu,
+  UD_Iint1,
   UD_Inone,
   UD_I3vil
 };
