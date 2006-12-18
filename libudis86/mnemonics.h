@@ -596,6 +596,16 @@ enum ud_mnemonic_code
   UD_Iaddsubps,
   UD_Ilddqu,
   UD_Iint1,
+  UD_Ivmcall,
+  UD_Ivmlaunch,
+  UD_Ivmresume,
+  UD_Ivmxoff,
+  UD_Imonitor,
+  UD_Imwait,
+  UD_Ivmptrld,
+  UD_Ivmptrst,
+  UD_Ivmclear,
+  UD_Ivmxon,
   UD_Inone,
   UD_I3vil
 };

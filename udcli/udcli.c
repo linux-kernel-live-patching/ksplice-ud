@@ -34,6 +34,7 @@ static char help[] =
   "    -64      : Set the disassembly mode to 64 bits.\n"
   "    -intel   : Set the output to INTEL (NASM like) syntax. (default)\n"
   "    -att     : Set the output to AT&T (GAS like) syntax.\n"
+  "    -v <v>	: Set vendor. <v> = {intel, amd}.\n"
   "    -o <pc>  : Set the value of program counter to <pc>. (default = 0)\n"
   "    -s <n>   : Set the number of bytes to skip before disassembly to <n>.\n"
   "    -c <n>   : Set the number of bytes to disassemble to <n>.\n"
@@ -54,6 +55,7 @@ unsigned char o_do_count= 0;
 unsigned char o_do_off = 1;
 unsigned char o_do_hex = 1;
 unsigned char o_do_x = 0;
+unsigned o_vendor = UD_VENDOR_AMD;
 
 int input_hook_x(ud_t* u);
 int input_hook_file(ud_t* u);
@@ -116,6 +118,16 @@ int main(int argc, char **argv)
 				fprintf(stderr, "Invalid value given for -c.\n");
 		} else { 
 			fprintf(stderr, "No value given for -c.\n");
+			printf(help, prog_path);
+			exit(EXIT_FAILURE);
+		}
+	else if (strcmp(*argv,"-v") == 0)
+		if (--argc) {
+			char* s = *(++argv);
+			if (*s == 'i')
+				ud_set_vendor(&ud_obj, UD_VENDOR_INTEL);
+		} else { 
+			fprintf(stderr, "No value given for -v.\n");
 			printf(help, prog_path);
 			exit(EXIT_FAILURE);
 		}

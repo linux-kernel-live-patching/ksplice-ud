@@ -27,7 +27,11 @@ extern void ud_set_input_hook(struct ud*, int (*)(struct ud*));
 
 extern void ud_set_input_buffer(struct ud*, uint8_t*, size_t);
 
+#ifndef __UD_STANDALONE__
 extern void ud_set_input_file(struct ud*, FILE*);
+#endif /* __UD_STANDALONE__ */
+
+extern void ud_set_vendor(struct ud*, unsigned);
 
 extern void ud_set_syntax(struct ud*, void (*)(struct ud*));
 

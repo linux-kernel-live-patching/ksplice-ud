@@ -148,6 +148,7 @@ struct ud
   unsigned int		insn_fill;
   uint8_t		dis_mode;
   uint64_t		pc;
+  uint8_t		vendor;
   struct map_entry*	mapen;
   enum ud_mnemonic_code	mnemonic;
   struct ud_operand	operand[3];
@@ -188,5 +189,6 @@ typedef struct ud_operand 	ud_operand_t;
 #define UD_SYN_ATT		ud_translate_att
 #define UD_EOI			-1
 #define UD_INP_CACHE_SZ		32
-
+#define UD_VENDOR_AMD		0
+#define UD_VENDOR_INTEL		1
 #endif

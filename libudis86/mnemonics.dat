@@ -587,4 +587,14 @@ hsubps
 addsubps
 lddqu
 int1
+vmcall
+vmlaunch
+vmresume
+vmxoff
+monitor
+mwait
+vmptrld
+vmptrst
+vmclear
+vmxon
 none

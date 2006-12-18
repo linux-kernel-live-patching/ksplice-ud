@@ -1664,6 +1664,18 @@ struct map_entry itab_g7_op0F01_Reg7[0x8] = {
   { UD_Iinvalid,	NOARG,	NOARG,	NOARG,	Pnone }
 };
 
+/* group 7 -- Reg7 */
+struct map_entry itab_g7_op0F01_Reg7_intel[0x8] = {
+  { UD_Iswapgs, 	NOARG,	NOARG,	NOARG,	Pnone },
+  { UD_Iinvalid,	NOARG,	NOARG,	NOARG,	Pnone },
+  { UD_Iinvalid,	NOARG,	NOARG,	NOARG,	Pnone },
+  { UD_Iinvalid,	NOARG,	NOARG,	NOARG,	Pnone },
+  { UD_Iinvalid,	NOARG,	NOARG,	NOARG,	Pnone },
+  { UD_Iinvalid,	NOARG,	NOARG,	NOARG,	Pnone },
+  { UD_Iinvalid,	NOARG,	NOARG,	NOARG,	Pnone },
+  { UD_Iinvalid,	NOARG,	NOARG,	NOARG,	Pnone }
+};
+
 /* group 7 -- Reg3 */
 struct map_entry itab_g7_op0F01_Reg3[0x8] = {
   { UD_Ivmrun,		NOARG,	NOARG,	NOARG,	Pnone },
@@ -1674,6 +1686,30 @@ struct map_entry itab_g7_op0F01_Reg3[0x8] = {
   { UD_Iclgi,		NOARG,	NOARG,	NOARG,	Pnone },
   { UD_Iskinit, 	NOARG,	NOARG,	NOARG,	Pnone },
   { UD_Iinvlpga,	NOARG,	NOARG,	NOARG,	Pnone }
+};
+
+/* group 7 -- Reg0: Intel */
+struct map_entry itab_g7_op0F01_Reg0_intel[0x8] = {
+  { UD_Iinvalid,	NOARG,	NOARG,	NOARG,	Pnone },
+  { UD_Ivmcall,		NOARG,	NOARG,	NOARG,	Pnone },
+  { UD_Ivmlaunch, 	NOARG,	NOARG,	NOARG,	Pnone },
+  { UD_Ivmresume, 	NOARG,	NOARG,	NOARG,	Pnone },
+  { UD_Ivmxoff,		NOARG,	NOARG,	NOARG,	Pnone },
+  { UD_Iinvalid,	NOARG,	NOARG,	NOARG,	Pnone },
+  { UD_Iinvalid,	NOARG,	NOARG,	NOARG,	Pnone },
+  { UD_Iinvalid,	NOARG,	NOARG,	NOARG,	Pnone },
+};
+
+/* group 7 -- Reg1: Intel */
+struct map_entry itab_g7_op0F01_Reg1_intel[0x8] = {
+  { UD_Imonitor,	NOARG,	NOARG,	NOARG,	Pnone },
+  { UD_Imwait,		NOARG,	NOARG,	NOARG,	Pnone },
+  { UD_Iinvalid,	NOARG,	NOARG,	NOARG,	Pnone },
+  { UD_Iinvalid,	NOARG,	NOARG,	NOARG,	Pnone },
+  { UD_Iinvalid,	NOARG,	NOARG,	NOARG,	Pnone },
+  { UD_Iinvalid,	NOARG,	NOARG,	NOARG,	Pnone },
+  { UD_Iinvalid,	NOARG,	NOARG,	NOARG,	Pnone },
+  { UD_Iinvalid,	NOARG,	NOARG,	NOARG,	Pnone },
 };
 
 /* group 8  */
@@ -1698,6 +1734,42 @@ struct map_entry itab_g9_op0FC7[0x8] = {
   { UD_Iinvalid,	NOARG,	NOARG,	NOARG,	Pnone },
   { UD_Iinvalid,	NOARG,	NOARG,	NOARG,	Pnone },
   { UD_Iinvalid,	NOARG,	NOARG,	NOARG,	Pnone },
+};
+
+/* group 9 - Intel */
+struct map_entry itab_g9_op0FC7_intel[0x8] = {
+  { UD_Ivmptrld,	Mq,	NOARG,	NOARG,	Pa32 | REX(_R|_X|_B) },
+  { UD_Icmpxchg8b,	M,	NOARG,	NOARG,	Pa32 | REX(_R|_X|_B) | PdepM },
+  { UD_Iinvalid,	NOARG,	NOARG,	NOARG,	Pnone },
+  { UD_Iinvalid,	NOARG,	NOARG,	NOARG,	Pnone },
+  { UD_Iinvalid,	NOARG,	NOARG,	NOARG,	Pnone },
+  { UD_Iinvalid,	NOARG,	NOARG,	NOARG,	Pnone },
+  { UD_Iinvalid,	NOARG,	NOARG,	NOARG,	Pnone },
+  { UD_Ivmptrst,	Mq,	NOARG,	NOARG,	Pa32 | REX(_R|_X|_B) },
+};
+
+/* group 9 - Intel */
+struct map_entry itab_g9_op0FC7_prefix66_intel[0x8] = {
+  { UD_Ivmclear,	Mq,	NOARG,	NOARG,	Pa32 | REX(_R|_X|_B) },
+  { UD_Iinvalid,	NOARG,	NOARG,	NOARG,	Pnone },
+  { UD_Iinvalid,	NOARG,	NOARG,	NOARG,	Pnone },
+  { UD_Iinvalid,	NOARG,	NOARG,	NOARG,	Pnone },
+  { UD_Iinvalid,	NOARG,	NOARG,	NOARG,	Pnone },
+  { UD_Iinvalid,	NOARG,	NOARG,	NOARG,	Pnone },
+  { UD_Iinvalid,	NOARG,	NOARG,	NOARG,	Pnone },
+  { UD_Iinvalid,	NOARG,	NOARG,	NOARG,	Pnone },
+};
+
+/* group 9 - Intel */
+struct map_entry itab_g9_op0FC7_prefixF3_intel[0x8] = {
+  { UD_Iinvalid,	NOARG,	NOARG,	NOARG,	Pnone },
+  { UD_Iinvalid,	NOARG,	NOARG,	NOARG,	Pnone },
+  { UD_Iinvalid,	NOARG,	NOARG,	NOARG,	Pnone },
+  { UD_Iinvalid,	NOARG,	NOARG,	NOARG,	Pnone },
+  { UD_Iinvalid,	NOARG,	NOARG,	NOARG,	Pnone },
+  { UD_Iinvalid,	NOARG,	NOARG,	NOARG,	Pnone },
+  { UD_Iinvalid,	NOARG,	NOARG,	NOARG,	Pnone },
+  { UD_Ivmxon,		Mq,	NOARG,	NOARG,	Pa32 | REX(_R|_X|_B) },
 };
 
 /* group A  */
@@ -1959,12 +2031,10 @@ struct map_entry itab_gP_op0F0D[0x8] = {
 
 struct
 {
-
   struct map_entry *me_pfx_none;
   struct map_entry *me_pfx_66;
   struct map_entry *me_pfx_f2;
   struct map_entry *me_pfx_f3;
-
 } itab_groups[] =  {
   { itab_g1_op80,	0, 0, 0 },
   { itab_g1_op81,	0, 0, 0 },
@@ -1993,7 +2063,38 @@ struct
   { itab_gF_op0FAE,	itab_gF_op0FAE_prefix66, itab_gF_op0FAE_prefixF3, itab_gF_op0FAE_prefixF2 },
   { itab_g8_op0FBA,	0, 0, 0 },
   { itab_gA_op0FB9,	0, 0, 0 },
-  { itab_g9_op0FC7,	0, 0, 0 }
+  { itab_g9_op0FC7,	0, 0, 0 },
+
+#define ITAB_GROUPS_START_INTEL 28
+
+  { itab_g1_op80,	0, 0, 0 },
+  { itab_g1_op81,	0, 0, 0 },
+  { itab_g1_op82,	0, 0, 0 },
+  { itab_g1_op83,	0, 0, 0 },
+  { itab_g1A_op8F,	0, 0, 0 },
+  { itab_g2_opC0,	0, 0, 0 },
+  { itab_g2_opC1,	0, 0, 0 },
+  { itab_gB_opC6,	0, 0, 0 },
+  { itab_gB_opC7,	0, 0, 0 },
+  { itab_g2_opD0,	0, 0, 0 },
+  { itab_g2_opD1,	0, 0, 0 },
+  { itab_g2_opD2,	0, 0, 0 },
+  { itab_g2_opD3,	0, 0, 0 },
+  { itab_g3_opF6,	0, 0, 0 },
+  { itab_g3_opF7,	0, 0, 0 },
+  { itab_g4_opFE,	0, 0, 0 },
+  { itab_g5_opFF,	0, 0, 0 },
+  { itab_g6_op0F00,	0, 0, 0 },
+  { itab_g7_op0F01,	0, 0, 0 },
+  { itab_gP_op0F0D,	0, 0, 0 },
+  { itab_g10_op0F18,	0, 0, 0 },
+  { itab_gC_op0F71,	itab_gC_op0F71_prefix66, itab_gC_op0F71_prefixF3, itab_gC_op0F71_prefixF2 },
+  { itab_gD_op0F72,	itab_gD_op0F72_prefix66, itab_gD_op0F72_prefixF3, itab_gD_op0F72_prefixF2 },
+  { itab_gE_op0F73,	itab_gE_op0F73_prefix66, itab_gE_op0F73_prefixF3, itab_gE_op0F73_prefixF2 },
+  { itab_gF_op0FAE,	itab_gF_op0FAE_prefix66, itab_gF_op0FAE_prefixF3, itab_gF_op0FAE_prefixF2 },
+  { itab_g8_op0FBA,	0, 0, 0 },
+  { itab_gA_op0FB9,	0, 0, 0 },
+  { itab_g9_op0FC7_intel,	itab_g9_op0FC7_prefix66_intel, itab_g9_op0FC7_prefixF3_intel, 0 },
 };
 
 /* D8 Opcode Map */
@@ -2798,8 +2899,10 @@ search_2byte_insn(register struct ud* u)
 	return;
 
   /* If instruction is in a Group */
+  gindex = u->mapen->prefix + ((u->vendor == UD_VENDOR_INTEL) ? 
+				ITAB_GROUPS_START_INTEL : 0);
 
-  gindex = u->mapen->prefix;
+  printf("gindek == %d\n", gindex);
 
   if (u->pfx_insn == 0x66 && itab_groups[gindex].me_pfx_66) {
 	u->mapen = &itab_groups[gindex].me_pfx_66[MODRM_REG(inp_peek(u))];
@@ -2832,13 +2935,27 @@ search_2byte_insn(register struct ud* u)
 	uint8_t mod = MODRM_MOD(inp_peek(u));
 	uint8_t rm  = MODRM_RM(inp_peek(u));
 
-	if (reg == 3 && mod == 3) {
-		u->mapen = &itab_g7_op0F01_Reg3[rm];
-		inp_next(u);
-	} else if (reg == 7 && mod == 3) {
-		u->mapen = &itab_g7_op0F01_Reg7[rm];
-		inp_next(u);
-	} else u->mapen = &itab_g7_op0F01[reg];
+	if (u->vendor == UD_VENDOR_INTEL) {
+		if (reg == 0 && mod == 3) {
+			u->mapen = &itab_g7_op0F01_Reg0_intel[rm];
+			inp_next(u);
+		} else if (reg == 1 && mod == 3) {
+			u->mapen = &itab_g7_op0F01_Reg1_intel[rm];
+			inp_next(u);
+		} else if (reg == 7 && mod == 3) {
+			u->mapen = &itab_g7_op0F01_Reg7_intel[rm];
+			inp_next(u);
+		}  
+	}
+	else {
+		if (reg == 3 && mod == 3) {
+			u->mapen = &itab_g7_op0F01_Reg3[rm];
+			inp_next(u);
+		} else if (reg == 7 && mod == 3) {
+			u->mapen = &itab_g7_op0F01_Reg7[rm];
+			inp_next(u);
+		} else u->mapen = &itab_g7_op0F01[reg];
+	}
   } 
   /* 0FAE - opcode extensions */
   else if (inp_curr(u) == 0xAE) {
