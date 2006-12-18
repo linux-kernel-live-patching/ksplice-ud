@@ -2699,7 +2699,7 @@ struct map_entry movsxd =
 
 /* 3D Now instructions with suffix */
 extern enum ud_mnemonic_code 
-ud_map_get_3dnow(unsigned char suffix)
+ud_map_get_3dnow(uint8_t suffix)
 {
   switch(suffix) {
 	case 0x0C: return UD_Ipi2fw;

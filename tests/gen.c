@@ -1,9 +1,19 @@
 #include <stdio.h>
 #include <udis86.h>
 
+#ifdef _WIN32
+# include <io.h>
+# include <fcntl.h>
+#endif
+
+/* help string */
 int main(int argc, char **argv)
 {
   ud_t ud_obj;
+
+#ifdef _WIN32
+  _setmode(_fileno(stdin), _O_BINARY);
+#endif  
 
   ud_init(&ud_obj);
   ud_set_input_file(&ud_obj, stdin);

@@ -19,6 +19,11 @@
 #  define FMT "ll"
 #endif
 
+#ifdef _WIN32
+# include <io.h>
+# include <fcntl.h>
+#endif
+
 /* help string */
 static char help[] = 
 {
@@ -63,6 +68,10 @@ int main(int argc, char **argv)
   ud_init(&ud_obj);
   ud_set_mode(&ud_obj, 32);
   ud_set_syntax(&ud_obj, UD_SYN_INTEL);
+
+#ifdef _WIN32
+  _setmode(_fileno(stdin), _O_BINARY);
+#endif  
 
   fptr = stdin;
 
