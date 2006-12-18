@@ -13,6 +13,12 @@
 #include <ctype.h>
 #include "../udis86.h"
 
+#if defined(__amd64__) || defined(__x86_64__)
+#  define FMT "l"
+#else
+#  define FMT "ll"
+#endif
+
 /* help string */
 static char help[] = 
 {
@@ -86,7 +92,7 @@ int main(int argc, char **argv)
 	else if (strcmp(*argv,"-s") == 0)
 		if (--argc) {
 			char* s = *(++argv);
-			if (sscanf(s, "%lld", &o_skip) == 0)
+			if (sscanf(s, "%"  FMT "d", &o_skip) == 0)
 				fprintf(stderr, "Invalid value given for -s.\n");
 		} else { 
 			fprintf(stderr, "No value given for -s.\n");
@@ -97,7 +103,7 @@ int main(int argc, char **argv)
 		if (--argc) {
 			o_do_count= 1;
 			char* s = *(++argv);
-			if (sscanf(s, "%lld", &o_count) == 0)
+			if (sscanf(s, "%" FMT "d", &o_count) == 0)
 				fprintf(stderr, "Invalid value given for -c.\n");
 		} else { 
 			fprintf(stderr, "No value given for -c.\n");
@@ -108,7 +114,7 @@ int main(int argc, char **argv)
 		if (--argc) {
 			uint64_t pc = 0;
 			char* s = *(++argv);
-			if (sscanf(s, "%llx", &pc) == 0)
+			if (sscanf(s, "%" FMT "x", &pc) == 0)
 				fprintf(stderr, "Invalid value given for -o.\n");
 			ud_set_pc(&ud_obj, pc);
 		} else { 
@@ -147,7 +153,7 @@ int main(int argc, char **argv)
   /* disassembly loop */
   while (ud_disassemble(&ud_obj)) {
 	if (o_do_off)
-		printf("%016llx ", ud_insn_off(&ud_obj));
+		printf("%016" FMT "x ", ud_insn_off(&ud_obj));
 	if (o_do_hex) {
 		char* hex1, *hex2;
 		char c;

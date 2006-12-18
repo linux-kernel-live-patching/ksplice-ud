@@ -1,3 +1,12 @@
+ * [Dec/18/06] Fixed: Printf warnings.
+	       Fixed: set_input_buffered t set_input_buffered.
+ * [Oct/27/06] 0xF1 is now int1.
+	       Fixed: cast prefix for Group1_op80/82/C0/D0 instructions.
+	       Fixed: lmsw
+	       Added support for Udis86 Standalone.
+ * [Sep/18/06] Fixed: Missing support for o32 for in/out instructions.
+ * [Jul/26/06] Fixed: Missing REX.W in Group1_op83 instructions.
+ * [Jul/16/06] Fixed: rex.b on [rip+disp]
  * [Jul/15/06] Fixed: Wrongly printing "loopnz" as "loopn" (Thanks to Sanjay Patel)
  	       Fixed: Wrongly decoding "out Ib, AL" ((Thanks to Sanjay Patel)
  * [Jun/8/06]  Missing instructions added. (As per AMD64 Manual Vol3 Rev 3.11 
