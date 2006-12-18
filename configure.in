@@ -1,5 +1,4 @@
-AC_PREREQ(2.59)
-AC_INIT(udis86, 1.0, vivek@sig9.com)
+AC_INIT(udis86, 1.4, vivek@sig9.com)
 AC_PROG_CC
 AC_PROG_INSTALL
 AC_CONFIG_FILES([Makefile

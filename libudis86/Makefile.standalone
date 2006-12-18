@@ -1,10 +1,12 @@
-# Standalone
+# Udis86 Standalone
 #
 #
 
-CC = gcc
-CFLAGS = -Wall -O2
+LDFLAGS += -r
+CFLAGS += -Wall -O2
+UD_STANDALONE ?= ud_standalone.o
 
+.PHONY: clean
 .SUFFIXES: .c .o
 .c.o:
 	$(CC) -c $(CFLAGS) -D__UD_STANDALONE__ -o $@ $<
@@ -18,7 +20,7 @@ OBJS =	mnemonics.o \
 	syn-att.o \
 	udis86.o
 
-libudis86_standalone.o: clean $(OBJS)
-	ld $(OBJS) -r -o libudis86_standalone.o
+$(UD_STANDALONE): clean $(OBJS)
+	$(LD) $(LDFLAGS) $(OBJS) -o $@
 clean:
-	rm -f $(OBJS)
+	$(RM) -f $(OBJS) $(UD_STANDALONE)

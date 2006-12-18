@@ -11,6 +11,8 @@ install:
 uninstall:
 	cd libudis86 && $(MAKE) uninstall
 	cd udcli && $(MAKE) uninstall
+standalone:
+	cd libudis86 && $(MAKE) -f Makefile.standalone
 clean:
 	cd libudis86 && $(MAKE) clean
 	cd udcli && $(MAKE) clean

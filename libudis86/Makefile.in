@@ -61,6 +61,7 @@ uninstall:
 	$(RM) -frd $(INSTALLROOT)$(includedir)/libudis86
 	$(RM) -f $(INSTALLROOT)$(includedir)/udis86.h
 clean:
+	$(MAKE) clean -f Makefile.standalone
 	$(RM) -f core $(srcdir)/*.o $(srcdir)/*.a *~
 
 distclean: clean
