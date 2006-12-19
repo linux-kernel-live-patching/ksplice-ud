@@ -1654,7 +1654,7 @@ struct map_entry itab_g7_op0F01[0x8] = {
 
 /* group 7 -- Reg7 */
 struct map_entry itab_g7_op0F01_Reg7[0x8] = {
-  { UD_Iswapgs, 	NOARG,	NOARG,	NOARG,	Pnone },
+  { UD_Iswapgs, 	NOARG,	NOARG,	NOARG,	PdepM },
   { UD_Irdtscp,		NOARG,	NOARG,	NOARG,	Pnone },
   { UD_Iinvalid,	NOARG,	NOARG,	NOARG,	Pnone },
   { UD_Iinvalid,	NOARG,	NOARG,	NOARG,	Pnone },
@@ -1666,7 +1666,7 @@ struct map_entry itab_g7_op0F01_Reg7[0x8] = {
 
 /* group 7 -- Reg7 */
 struct map_entry itab_g7_op0F01_Reg7_intel[0x8] = {
-  { UD_Iswapgs, 	NOARG,	NOARG,	NOARG,	Pnone },
+  { UD_Iswapgs, 	NOARG,	NOARG,	NOARG,	PdepM },
   { UD_Iinvalid,	NOARG,	NOARG,	NOARG,	Pnone },
   { UD_Iinvalid,	NOARG,	NOARG,	NOARG,	Pnone },
   { UD_Iinvalid,	NOARG,	NOARG,	NOARG,	Pnone },

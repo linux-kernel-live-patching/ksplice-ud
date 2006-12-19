@@ -91,6 +91,10 @@ resolve_mnemonic(register struct ud* u)
 		case UD_Ipopfw:		return UD_Ipopfq;
 		default: 		break; 
 	} 
+  } else {
+	if (u->mnemonic == UD_Iswapgs) {
+		u->error = 1;
+	}
   }
 
   if (u->adr_mode == 32) {
