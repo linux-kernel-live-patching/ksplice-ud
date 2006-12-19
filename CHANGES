@@ -1,8 +1,10 @@
  * [Dec/18/06] Fixed: Printf warnings.
 	       Fixed: set_input_buffered to set_input_buffer in documentation.
 	       Added support for INTEL VMX instructions.
-	       API addition: ud_set_vendor(): UD_VENDOR_{INTEL, AMD}
+	       API addition: ud_set_vendor(): UD_VENDOR_{INTEL, AMD}.
 	       Fixed: Handling of invalid combination of bytes. No more input re-syncing.
+	       Added Makefiles for win32 build. (Thanks to Xi Hang).
+	       Added Makefile.standalone for "Standalone Udis86".
  * [Oct/27/06] 0xF1 is now int1.
 	       Fixed: cast prefix for Group1_op80/82/C0/D0 instructions.
 	       Fixed: lmsw
