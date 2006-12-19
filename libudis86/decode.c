@@ -24,6 +24,9 @@
 #define T_SEG	5
 #define T_XMM	6
 
+struct map_entry* ud_me_db();
+struct map_entry* ud_me_invalid();
+
 /* -----------------------------------------------------------------------------
  * resolve_oprsize()- Resolves the size of operand depending on the current
  * disassembly mode, effective operand sizes, etc.
@@ -899,11 +902,8 @@ extern unsigned int ud_decode(register struct ud* u)
 
   if (u->error) {
 	clear_insn(u);
-	inp_reset(u);
- 
-	u->mnemonic = UD_Idb;
-	u->operand[0].type = UD_OP_IMM;
-	u->operand[0].size = 8;
+	u->mapen = ud_me_invalid();
+	u->mnemonic = u->mapen->mnemonic;
  }
 
   /* [8] Generate hexadecimal code  */

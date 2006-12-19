@@ -2797,6 +2797,18 @@ struct map_entry pause =
   { UD_Ipause,	NOARG,	NOARG,	NOARG, Pnone };
 struct map_entry movsxd = 
   { UD_Imovsxd,	Gv,	Ed,	NOARG,	Pc2 | Po32 | Pa32 | REX(_X|_W|_B|_R) };
+struct map_entry db = 
+  { UD_Idb, Ib, NOARG, NOARG, Pnone };
+struct map_entry invalid = 
+  { UD_Iinvalid, NOARG, NOARG, NOARG, Pnone };
+
+struct map_entry* ud_me_db() {
+	return &db;
+}
+
+struct map_entry* ud_me_invalid() {
+	return &invalid;
+}
 
 /* 3D Now instructions with suffix */
 extern enum ud_mnemonic_code 
@@ -2902,8 +2914,6 @@ search_2byte_insn(register struct ud* u)
   gindex = u->mapen->prefix + ((u->vendor == UD_VENDOR_INTEL) ? 
 				ITAB_GROUPS_START_INTEL : 0);
 
-  printf("gindek == %d\n", gindex);
-
   if (u->pfx_insn == 0x66 && itab_groups[gindex].me_pfx_66) {
 	u->mapen = &itab_groups[gindex].me_pfx_66[MODRM_REG(inp_peek(u))];
 	if (u->mapen != NULL && u->mapen->mnemonic != UD_Ina) {
@@ -2945,7 +2955,7 @@ search_2byte_insn(register struct ud* u)
 		} else if (reg == 7 && mod == 3) {
 			u->mapen = &itab_g7_op0F01_Reg7_intel[rm];
 			inp_next(u);
-		}  
+		}
 	}
 	else {
 		if (reg == 3 && mod == 3) {
@@ -2954,8 +2964,10 @@ search_2byte_insn(register struct ud* u)
 		} else if (reg == 7 && mod == 3) {
 			u->mapen = &itab_g7_op0F01_Reg7[rm];
 			inp_next(u);
-		} else u->mapen = &itab_g7_op0F01[reg];
-	}
+		} else u->mapen = &itab_g7_op0F01[rm];
+
+		printf("%d", u->mapen->mnemonic);
+	}	
   } 
   /* 0FAE - opcode extensions */
   else if (inp_curr(u) == 0xAE) {

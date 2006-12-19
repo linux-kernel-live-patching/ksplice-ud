@@ -2,6 +2,7 @@
 	       Fixed: set_input_buffered to set_input_buffer in documentation.
 	       Added support for INTEL VMX instructions.
 	       API addition: ud_set_vendor(): UD_VENDOR_{INTEL, AMD}
+	       Fixed: Handling of invalid combination of bytes. No more input re-syncing.
  * [Oct/27/06] 0xF1 is now int1.
 	       Fixed: cast prefix for Group1_op80/82/C0/D0 instructions.
 	       Fixed: lmsw
