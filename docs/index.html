@@ -18,23 +18,23 @@ intent of the design and development of udis86 is to aid software development
 projects that entail binary code analysis.</p>
 
 <div class="box">
-<a href="http://sourceforge.net/project/showfiles.php?group_id=96233">Download</a>: <a href="http://prdownloads.sourceforge.net/udis86/udis86-1.0.tar.gz?download">udis86-1.0.tar.gz</a>
+<a href="http://sourceforge.net/project/showfiles.php?group_id=96233">Download</a>: <a href="http://prdownloads.sourceforge.net/udis86/udis86-1.4.tar.gz?download">udis86-1.4.tar.gz</a>
 </div>
 
 <h2>libudis86</h2>
 	<ol>
 	<li>Full support for the <i>x86 and x86-64 (AMD64)</i> range of instruction set
 	architectures.</li>
-	<li>Full support  for all <i> MMX, SSE, SSE2, SSE3, FPU(x87), and 
+	<li>Full support  for all <i> AMD-V, INTEL-VMX, MMX, SSE, SSE2, SSE3, FPU(x87), and 
 	AMD 3Dnow! </i>	instructions.</li>
 	<li>Supports 16bit, 32bit, and 64bit disassembly modes.</li>
 	<li>Generates output in <i>AT&T</i> or <i>INTEL</i> assembler language syntaxes.</li>
 	<li>Supports flexbile input methods: File, Buffer, and Hooks.</li>
 	<li>Thread-safe and Reentrant.</li>
 	<li>Clean and very easy-to-use API.</li>
-	<li>Minimal (and defined) dependency on standard libraries, making the 
-	library code usable and embeddable in kernel code (or other 
-	environments which lack <i>libc</i>).</li>
+	<li<b><i>New!</i></b> <a href="doc.html#sec111">The new standalone build system</a> 
+	makes udis86 usable and embeddable in kernel code (or other environments which, say,
+	lack <i>libc</i>).</li>
 	</ol>
 
 	See <a href="doc.html#sec1">Usage</a>.

@@ -26,12 +26,15 @@
 <a href="index.html">Home</a>
 
 <h1>Documentation</h1>
-<small><i>April 30, 2006</i></small>
+<small><i>Dec 19, 2006</i> - Added new API function and Standalone build mode.</small>
 <hr size="1"/>
 <br/>
 <a href="#sec1">1. Using the library - libudis86</a>
 <blockquote>
 	<a href="#sec11">1.1 Compiling and Installing</a> <br/>
+	<blockquote>
+		<a href="#sec111">1.1.1 Standalone Udis86</a> <br/>
+	</blockquote>
 	<a href="#sec12">1.2 Interfacing With Your Program</a> <br/>
 	<a href="#sec13">1.3 A Quick Example</a><br/>
 	<a href="#sec14">1.4 The Udis86 Object</a><br/>
@@ -71,6 +74,31 @@ $ make install
 install. The install scripts copy the necessary header and library files to 
 appropriate locations of in system.
 </p>
+
+<a name="sec111"></a>
+<h4>1.1.1 Standalone Udis86</h4>
+
+<p>Standalone udis86 is (for now) a simple build hack that lets you build
+a single relocatable object file with all of the libudis86 functionality, that you
+could possibly use in any environment, say, a kernel modukle. The standalone object 
+assumes the availablity of the following functionality in the environment.</p>
+
+<pre>
+- memset()
+- vprintf()
+- sscanf()
+</pre>
+
+<p> To build udis86 in standalone mode, do the following.</p>
+
+</pre>
+$ ./configure
+$ make standalone
+</pre>
+
+which will generate <code>ud_standalone.o</code> in <code>ud/libudis86</code>. This build
+mode is a little hack'ish in nature and hopefully is replaced with better configure scripts
+in the future. If you have ideas, let me know!
 
 <a name="sec12"></a>
 <h3>1.2 Interfacing with your program</h3>
@@ -214,7 +242,7 @@ argument. The following is a list of all functions available.
 	<br/>
 	<ul>
 	<li>UD_SYN_INTEL - for INTEL (NASM-like) syntax.</li>
-	<li>UD_SYN_ATT - for AT&T (GAS-like) syntax.</li>
+	<li>UD_SYN_ATT - for AT&amp;T (GAS-like) syntax.</li>
 	</ul>
 	If you do not want libudis86 to translate, you can pass a NULL to the 
 	function, with no more translations thereafter. This is particularily
@@ -224,6 +252,20 @@ argument. The following is a list of all functions available.
 	If you want to create your own translator, you must pass a pointer to 
 	function that accepts a pointer to ud_t. This function will be called
 	by libudis86 after each instruction is decoded.
+	</li>
+
+	<li>
+	<pre>void ud_set_vendor(ud_t*, unsigned vendor);</pre>
+
+	Sets the vendor of whose instruction to choose from. This is only useful for
+	selecting the VMX or SVM instruction sets at which point INTEL and AMD have 
+	diverged significantly. At a later stage, support for a more granular 
+	selection of instruction sets maybe added.
+	<br/>
+	<ul>
+	<li>UD_VENDOR_INTEL - for INTEL instruction set.</li>
+	<li>UD_VEDNOR_ATT - for AMD instruction set.</li>
+	</ul>
 	</li>
 
 	<li>
@@ -467,7 +509,8 @@ your quick disassembly needs.
 -32      : Set the disassembly mode to 32 bits. (default)
 -64      : Set the disassembly mode to 64 bits.
 -intel   : Set the output to INTEL (NASM like) syntax. (default)
--att     : Set the output to AT&T (GAS like) syntax.
+-att     : Set the output to AT&amp;T (GAS like) syntax.
+-v &lt;v&gt;   : Set vendor. &lt;v&gt; = {intel, amd} 
 -o &lt;pc&gt;  : Set the value of program counter to <pc>. (default = 0)
 -s &lt;pc&gt;  : Set the number of bytes to skip before disassembly to <n>.
 -c &lt;pc&gt;  : Set the number of bytes to disassemble to <n>.
