@@ -25,6 +25,7 @@ do { \
   u->inp_curr = 0; \
   u->inp_fill = 0; \
   u->inp_ctr  = 0; \
+  u->inp_end  = 0; \
 } while (0)
 
 /* inp_start() - Should be called before each de-code operation. */
