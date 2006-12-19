@@ -34,7 +34,7 @@ static char help[] =
   "    -64      : Set the disassembly mode to 64 bits.\n"
   "    -intel   : Set the output to INTEL (NASM like) syntax. (default)\n"
   "    -att     : Set the output to AT&T (GAS like) syntax.\n"
-  "    -v <v>	: Set vendor. <v> = {intel, amd}.\n"
+  "    -v <v>   : Set vendor. <v> = {intel, amd}.\n"
   "    -o <pc>  : Set the value of program counter to <pc>. (default = 0)\n"
   "    -s <n>   : Set the number of bytes to skip before disassembly to <n>.\n"
   "    -c <n>   : Set the number of bytes to disassemble to <n>.\n"
@@ -63,6 +63,7 @@ int input_hook_file(ud_t* u);
 int main(int argc, char **argv)
 {
   char *prog_path = *argv;
+  char *s;
   ud_t ud_obj;
   int mode = 0;
 
@@ -102,7 +103,7 @@ int main(int argc, char **argv)
 		o_do_x = 1;
 	else if (strcmp(*argv,"-s") == 0)
 		if (--argc) {
-			char* s = *(++argv);
+			s = *(++argv);
 			if (sscanf(s, "%"  FMT "d", &o_skip) == 0)
 				fprintf(stderr, "Invalid value given for -s.\n");
 		} else { 
@@ -113,7 +114,7 @@ int main(int argc, char **argv)
 	else if (strcmp(*argv,"-c") == 0)
 		if (--argc) {
 			o_do_count= 1;
-			char* s = *(++argv);
+			s = *(++argv);
 			if (sscanf(s, "%" FMT "d", &o_count) == 0)
 				fprintf(stderr, "Invalid value given for -c.\n");
 		} else { 
@@ -123,7 +124,7 @@ int main(int argc, char **argv)
 		}
 	else if (strcmp(*argv,"-v") == 0)
 		if (--argc) {
-			char* s = *(++argv);
+			s = *(++argv);
 			if (*s == 'i')
 				ud_set_vendor(&ud_obj, UD_VENDOR_INTEL);
 		} else { 
@@ -134,7 +135,7 @@ int main(int argc, char **argv)
 	else if (strcmp(*argv,"-o") == 0) {
 		if (--argc) {
 			uint64_t pc = 0;
-			char* s = *(++argv);
+			s = *(++argv);
 			if (sscanf(s, "%" FMT "x", &pc) == 0)
 				fprintf(stderr, "Invalid value given for -o.\n");
 			ud_set_pc(&ud_obj, pc);
@@ -149,13 +150,13 @@ int main(int argc, char **argv)
 		exit(EXIT_FAILURE);
 	} else {
 		static int i = 0;
-		char *f = *argv;
+		s = *argv;
 		if (i) {
 			fprintf(stderr, "Multiple files specified.\n");
 			exit(EXIT_FAILURE);
 		} else i = 1;
-		if ((fptr = fopen(f, "rb")) == NULL) {
-			fprintf(stderr, "Failed to open file: %s.\n", f);
+		if ((fptr = fopen(s, "rb")) == NULL) {
+			fprintf(stderr, "Failed to open file: %s.\n", s);
 				exit(EXIT_FAILURE);
 		}
 	}
