@@ -91,12 +91,12 @@ resolve_mnemonic(register struct ud* u)
 		case UD_Ipopfw:		return UD_Ipopfq;
 		default: 		break; 
 	} 
-  } else {
-	if (u->mnemonic == UD_Iswapgs) {
+  } 
+  
+  if (u->mnemonic == UD_Iswapgs && u->dis_mode != 64) {
 		u->error = 1;
-	}
   }
-
+  
   if (u->adr_mode == 32) {
 	switch(u->mnemonic) {
 		case UD_Ijcxz:		return UD_Ijecxz;
@@ -683,6 +683,8 @@ disasm_operands(register struct ud* u)
 			decode_modrm(u, &(iop[1]), mop2s, T_GPR, &(iop[0]), mop1s, T_XMM);
 		} else if (mop2t == OP_E) {
 			decode_modrm(u, &(iop[1]), mop2s, T_GPR, &(iop[0]), mop1s, T_XMM);
+		} else if (mop2t == OP_PR) {
+			decode_modrm(u, &(iop[1]), mop2s, T_MMX, &(iop[0]), mop1s, T_XMM);
 		}
 		break;
 

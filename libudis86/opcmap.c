@@ -2964,9 +2964,7 @@ search_2byte_insn(register struct ud* u)
 		} else if (reg == 7 && mod == 3) {
 			u->mapen = &itab_g7_op0F01_Reg7[rm];
 			inp_next(u);
-		} else u->mapen = &itab_g7_op0F01[rm];
-
-		printf("%d", u->mapen->mnemonic);
+		} else u->mapen = &itab_g7_op0F01[reg];
 	}	
   } 
   /* 0FAE - opcode extensions */
