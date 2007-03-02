@@ -2945,27 +2945,22 @@ search_2byte_insn(register struct ud* u)
 	uint8_t mod = MODRM_MOD(inp_peek(u));
 	uint8_t rm  = MODRM_RM(inp_peek(u));
 
-	if (u->vendor == UD_VENDOR_INTEL) {
-		if (reg == 0 && mod == 3) {
-			u->mapen = &itab_g7_op0F01_Reg0_intel[rm];
-			inp_next(u);
-		} else if (reg == 1 && mod == 3) {
-			u->mapen = &itab_g7_op0F01_Reg1_intel[rm];
-			inp_next(u);
-		} else if (reg == 7 && mod == 3) {
-			u->mapen = &itab_g7_op0F01_Reg7_intel[rm];
-			inp_next(u);
-		}
-	}
-	else {
-		if (reg == 3 && mod == 3) {
+	if (reg == 0 && mod == 3i && u->vendor == UD_VENDOR_INTEL) {
+		u->mapen = &itab_g7_op0F01_Reg0_intel[rm];
+		inp_next(u);
+	} else if (reg == 1 && mod == 3 && u->vendor == UD_VENDOR_INTEL) {
+		u->mapen = &itab_g7_op0F01_Reg1_intel[rm];
+		inp_next(u);
+	} else if (reg == 3 && mod == 3 && u->vendor != UD_VENDOR_INTEL) {
 			u->mapen = &itab_g7_op0F01_Reg3[rm];
 			inp_next(u);
-		} else if (reg == 7 && mod == 3) {
+	} else if (reg == 7 && mod == 3i && u->vendor == UD_VENDOR_INTEL) {
+		u->mapen = &itab_g7_op0F01_Reg7_intel[rm];
+		inp_next(u);
+	} else if (reg == 7 && mod == 3) {
 			u->mapen = &itab_g7_op0F01_Reg7[rm];
 			inp_next(u);
-		} else u->mapen = &itab_g7_op0F01[reg];
-	}	
+	} else u->mapen = &itab_g7_op0F01[reg];
   } 
   /* 0FAE - opcode extensions */
   else if (inp_curr(u) == 0xAE) {
