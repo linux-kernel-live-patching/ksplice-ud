@@ -1,6 +1,6 @@
 # Makefile
 
-CC		= cc
+CC		= gcc
 RM		= rm
 
 
@@ -11,7 +11,10 @@ RM		= rm
 OBJS =	gen.o
 
 gen: $(OBJS)
-	$(CC) $(OBJS) -ludis86 -o gen
+	$(CC) $(OBJS) ../libudis86/libudis86.a -o gen
+
+tests: test16 test32 test64 testjmp ovrrun randraw
+
 test16: gen
 	yasm -f bin -o test16.bin test16.asm
 	echo "[bits 16]" > test16.out
@@ -30,6 +33,19 @@ test64: gen
 testjmp: gen
 	yasm -f bin -o testjmp.bin testjmp.asm
 	udcli -64 < testjmp.bin > testjmp.out
-	cat testjmp.out | more
+	diff testjmp.ref testjmp.out
+
+ovrrun: bufovrrun.c
+	$(CC) bufovrrun.c -o ovrrun ../libudis86/libudis86.a
+	./ovrrun
+
+randraw: randtest.raw
+	./gen -16 < randtest.raw > randtest16.out
+	diff randtest16.out randtest16.ref
+	./gen -32 < randtest.raw > randtest32.out
+	diff randtest32.out randtest32.ref
+	./gen -64 < randtest.raw > randtest64.out
+	diff randtest64.out randtest64.ref
+
 clean:
-	$(RM) -f core ./*.o ./gen *~ *.bin *.out
+	$(RM) -f core ./*.o ./gen *~ *.bin *.out ovrrun

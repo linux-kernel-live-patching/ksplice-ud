@@ -167,7 +167,7 @@ struct map_entry
   uint32_t 			prefix;
 };
 
-void ud_search_map(struct ud*);
+int ud_search_map(struct ud*);
 enum ud_mnemonic_code ud_map_get_3dnow(uint8_t);
 
 #endif

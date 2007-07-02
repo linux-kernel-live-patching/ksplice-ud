@@ -16,6 +16,7 @@ standalone:
 clean:
 	cd libudis86 && $(MAKE) clean
 	cd udcli && $(MAKE) clean
+	cd tests && $(MAKE) clean
 test:
 	nasm test32.asm -f bin -o test.bin
 	udcli -32 < test.bin

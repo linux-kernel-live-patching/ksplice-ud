@@ -5,7 +5,7 @@
  * All rights reserved. See LICENSE
  * -----------------------------------------------------------------------------
  */
-
+#include <assert.h>
 #include "types.h"
 #include "mnemonics.h"
 #include "opcmap.h"
@@ -1557,7 +1557,7 @@ struct map_entry itab_g2_opD1[0x8] = {
   { UD_Ircr,	Ev,	I1,	NOARG,	Pc1 | Po32 | Pa32 | REX(_W|_R|_X|_B) },
   { UD_Ishl,	Ev,	I1,	NOARG,	Pc1 | Po32 | Pa32 | REX(_W|_R|_X|_B) },
   { UD_Ishr,	Ev,	I1,	NOARG,	Pc1 | Po32 | Pa32 | REX(_W|_R|_X|_B) },
-  { UD_Iinvalid,Ev,	I1,	NOARG,	Pc1 | Po32 | Pa32 | REX(_W|_R|_X|_B) },
+  { UD_Iinvalid,NOARG,	NOARG,	NOARG,	Pnone },
   { UD_Isar,	Ev,	I1,	NOARG,	Pc1 | Po32 | Pa32 | REX(_W|_R|_X|_B) }
 };
 
@@ -2811,10 +2811,9 @@ struct map_entry* ud_me_invalid() {
 }
 
 /* 3D Now instructions with suffix */
-extern enum ud_mnemonic_code 
-ud_map_get_3dnow(uint8_t suffix)
+extern enum ud_mnemonic_code ud_map_get_3dnow(uint8_t suffix)
 {
-  switch(suffix) {
+  switch ( suffix ) {
 	case 0x0C: return UD_Ipi2fw;
 	case 0x0D: return UD_Ipi2fd;
 	case 0x1C: return UD_Ipf2iw;
@@ -2840,132 +2839,177 @@ ud_map_get_3dnow(uint8_t suffix)
 	case 0xBB: return UD_Ipswapd;
 	case 0xBF: return UD_Ipavgusb;
   }
-  return(0);
+  return ( 0 );
 }
 
 /* -----------------------------------------------------------------------------
  * search_1byte_insn() - Searches for 1-byte instructions.
  * -----------------------------------------------------------------------------
  */
-static void
-search_1byte_insn(register struct ud* u)
+static int search_1byte_insn( struct ud* u )
 {
-  u->mapen = &itab_1byte[inp_curr(u)];
+  uint8_t curr = inp_curr( u );
 
-  if (inp_curr(u) == 0x90) {
-	if (!(u->dis_mode == 64 && P_REX_B(u->pfx_rex))) {
-		if (u->pfx_rep) {
+  /* if in error state, return */
+  if ( u->error ) return -1;
+
+  u->mapen = &itab_1byte[ curr ];
+
+  if ( u->mapen->mnemonic == UD_Igrp ) {
+	uint8_t opc_ext = inp_peek( u );
+	if ( u->error ) return -1;
+	/* For instruction groups, the prefix field points 
+	 * to the group table. 
+	 */
+	u->mapen = &itab_groups[ u->mapen->prefix ] . 
+			me_pfx_none[ MODRM_REG( opc_ext ) ];
+  	/* Invalid opcode, load next byte. */
+	if ( u->mapen->mnemonic == UD_Iinvalid ) inp_next( u );
+  } else if ( curr == 0x90 ) {
+	/* resolve: xchg, nop, pause */
+	if ( !( u->dis_mode == 64 && P_REX_B( u->pfx_rex ) ) ) {
+		/* "rep nop" maps to pause */
+		if ( u->pfx_rep ) {
 			u->mapen = &pause;
 			u->pfx_rep = 0;
-		} else  u->mapen = &nop;
+		} else {
+			u->mapen = &nop;
+		}
 	}
-  } else if (u->dis_mode == 64 && (u->mapen)->mnemonic == UD_Iarpl)
+  } else if ( u->mapen->mnemonic == UD_Ix87 ) {
+	uint8_t opc_ext;
+	opc_ext = inp_peek( u );
+	if ( u->error ) return -1;
+	if ( opc_ext <= 0xBF ) {
+		/* x87 opcode based on mrm reg */
+		u->mapen = &itab_x87_reg[ curr - 0xD8 ]
+				[ MODRM_REG( opc_ext ) ];
+		/* invalid opcode extension. */
+		if ( u->mapen->mnemonic == UD_Iinvalid ) inp_next( u );	
+	} else {
+		/* x87 instruction */
+		u->mapen = &itab_x87[ curr - 0xD8 ]
+				[ opc_ext - 0xC0 ];
+		inp_next( u );
+	}
+  } else if ( u->dis_mode == 64 && ( u->mapen )->mnemonic == UD_Iarpl ) {
+	/* 64bit ARPL maps to movsxd */
 	u->mapen = &movsxd;
-
-  else if (u->mapen->mnemonic == UD_Igrp)
-	u->mapen = &itab_groups[u->mapen->prefix].me_pfx_none[MODRM_REG(inp_peek(u))];
-
-  else if ((u->mapen)->mnemonic == UD_Ix87) {
-	if (inp_peek(u) <= 0xBF) {
-		u->mapen = &itab_x87_reg[(inp_curr(u))-0xD8][MODRM_REG(inp_peek(u))];		
-	}
-	else {
-		u->mapen = &itab_x87[inp_curr(u)-0xD8][inp_peek(u)-0xC0];
-		inp_next(u);
-	}
   }  
+
+  return 0;
 }
 
 /* -----------------------------------------------------------------------------
  * search_2byte_insn() - Searches for 2-byte instructions.
  * -----------------------------------------------------------------------------
  */
-static void
-search_2byte_insn(register struct ud* u)
+int search_2byte_insn( struct ud* u )
 {
   uint32_t gindex;
+  uint8_t curr ;
+  uint8_t peek;
 
-  inp_next(u);
+  /* return if in error state */
+  if ( u->error ) { return 1; }
+  curr = inp_curr( u ); 
 
-  if (u->pfx_insn == 0x66) {
-	u->mapen = &itab_2byte_prefix66[inp_curr(u)];
-	if (u->mapen != NULL && u->mapen->mnemonic != UD_Ina)
+  /* 2byte opcodes can be modified by 0x66, F3, and F2 */
+  if ( u->pfx_insn == 0x66 ) {
+	u->mapen = &itab_2byte_prefix66[ curr ];
+	if ( u->mapen != NULL && u->mapen->mnemonic != UD_Ina ) {
 		u->pfx_opr = 0;
-  } else if (u->pfx_insn == 0xF2) {
-	u->mapen = &itab_2byte_prefixF2[inp_curr(u)];
-	if (u->mapen != NULL && u->mapen->mnemonic != UD_Ina)
+	}
+  } else if ( u->pfx_insn == 0xF2 ) {
+	u->mapen = &itab_2byte_prefixF2[ curr ];
+	if ( u->mapen != NULL && u->mapen->mnemonic != UD_Ina ) {
 		u->pfx_repne = 0;
-  } else if (u->pfx_insn == 0xF3) {
-	u->mapen = &itab_2byte_prefixF3[inp_curr(u)];
-	if (u->mapen != NULL && u->mapen->mnemonic != UD_Ina)
+	}
+  } else if ( u->pfx_insn == 0xF3 ) {
+	u->mapen = &itab_2byte_prefixF3[ curr ];
+	if (u->mapen != NULL && u->mapen->mnemonic != UD_Ina) {
 		u->pfx_rep = 0;
+	}
   }
 
-  if (u->mapen == NULL || u->mapen->mnemonic == UD_Ina)
-	u->mapen = &itab_2byte[inp_curr(u)];
+  /* If no such prefix, or if those prefixes were not applicable to the
+   * opcode, just get a 2byte opcode instruction from the 2byte table.
+   */
+  if ( u->mapen == NULL || u->mapen->mnemonic == UD_Ina ) {
+	u->mapen = &itab_2byte[ curr ];
+  }
 
-  if (u->mapen->mnemonic == UD_I3dnow)
+  /* 3D Now */
+  if ( u->mapen->mnemonic == UD_I3dnow ) {
 	u->mapen = &itab_3DNow;
+  }
 
-  if (u->mapen->mnemonic != UD_Igrp)
-	return;
+  /* Unless the table entry points to a group entry, we are done. */
+  if ( u->mapen->mnemonic != UD_Igrp ) {
+	return 0;
+  }
 
-  /* If instruction is in a Group */
-  gindex = u->mapen->prefix + ((u->vendor == UD_VENDOR_INTEL) ? 
-				ITAB_GROUPS_START_INTEL : 0);
+  /* If instruction is in a Group, get the group index. */
+  gindex = u->mapen->prefix + ( ( u->vendor == UD_VENDOR_INTEL ) ? 
+					ITAB_GROUPS_START_INTEL : 0 );
 
-  if (u->pfx_insn == 0x66 && itab_groups[gindex].me_pfx_66) {
-	u->mapen = &itab_groups[gindex].me_pfx_66[MODRM_REG(inp_peek(u))];
-	if (u->mapen != NULL && u->mapen->mnemonic != UD_Ina) {
+  /* Peek ahead for opcode extension. */
+  peek = inp_peek( u ); if ( u->error ) return -1;
+  
+  /* Check for groups with prefixes */
+  if ( u->pfx_insn == 0x66 && itab_groups[ gindex ].me_pfx_66 ) {
+	u->mapen = &itab_groups[ gindex ].me_pfx_66[ MODRM_REG( peek ) ];
+	if ( u->mapen != NULL && u->mapen->mnemonic != UD_Ina ) {
 		u->pfx_opr = 0;
-		return;
+		return 0;
 	}
-  }
-  else if (u->pfx_insn == 0xF2 && itab_groups[gindex].me_pfx_f2) {
-	u->mapen = &itab_groups[gindex].me_pfx_f2[MODRM_REG(inp_peek(u))];
-	if (u->mapen != NULL && u->mapen->mnemonic != UD_Ina) {
+  } else if ( u->pfx_insn == 0xF2 && itab_groups[ gindex ].me_pfx_f2 ) {
+	u->mapen = &itab_groups[ gindex ].me_pfx_f2[ MODRM_REG( peek ) ];
+	if ( u->mapen != NULL && u->mapen->mnemonic != UD_Ina ) {
 		u->pfx_repne = 0;
-		return;
+		return 0;
 	}
-  }
-  else if (u->pfx_insn == 0xF3 && itab_groups[gindex].me_pfx_f3) {
-	u->mapen = &itab_groups[gindex].me_pfx_f3[MODRM_REG(inp_peek(u))];
-	if (u->mapen != NULL && u->mapen->mnemonic != UD_Ina) {
+  } else if ( u->pfx_insn == 0xF3 && itab_groups[ gindex ].me_pfx_f3 ) {
+	u->mapen = &itab_groups[ gindex ].me_pfx_f3[ MODRM_REG( peek ) ];
+	if ( u->mapen != NULL && u->mapen->mnemonic != UD_Ina ) {
 		u->pfx_rep = 0;
-		return;
+		return 0;
 	}
   }
 
-  if (! u->pfx_insn || u->mapen->mnemonic == UD_Igrp)
-	u->mapen = &itab_groups[gindex].me_pfx_none[MODRM_REG(inp_peek(u))];
+  /* Non-prefixed group instructions */
+  if ( !u->pfx_insn || u->mapen->mnemonic == UD_Igrp ) {
+	u->mapen = &itab_groups[ gindex ].me_pfx_none[ MODRM_REG( peek ) ];
+  }
 
   /* 0F01 - opcode extensions */
-  if (inp_curr(u) == 0x01) {
-	uint8_t reg = MODRM_REG(inp_peek(u));
-	uint8_t mod = MODRM_MOD(inp_peek(u));
-	uint8_t rm  = MODRM_RM(inp_peek(u));
+  if ( curr == 0x01 ) {
+	uint8_t reg = MODRM_REG( peek );
+	uint8_t mod = MODRM_MOD( peek );
+	uint8_t rm  = MODRM_RM( peek );
 
-	if (reg == 0 && mod == 3i && u->vendor == UD_VENDOR_INTEL) {
-		u->mapen = &itab_g7_op0F01_Reg0_intel[rm];
+	if ( reg == 0 && mod == 3i && u->vendor == UD_VENDOR_INTEL ) {
+		u->mapen = &itab_g7_op0F01_Reg0_intel[ rm ];
+		inp_next( u );
+	} else if ( reg == 1 && mod == 3 && u->vendor == UD_VENDOR_INTEL ) {
+		u->mapen = &itab_g7_op0F01_Reg1_intel[ rm ];
 		inp_next(u);
-	} else if (reg == 1 && mod == 3 && u->vendor == UD_VENDOR_INTEL) {
-		u->mapen = &itab_g7_op0F01_Reg1_intel[rm];
-		inp_next(u);
-	} else if (reg == 3 && mod == 3 && u->vendor != UD_VENDOR_INTEL) {
-			u->mapen = &itab_g7_op0F01_Reg3[rm];
+	} else if ( reg == 3 && mod == 3 && u->vendor != UD_VENDOR_INTEL ) {
+			u->mapen = &itab_g7_op0F01_Reg3[ rm ];
 			inp_next(u);
-	} else if (reg == 7 && mod == 3i && u->vendor == UD_VENDOR_INTEL) {
-		u->mapen = &itab_g7_op0F01_Reg7_intel[rm];
+	} else if ( reg == 7 && mod == 3i && u->vendor == UD_VENDOR_INTEL ) {
+		u->mapen = &itab_g7_op0F01_Reg7_intel[ rm ];
 		inp_next(u);
 	} else if (reg == 7 && mod == 3) {
-			u->mapen = &itab_g7_op0F01_Reg7[rm];
+			u->mapen = &itab_g7_op0F01_Reg7[ rm ];
 			inp_next(u);
-	} else u->mapen = &itab_g7_op0F01[reg];
-  } 
-  /* 0FAE - opcode extensions */
-  else if (inp_curr(u) == 0xAE) {
-	uint8_t reg = MODRM_REG(inp_peek(u));
-	uint8_t mod = MODRM_MOD(inp_peek(u));
+	} else {
+		u->mapen = &itab_g7_op0F01[ reg ];
+	}
+  } /* 0FAE - opcode extensions */
+  else if ( curr == 0xAE ) {
+	uint8_t reg = MODRM_REG( peek );
+	uint8_t mod = MODRM_MOD( peek );
 
 	if (reg == 5 && mod == 3) {
 		u->mapen = &itab_gF_op0FAE_Reg5;
@@ -2976,8 +3020,11 @@ search_2byte_insn(register struct ud* u)
 	} else if (reg == 7 && mod == 3) {
 		u->mapen = &itab_gF_op0FAE_Reg7;
 		inp_next(u);
-	} else u->mapen = &itab_gF_op0FAE[reg];
+	} else { 
+		u->mapen = &itab_gF_op0FAE[ reg ];
+	}
   }
+  if ( u->error ) return -1; else return 0;
 }
 
 /* =============================================================================
@@ -2985,15 +3032,28 @@ search_2byte_insn(register struct ud* u)
  * corresponding to the opcode given by next byte in the byte stream.
  * =============================================================================
  */
-void ud_search_map(register struct ud* u) 
+int ud_search_map( struct ud* u ) 
 {
-  inp_next(u);
-
-  if (0x0F == inp_curr(u))
-	search_2byte_insn(u);
-  else	search_1byte_insn(u);
-
-  u->mnemonic = u->mapen->mnemonic;
+  int r;
+  /* if in state of error, return */
+  if ( u->error ) return -1;
+  /* get first byte of opcode. */
+  inp_next(u); if ( u->error ) return -1;
+  /* if first byte is 0x0F, denotes a 2byte map */
+  if ( 0x0F == inp_curr( u ) ) {
+	/* get second byte of opcode */
+	inp_next( u ); if ( u->error ) return -1;
+	r = search_2byte_insn( u );
+  } else {
+	r = search_1byte_insn( u );
+  }
+  assert( u->mapen != NULL );
+  if ( r == 0 ) {
+  	u->mnemonic = u->mapen->mnemonic;
+	return 0;
+  } else {
+	return r;
+  }
 }
 
 /* =============================================================================

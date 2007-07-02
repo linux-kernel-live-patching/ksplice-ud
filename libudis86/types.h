@@ -172,7 +172,6 @@ struct ud
   uint8_t		c3;
   uint8_t 		inp_cache[256];
   uint8_t		inp_sess[64];
-
 };
 
 /* -----------------------------------------------------------------------------
@@ -191,4 +190,9 @@ typedef struct ud_operand 	ud_operand_t;
 #define UD_INP_CACHE_SZ		32
 #define UD_VENDOR_AMD		0
 #define UD_VENDOR_INTEL		1
+
+#define bail_out(ud,error_code) longjmp( (ud)->bailout, error_code )
+#define try_decode(ud) if ( setjmp( (ud)->bailout ) == 0 )
+#define catch_error() else
+
 #endif

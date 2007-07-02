@@ -236,3 +236,8 @@
 	pause 
 	pop dword [eax]
 	out 0x0, al
+	lldt [0x100]
+	lgdt [0x221]
+	sldt [0x233]
+	sgdt [0x443]
+	lidt [eax+0x333]
