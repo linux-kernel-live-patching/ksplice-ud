@@ -511,8 +511,9 @@ static int disasm_operands(register struct ud* u)
 			} else if (mop2t == OP_I1) {
 				iop[1].type = UD_OP_CONST;
 				u->operand[1].lval.udword = 1;
-			} else if (mop2t == OP_I)
+			} else if (mop2t == OP_I) {
 				decode_imm(u, mop2s, &(iop[1]));
+			}
 		}
 		break;
 

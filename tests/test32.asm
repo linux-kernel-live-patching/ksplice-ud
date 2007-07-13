@@ -241,3 +241,11 @@
 	sldt [0x233]
 	sgdt [0x443]
 	lidt [eax+0x333]
+	lldt ax
+	ltr bx
+	verr cx
+	verw dx
+	sldt ax
+	str bx
+	str eax
+	and esp, 0xfc

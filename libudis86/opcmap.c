@@ -39,6 +39,7 @@
 #define	I1	{ OP_I1, 0 	}
 #define	I3	{ OP_I3, 0 	}
 #define Ib	{ OP_I, SZ_B 	}
+#define Isb	{ OP_I, SZ_SB 	}
 #define Iw	{ OP_I, SZ_W	}
 #define Iv	{ OP_I, SZ_V	}
 #define Iz	{ OP_I, SZ_Z	}
@@ -1629,12 +1630,12 @@ struct map_entry itab_g5_opFF[0x8] = {
 
 /* group 6 */
 struct map_entry itab_g6_op0F00[0x8] = {
-  { UD_Isldt,		M,	NOARG,	NOARG,	Po32 | Pa32 | REX(_R|_X|_B) },
-  { UD_Istr,		M,	NOARG,	NOARG,	Po32 | Pa32 | REX(_R|_X|_B) },
-  { UD_Illdt,		M,	NOARG,	NOARG,	Pa32 | REX(_R|_X|_B) },
-  { UD_Iltr,		M,	NOARG,	NOARG,	Pa32 | REX(_R|_X|_B) },
-  { UD_Iverr,		M,	NOARG,	NOARG,	Pa32 | REX(_R|_X|_B) },
-  { UD_Iverw,		M,	NOARG,	NOARG,	Pa32 | REX(_R|_X|_B) },
+  { UD_Isldt,		Ev,	NOARG,	NOARG,	Po32 | Pa32 | REX(_R|_X|_B) },
+  { UD_Istr,		Ev,	NOARG,	NOARG,	Po32 | Pa32 | REX(_R|_X|_B) },
+  { UD_Illdt,		Ew,	NOARG,	NOARG,	Pa32 | REX(_R|_X|_B) },
+  { UD_Iltr,		Ew,	NOARG,	NOARG,	Pa32 | REX(_R|_X|_B) },
+  { UD_Iverr,		Ew,	NOARG,	NOARG,	Pa32 | REX(_R|_X|_B) },
+  { UD_Iverw,		Ew,	NOARG,	NOARG,	Pa32 | REX(_R|_X|_B) },
   { UD_Iinvalid,	NOARG,	NOARG,	NOARG,	Pnone },
   { UD_Iinvalid,	NOARG,	NOARG,	NOARG,	Pnone }
 };
