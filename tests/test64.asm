@@ -85,6 +85,8 @@
 	movupd xmm0, [r12d]
 	movsldup xmm0, [r12d]
 	movups xmm0, xmm1
+	movups xmm10, xmm12
+	movups xmm0, xmm12
 	movlps xmm0, [rax]
 	movlps [rax], xmm0
 	unpcklps xmm4, xmm5
@@ -123,6 +125,8 @@
 	add dil, dil
 	add sil, bpl
 	add al, sil
+	add rax, r12
+	add eax, r12d
 	prefetcht0 [eax]
 	prefetchnta [eax]
 	prefetch [eax]
@@ -140,3 +144,8 @@
 	push rax
 	push r11
 	mov rax, [0x100]
+	pmovmskb r12d, xmm14
+	movdq2q mm0, xmm13
+	psrlw xmm10, 0x10
+	psraw xmm7, 0x1
+	psllw xmm12, 0x23

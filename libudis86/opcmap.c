@@ -503,7 +503,7 @@ struct map_entry itab_2byte[0x100] =
 /* 4D */ { UD_Icmovge,	Gv,	Ev,	NOARG,	Po32 | Pa32 | REX(_W|_R|_X|_B) },
 /* 4E */ { UD_Icmovle,	Gv,	Ev,	NOARG,	Po32 | Pa32 | REX(_W|_R|_X|_B) },
 /* 4F */ { UD_Icmovg,	Gv,	Ev,	NOARG,	Po32 | Pa32 | REX(_W|_R|_X|_B) },
-/* 50 */ { UD_Imovmskps,Gd,	VR,	NOARG,	Po32 | REX(_W|_R|_B) },
+/* 50 */ { UD_Imovmskps,Gd,	VR,	NOARG,	Po32 | REX(_R|_B) },
 /* 51 */ { UD_Isqrtps,	V,	W,	NOARG,	Pa32 | REX(_R|_X|_B) },
 /* 52 */ { UD_Irsqrtps,	V,	W,	NOARG,	Pa32 | REX(_R|_X|_B) },
 /* 53 */ { UD_Ircpps,	V,	W,	NOARG,	Pa32 | REX(_R|_X|_B) },
@@ -638,7 +638,7 @@ struct map_entry itab_2byte[0x100] =
 /* D4 */ { UD_Ipaddq,	P,	Q,	NOARG,	Pa32 | REX(_R|_X|_B) },
 /* D5 */ { UD_Ipmullw,	P,	Q,	NOARG,	Pa32 | REX(_R|_X|_B) },
 /* D6 */ { UD_Iinvalid,	NOARG,	NOARG,	NOARG,	Pnone },
-/* D7 */ { UD_Ipmovmskb,Gd,	PR,	NOARG,	Pnone },
+/* D7 */ { UD_Ipmovmskb,Gd,	PR,	NOARG,	Po32 | REX(_R|_B) },
 /* D8 */ { UD_Ipsubusb,	P,	Q,	NOARG,	Pa32 | REX(_R|_X|_B) },
 /* D9 */ { UD_Ipsubusw,	P,	Q,	NOARG,	Pa32 | REX(_R|_X|_B) },
 /* DA */ { UD_Ipminub,	P,	Q,	NOARG,	Pa32 | REX(_R|_X|_B) },
@@ -1023,7 +1023,7 @@ struct map_entry itab_2byte_prefix66[0x100] =
 /* 4D */ { UD_Ina,	NOARG,	NOARG,	NOARG,	Pnone },
 /* 4E */ { UD_Ina,	NOARG,	NOARG,	NOARG,	Pnone },
 /* 4F */ { UD_Ina,	NOARG,	NOARG,	NOARG,	Pnone },
-/* 50 */ { UD_Imovmskpd,Gd,	VR,	NOARG,	Po32 | REX(_W|_R|_B) },
+/* 50 */ { UD_Imovmskpd,Gd,	VR,	NOARG,	Po32 | REX(_R|_B) },
 /* 51 */ { UD_Isqrtpd,	V,	W,	NOARG,	Pa32 | REX(_R|_X|_B) },
 /* 52 */ { UD_Iinvalid,	NOARG,	NOARG,	NOARG,	Pnone },
 /* 53 */ { UD_Iinvalid,	NOARG,	NOARG,	NOARG,	Pnone },
@@ -1140,7 +1140,7 @@ struct map_entry itab_2byte_prefix66[0x100] =
 /* C2 */ { UD_Icmppd,	V,	W,	Ib,	Pa32 | REX(_R|_X|_B) },
 /* C3 */ { UD_Iinvalid,	NOARG,	NOARG,	NOARG,	Pnone },
 /* C4 */ { UD_Ipinsrw,	V,	Ew,	Ib,	Pa32 | REX(_W|_R|_X|_B) },
-/* C5 */ { UD_Ipextrw,	Gd,	VR,	Ib,	Pa32  },
+/* C5 */ { UD_Ipextrw,	Gd,	VR,	Ib,	Pa32 | REX(_R|_B) },
 /* C6 */ { UD_Ishufpd,	V,	W,	Ib,	Pa32 | REX(_R|_X|_B) },
 /* C7 */ { UD_Igrp,	NOARG,	NOARG,	NOARG,	GRP_0FC7 },
 /* C8 */ { UD_Ina,	NOARG,	NOARG,	NOARG,	Pnone },
@@ -1158,7 +1158,7 @@ struct map_entry itab_2byte_prefix66[0x100] =
 /* D4 */ { UD_Ipaddq,	V,	W,	NOARG,	Pa32 | REX(_R|_X|_B) },
 /* D5 */ { UD_Ipmullw,	V,	W,	NOARG,	Pa32 | REX(_R|_X|_B) },
 /* D6 */ { UD_Imovq,	W,	V,	NOARG,	Pa32 | REX(_R|_X|_B) },
-/* D7 */ { UD_Ipmovmskb,Gd,	VR,	NOARG,	Pnone },
+/* D7 */ { UD_Ipmovmskb,Gd,	VR,	NOARG,	Pnone| REX(_R|_B) },
 /* D8 */ { UD_Ipsubusb,	V,	W,	NOARG,	Pa32 | REX(_R|_X|_B) },
 /* D9 */ { UD_Ipsubusw,	V,	W,	NOARG,	Pa32 | REX(_R|_X|_B) },
 /* DA */ { UD_Ipminub,	V,	W,	NOARG,	Pa32 | REX(_R|_X|_B) },
@@ -1417,7 +1417,7 @@ struct map_entry itab_2byte_prefixF2[0x100] =
 /* D3 */ { UD_Iinvalid,	NOARG,	NOARG,	NOARG,	Pnone },
 /* D4 */ { UD_Iinvalid,	NOARG,	NOARG,	NOARG,	Pnone },
 /* D5 */ { UD_Iinvalid,	NOARG,	NOARG,	NOARG,	Pnone },
-/* D6 */ { UD_Imovdq2q,	P,	VR,	NOARG,	Pa32  },
+/* D6 */ { UD_Imovdq2q,	P,	VR,	NOARG,	Pa32 | REX(_B) },
 /* D7 */ { UD_Iinvalid,	NOARG,	NOARG,	NOARG,	Pnone },
 /* D8 */ { UD_Iinvalid,	NOARG,	NOARG,	NOARG,	Pnone },
 /* D9 */ { UD_Iinvalid,	NOARG,	NOARG,	NOARG,	Pnone },
@@ -1824,11 +1824,11 @@ struct map_entry itab_gC_op0F71[0x8] = {
 struct map_entry itab_gC_op0F71_prefix66[0x8] = {
   { UD_Iinvalid,	NOARG,	NOARG,	NOARG,	Pnone },
   { UD_Iinvalid,	NOARG,	NOARG,	NOARG,	Pnone },
-  { UD_Ipsrlw,		VR,	Ib,	NOARG,	Pnone },
+  { UD_Ipsrlw,		VR,	Ib,	NOARG,	REX(_B) },
   { UD_Iinvalid,	NOARG,	NOARG,	NOARG,	Pnone },
-  { UD_Ipsraw,		VR,	Ib,	NOARG,	Pnone },
+  { UD_Ipsraw,		VR,	Ib,	NOARG,	REX(_B) },
   { UD_Iinvalid,	NOARG,	NOARG,	NOARG,	Pnone },
-  { UD_Ipsllw,		VR,	Ib,	NOARG,	Pnone },
+  { UD_Ipsllw,		VR,	Ib,	NOARG,	REX(_B) },
   { UD_Iinvalid,	NOARG,	NOARG,	NOARG,	Pnone },
 };
 
@@ -1872,11 +1872,11 @@ struct map_entry itab_gD_op0F72_prefix66[0x8] =
 {
   { UD_Iinvalid,	NOARG,	NOARG,	NOARG,	Pnone },
   { UD_Iinvalid,	NOARG,	NOARG,	NOARG,	Pnone },
-  { UD_Ipsrld,		VR,	Ib,	NOARG,	Pnone },
+  { UD_Ipsrld,		VR,	Ib,	NOARG,	REX(_B) },
   { UD_Iinvalid,	NOARG,	NOARG,	NOARG,	Pnone },
-  { UD_Ipsrad,		VR,	Ib,	NOARG,	Pnone },
+  { UD_Ipsrad,		VR,	Ib,	NOARG,	REX(_B) },
   { UD_Iinvalid,	NOARG,	NOARG,	NOARG,	Pnone },
-  { UD_Ipslld,		VR,	Ib,	NOARG,	Pnone },
+  { UD_Ipslld,		VR,	Ib,	NOARG,	REX(_B) },
   { UD_Iinvalid,	NOARG,	NOARG,	NOARG,	Pnone },
 };
 
@@ -1919,12 +1919,12 @@ struct map_entry itab_gE_op0F73_prefix66[0x8] =
 {
   { UD_Iinvalid,	NOARG,	NOARG,	NOARG,	Pnone },
   { UD_Iinvalid,	NOARG,	NOARG,	NOARG,	Pnone },
-  { UD_Ipsrlq,		VR,	Ib,	NOARG,	Pnone },
-  { UD_Ipsrldq,		VR,	Ib,	NOARG,	Pnone },
-  { UD_Iinvalid,	NOARG,	NOARG,	NOARG,	Pnone },
-  { UD_Iinvalid,	NOARG,	NOARG,	NOARG,	Pnone },
-  { UD_Ipsllq,		VR,	Ib,	NOARG,	Pnone },
-  { UD_Ipslldq,		VR,	Ib,	NOARG,	Pnone }
+  { UD_Ipsrlq,		VR,	Ib,	NOARG,	REX(_B) },
+  { UD_Ipsrldq,		VR,	Ib,	NOARG,	REX(_B) },
+  { UD_Iinvalid,	NOARG,	NOARG,	NOARG,	REX(_B) },
+  { UD_Iinvalid,	NOARG,	NOARG,	NOARG,	REX(_B) },
+  { UD_Ipsllq,		VR,	Ib,	NOARG,	REX(_B) },
+  { UD_Ipslldq,		VR,	Ib,	NOARG,	REX(_B) }
 };
 
 struct map_entry itab_gE_op0F73_prefixF3[0x8] = {

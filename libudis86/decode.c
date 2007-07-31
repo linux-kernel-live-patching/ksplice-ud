@@ -298,7 +298,7 @@ decode_modrm(struct ud* u, struct ud_operand *op, unsigned int s,
 	op->type = UD_OP_REG;
 	if (rm_type == 	T_GPR)
 		op->base = decode_gpr(u, op->size, rm);
-	else	op->base = resolve_reg(u, rm_type, (P_REX_R(u->pfx_rex) << 3) | (rm&7));
+	else	op->base = resolve_reg(u, rm_type, (P_REX_B(u->pfx_rex) << 3) | (rm&7));
   } 
   /* else its memory addressing */  
   else {
@@ -647,15 +647,19 @@ static int disasm_operands(register struct ud* u)
 			decode_imm(u, mop2s, &(iop[1]));
 		break; 
 
-	/* P, Q[,I]/W/E[,I] */
+	/* P, Q[,I]/W/E[,I],VR */
 	case OP_P :
 		if (mop2t == OP_Q) {
 			decode_modrm(u, &(iop[1]), mop2s, T_MMX, &(iop[0]), mop1s, T_MMX);
 			if (mop3t == OP_I)
 				decode_imm(u, mop3s, &(iop[2]));
-		} else if (mop2t == OP_W)
+		} else if (mop2t == OP_W) {
 			decode_modrm(u, &(iop[1]), mop2s, T_XMM, &(iop[0]), mop1s, T_MMX);
-		else if (mop2t == OP_E) {
+		} else if (mop2t == OP_VR) {
+			if (MODRM_MOD(inp_peek(u)) != 3)
+				u->error = 1;
+			decode_modrm(u, &(iop[1]), mop2s, T_XMM, &(iop[0]), mop1s, T_MMX);
+		} else if (mop2t == OP_E) {
 			decode_modrm(u, &(iop[1]), mop2s, T_GPR, &(iop[0]), mop1s, T_MMX);
 			if (mop3t == OP_I)
 				decode_imm(u, mop3s, &(iop[2]));

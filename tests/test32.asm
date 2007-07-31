@@ -22,6 +22,7 @@
 	mov [ebp+edi+0x100000], esp
 	mov byte [esp], 0x10
 	add al, 0x10
+	add eax, ebx
 	push es
 	pop es
 	adc eax, 0x10000
@@ -249,3 +250,6 @@
 	str bx
 	str eax
 	and esp, 0xfc
+	psrlw xmm1, 0x10
+	psraw xmm7, 0x1
+	psllw xmm2, 0x23
