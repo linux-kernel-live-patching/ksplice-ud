@@ -2989,7 +2989,7 @@ int search_2byte_insn( struct ud* u )
 	uint8_t mod = MODRM_MOD( peek );
 	uint8_t rm  = MODRM_RM( peek );
 
-	if ( reg == 0 && mod == 3i && u->vendor == UD_VENDOR_INTEL ) {
+	if ( reg == 0 && mod == 3 && u->vendor == UD_VENDOR_INTEL ) {
 		u->mapen = &itab_g7_op0F01_Reg0_intel[ rm ];
 		inp_next( u );
 	} else if ( reg == 1 && mod == 3 && u->vendor == UD_VENDOR_INTEL ) {
@@ -2998,7 +2998,7 @@ int search_2byte_insn( struct ud* u )
 	} else if ( reg == 3 && mod == 3 && u->vendor != UD_VENDOR_INTEL ) {
 			u->mapen = &itab_g7_op0F01_Reg3[ rm ];
 			inp_next(u);
-	} else if ( reg == 7 && mod == 3i && u->vendor == UD_VENDOR_INTEL ) {
+	} else if ( reg == 7 && mod == 3 && u->vendor == UD_VENDOR_INTEL ) {
 		u->mapen = &itab_g7_op0F01_Reg7_intel[ rm ];
 		inp_next(u);
 	} else if (reg == 7 && mod == 3) {
