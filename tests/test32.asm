@@ -226,7 +226,7 @@
 	fisub word [ecx]
 	fld qword [bx+si]
 	fisttp qword [edx+0x100]
-	fnstsw [eax]
+	fnstsw word [eax]
 	frstor [ebx]
 	prefetch [bx+si]
 	psrlq xmm0, 0x10
@@ -253,3 +253,14 @@
 	psrlw xmm1, 0x10
 	psraw xmm7, 0x1
 	psllw xmm2, 0x23
+	fldenv [0x10]
+	fldenv [0x123]
+	fldcw word [0x100]
+	fnstcw word [0x10]
+	ficom word [eax+ebx+0x10]
+	fstp tword [0x10]
+	fadd qword [eax+ebx*2+0x1]
+	frstor [0x100]
+	fnstsw word [0x100]
+	fiadd word [0x100]
+	fild word [0x10]

@@ -149,3 +149,5 @@
 	psrlw xmm10, 0x10
 	psraw xmm7, 0x1
 	psllw xmm12, 0x23
+	swapgs 
+	fadd dword [rax+rbx]

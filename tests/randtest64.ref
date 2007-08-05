@@ -333,7 +333,7 @@
 	push rsp
 	mov edi, 0x78579764
 	xor [rbp-0x45], bh
-	fnstsw [rcx-0x7f]
+	fnstsw word [rcx-0x7f]
 	invalid 
 	shl dword [rcx], 0xe0
 	or esp, [rdi-0x2b2ad6da]
@@ -2646,7 +2646,7 @@
 	mov dl, 0xbb
 	fldenv [rsi]
 	sbb al, 0xa1
-	fstp tbyte [rbp-0xa682773]
+	fstp tword [rbp-0xa682773]
 	cmpsd 
 	mov al, 0x3f
 	in al, dx

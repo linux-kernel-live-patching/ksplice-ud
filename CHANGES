@@ -1,3 +1,9 @@
+ * [Aug/05/07] Patch for DJGPP (Thanks to Robert Reibisch)
+	       Removed "test" Target in tot Makefile (Thanks Robert to Reibisch)
+	       New target:tests.
+	       Misc. clean up top-of-tree Makefile.
+	       Use config.h for package version
+	       Review/cleanup FP Opcode map. 
  * [Dec/18/06] Fixed: Printf warnings.
 	       Fixed: set_input_buffered to set_input_buffer in documentation.
 	       Added support for INTEL VMX instructions.

@@ -2,28 +2,33 @@
 # udis86 - udis86 disassembler for x86(x86-64)
 #
 
+.PHONY: tests
+
 all:
-	cd libudis86 && $(MAKE)
-	cd udcli && $(MAKE)
-install:
-	cd libudis86 && $(MAKE) install
-	cd udcli && $(MAKE) install
+	$(MAKE) -C libudis86
+	$(MAKE) -C udcli
+
+install: all
+	$(MAKE) -C libudis86 install
+	$(MAKE) -C udcli install
+
 uninstall:
-	cd libudis86 && $(MAKE) uninstall
-	cd udcli && $(MAKE) uninstall
+	$(MAKE) -C libudis86 uninstall
+	$(MAKE) -C udcli uninstall
+
 standalone:
-	cd libudis86 && $(MAKE) -f Makefile.standalone
+	$(MAKE) -C libudis86 -f Makefile.standalone
+
 clean:
-	cd libudis86 && $(MAKE) clean
-	cd udcli && $(MAKE) clean
-	cd tests && $(MAKE) clean
-test:
-	nasm test32.asm -f bin -o test.bin
-	udcli -32 < test.bin
-	@read
-	udcli -32 -att < test.bin
+	$(MAKE) -C libudis86 clean
+	$(MAKE) -C udcli clean
+
+tests: all
+	$(MAKE) -C tests tests
+
 distclean: clean
-	cd libudis86 && $(MAKE) distclean
-	cd udcli && $(MAKE) distclean
+	$(MAKE) -C libudis86 distclean
+	$(MAKE) -C udcli distclean
+	$(MAKE) -C tests clean
 	$(RM) -f config.h test.bin Makefile *.log *~ docs/*~
 	$(RM) -rf autom4te*.cache

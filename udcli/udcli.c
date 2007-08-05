@@ -1,7 +1,7 @@
 /* -----------------------------------------------------------------------------
  * udcli.c - front end to udis86.
  *
- * Copyright (c) 2004, 2005, 2006 Vivek Mohan <vivek@sig9.com>
+ * Copyright (c) 2004,2005,2006,2007 Vivek Mohan <vivek@sig9.com>
  * All rights reserved.
  * See (LICENSE)
  * -----------------------------------------------------------------------------
@@ -12,6 +12,7 @@
 #include <string.h>
 #include <ctype.h>
 #include "../udis86.h"
+#include "../config.h"
 
 #if defined(__amd64__) || defined(__x86_64__)
 #  define FMT "l"
@@ -19,9 +20,16 @@
 #  define FMT "ll"
 #endif
 
-#ifdef _WIN32
+#if defined(__DJGPP__) || defined(_WIN32)
 # include <io.h>
 # include <fcntl.h>
+#endif 
+
+#ifdef __DJGPP__
+# include <unistd.h>  /* for isatty() */
+# define _setmode setmode
+# define _fileno fileno
+# define _O_BINARY O_BINARY
 #endif
 
 /* help string */
@@ -43,6 +51,7 @@ static char help[] =
   "    -noff    : Do not display the offset of instructions.\n"
   "    -nohex   : Do not display the hexadecimal code of instructions.\n"
   "    -h       : Display this help message.\n"
+  "    --version: Show version.\n"
   "\n"
   "Udcli is a front-end to the Udis86 Disassembler Library.\n" 
   "http://udis86.sourceforge.net/\n"
@@ -72,7 +81,10 @@ int main(int argc, char **argv)
   ud_set_mode(&ud_obj, 32);
   ud_set_syntax(&ud_obj, UD_SYN_INTEL);
 
-#ifdef _WIN32
+#ifdef __DJGPP__
+  if ( !isatty( fileno( stdin ) ) )
+#endif
+#if defined(__DJGPP) || defined(_WIN32)
   _setmode(_fileno(stdin), _O_BINARY);
 #endif  
 
@@ -144,6 +156,9 @@ int main(int argc, char **argv)
 			printf(help, prog_path);
 			exit(EXIT_FAILURE);
 		}
+	} else if ( strcmp( *argv, "--version" ) == 0 ) {
+		fprintf(stderr, "%s\n", PACKAGE_STRING );
+		exit(0);
 	} else if((*argv)[0] == '-') {
 		fprintf(stderr, "Invalid option %s.\n", *argv);
 		printf(help, prog_path);

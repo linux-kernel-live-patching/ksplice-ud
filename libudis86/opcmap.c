@@ -2019,7 +2019,8 @@ struct map_entry itab_g10_op0F18[0x8] = {
 };
 
 /* group P  */
-struct map_entry itab_gP_op0F0D[0x8] = {
+struct map_entry itab_gP_op0F0D[0x8] = 
+{
   { UD_Iprefetch,	M,	NOARG,	NOARG,	Pa32 | REX(_W|_R|_X|_B) },
   { UD_Iprefetch,	M,	NOARG,	NOARG,	Pa32 | REX(_W|_R|_X|_B) },
   { UD_Iprefetch,	M,	NOARG,	NOARG,	Pa32 | REX(_W|_R|_X|_B) },
@@ -2098,6 +2099,13 @@ struct
   { itab_g9_op0FC7_intel,	itab_g9_op0FC7_prefix66_intel, itab_g9_op0FC7_prefixF3_intel, 0 },
 };
 
+/* ----------------------------------------------------------------------------
+ * X87 (REG) Opcode Table (D8-DF)
+ *
+ * These tables resolve x87 opcodes based on the "reg" field of the modrm byte.
+ * ----------------------------------------------------------------------------
+ */
+
 /* D8 Opcode Map */
 struct map_entry itab_x87_opD8reg[0x8] = 
 {
@@ -2114,14 +2122,14 @@ struct map_entry itab_x87_opD8reg[0x8] =
 /* D9 Opcode Map */
 struct map_entry itab_x87_opD9reg[0x8] = 
 {
-  { UD_Ifld,	Md,	NOARG,	NOARG,	Pc1 | Pa32 | REX(_R|_X|_B) },
-  { UD_Iinvalid,NOARG,	NOARG,	NOARG,	Pnone },
-  { UD_Ifst,	Md,	NOARG,	NOARG,	Pc1 | Pa32 | REX(_R|_X|_B) },
-  { UD_Ifstp,	Md,	NOARG,	NOARG,	Pc1 | Pa32 | REX(_R|_X|_B) },
-  { UD_Ifldenv,	M,	NOARG,	NOARG,	Pa32 | REX(_R|_X|_B) },
-  { UD_Ifldcw,	Mw,	NOARG,	NOARG,	Pc1 | Pa32 | REX(_R|_X|_B) },
-  { UD_Ifnstenv,M,	NOARG,	NOARG,	Pa32 | REX(_R|_X|_B) },
-  { UD_Ifnstcw,	Mw,	NOARG,	NOARG,	Pc1 | Pa32 | REX(_R|_X|_B) }
+  { UD_Ifld,	Md,	NOARG,	NOARG,	Pc1  | Pa32 | REX(_R|_X|_B) },
+  { UD_Iinvalid,NOARG,	NOARG,	NOARG,	Pnone                       },
+  { UD_Ifst,	Md,	NOARG,	NOARG,	Pc1  | Pa32 | REX(_R|_X|_B) },
+  { UD_Ifstp,	Md,	NOARG,	NOARG,	Pc1  | Pa32 | REX(_R|_X|_B) },
+  { UD_Ifldenv,	M,	NOARG,	NOARG,	Pa32 |        REX(_R|_X|_B) },
+  { UD_Ifldcw,	Mw,	NOARG,	NOARG,	Pc1  | Pa32 | REX(_R|_X|_B) },
+  { UD_Ifnstenv,M,	NOARG,	NOARG,	Pa32 |        REX(_R|_X|_B) },
+  { UD_Ifnstcw,	Mw,	NOARG,	NOARG,	Pc1  | Pa32 | REX(_R|_X|_B) }
 };
 
 /* DA Opcode Map */
@@ -2144,9 +2152,9 @@ struct map_entry itab_x87_opDBreg[0x8] =
   { UD_Ifisttp,	Md,	NOARG,	NOARG,	Pc1 | Pa32 | REX(_R|_X|_B) },
   { UD_Ifist,	Md,	NOARG,	NOARG,	Pc1 | Pa32 | REX(_R|_X|_B) },
   { UD_Ifistp,	Md,	NOARG,	NOARG,	Pc1 | Pa32 | REX(_R|_X|_B) },
-  { UD_Iinvalid,NOARG,	NOARG,	NOARG,	Pnone },
+  { UD_Iinvalid,NOARG,	NOARG,	NOARG,	Pnone                      },
   { UD_Ifld,	Mt,	NOARG,	NOARG,	Pc1 | Pa32 | REX(_R|_X|_B) },
-  { UD_Iinvalid,NOARG,	NOARG,	NOARG,	Pnone },
+  { UD_Iinvalid,NOARG,	NOARG,	NOARG,	Pnone                      },
   { UD_Ifstp,	Mt,	NOARG,	NOARG,	Pc1 | Pa32 | REX(_R|_X|_B) }
 };
 
@@ -2166,14 +2174,14 @@ struct map_entry itab_x87_opDCreg[0x8] =
 /* DD Opcode Map */
 struct map_entry itab_x87_opDDreg[0x8] = 
 {
-  { UD_Ifld,	Mq,	NOARG,	NOARG,	Pc1 | Pa32 | REX(_R|_X|_B) },
-  { UD_Ifisttp,	Mq,	NOARG,	NOARG,	Pc1 | Pa32 | REX(_R|_X|_B) },
-  { UD_Ifst,	Mq,	NOARG,	NOARG,	Pc1 | Pa32 | REX(_R|_X|_B) },
-  { UD_Ifstp,	Mq,	NOARG,	NOARG,	Pc1 | Pa32 | REX(_R|_X|_B) },
-  { UD_Ifrstor,	M,	NOARG,	NOARG,	Pa32 | REX(_R|_X|_B) },
-  { UD_Iinvalid,NOARG,	NOARG,	NOARG,	Pnone },
-  { UD_Ifnsave,	M,	NOARG,	NOARG,	Pa32 | REX(_R|_X|_B) },
-  { UD_Ifnstsw,	M,	NOARG,	NOARG,	Pa32 | REX(_R|_X|_B) }
+  { UD_Ifld,	Mq,	NOARG,	NOARG,	Pc1  | Pa32 | REX(_R|_X|_B) },
+  { UD_Ifisttp,	Mq,	NOARG,	NOARG,	Pc1  | Pa32 | REX(_R|_X|_B) },
+  { UD_Ifst,	Mq,	NOARG,	NOARG,	Pc1  | Pa32 | REX(_R|_X|_B) },
+  { UD_Ifstp,	Mq,	NOARG,	NOARG,	Pc1  | Pa32 | REX(_R|_X|_B) },
+  { UD_Ifrstor,	M,	NOARG,	NOARG,	Pa32 |        REX(_R|_X|_B) },
+  { UD_Iinvalid,NOARG,	NOARG,	NOARG,	Pnone                       },
+  { UD_Ifnsave,	M,	NOARG,	NOARG,	Pa32        | REX(_R|_X|_B) },
+  { UD_Ifnstsw,	Mw,	NOARG,	NOARG,	Pc1  | Pa32 | REX(_R|_X|_B) }
 };
 
 /* DE Opcode Map */
@@ -2192,27 +2200,35 @@ struct map_entry itab_x87_opDEreg[0x8] =
 /* DF Opcode Map */
 struct map_entry itab_x87_opDFreg[0x8] = 
 {
-  { UD_Ifild,	Mw,	NOARG,	NOARG,	Pc1 | Pa32 | REX(_R|_X|_B) },
-  { UD_Ifisttp, Mw,	NOARG,	NOARG,	Pc1 | Pa32 | REX(_R|_X|_B) },
-  { UD_Ifist,	Mw,	NOARG,	NOARG,	Pc1 | Pa32 | REX(_R|_X|_B) },
-  { UD_Ifistp,	Mw,	NOARG,	NOARG,	Pc1 | Pa32 | REX(_R|_X|_B) },
-  { UD_Ifbld,	Mt,	NOARG,	NOARG,	Pa32 | REX(_R|_X|_B) },
-  { UD_Ifild,	Mq,	NOARG,	NOARG,	Pc1 | Pa32 | REX(_R|_X|_B) },
-  { UD_Ifbstp,	Mt,	NOARG,	NOARG,	Pa32 | REX(_R|_X|_B) },
-  { UD_Ifistp,	Mq,	NOARG,	NOARG,	Pc1 | Pa32 | REX(_R|_X|_B) }
+  { UD_Ifild,	Mw,	NOARG,	NOARG,	Pc1  | Pa32 | REX(_R|_X|_B) },
+  { UD_Ifisttp, Mw,	NOARG,	NOARG,	Pc1  | Pa32 | REX(_R|_X|_B) },
+  { UD_Ifist,	Mw,	NOARG,	NOARG,	Pc1  | Pa32 | REX(_R|_X|_B) },
+  { UD_Ifistp,	Mw,	NOARG,	NOARG,	Pc1  | Pa32 | REX(_R|_X|_B) },
+  { UD_Ifbld,	Mt,	NOARG,	NOARG,	Pa32 |        REX(_R|_X|_B) },
+  { UD_Ifild,	Mq,	NOARG,	NOARG,	Pc1  | Pa32 | REX(_R|_X|_B) },
+  { UD_Ifbstp,	Mt,	NOARG,	NOARG,	Pa32 |        REX(_R|_X|_B) },
+  { UD_Ifistp,	Mq,	NOARG,	NOARG,	Pc1  | Pa32 | REX(_R|_X|_B) }
 };
 
-struct map_entry itab_g_invalid[0x8] = 
+/* X87 Group of D8-DF (REG) Opcodes */
+struct map_entry *itab_x87_reg[] = 
 {
-  { UD_Iinvalid,	NOARG,	NOARG,	NOARG,	Pnone },
-  { UD_Iinvalid,	NOARG,	NOARG,	NOARG,	Pnone },
-  { UD_Iinvalid,	NOARG,	NOARG,	NOARG,	Pnone },
-  { UD_Iinvalid,	NOARG,	NOARG,	NOARG,	Pnone },
-  { UD_Iinvalid,	NOARG,	NOARG,	NOARG,	Pnone },
-  { UD_Iinvalid,	NOARG,	NOARG,	NOARG,	Pnone },
-  { UD_Iinvalid,	NOARG,	NOARG,	NOARG,	Pnone },
-  { UD_Iinvalid,	NOARG,	NOARG,	NOARG,	Pnone },
+  itab_x87_opD8reg,
+  itab_x87_opD9reg,
+  itab_x87_opDAreg,
+  itab_x87_opDBreg,
+  itab_x87_opDCreg,
+  itab_x87_opDDreg,
+  itab_x87_opDEreg,
+  itab_x87_opDFreg
 };
+
+/* ----------------------------------------------------------------------------
+ * X87 Opcode Table (D8-DF)
+ *
+ * These tables resolve x87 opcodes.
+ * ----------------------------------------------------------------------------
+ */
 
 /* D8 Opcode Map */
 struct map_entry itab_x87_opD8[0x8*0x8] = 
@@ -2765,18 +2781,7 @@ struct map_entry itab_x87_opDF[0x8*0x8] =
   { UD_Iinvalid,	NOARG,	NOARG,	NOARG,	Pnone }
 };
 
-struct map_entry *itab_x87_reg[] = 
-{
-  itab_x87_opD8reg,
-  itab_x87_opD9reg,
-  itab_x87_opDAreg,
-  itab_x87_opDBreg,
-  itab_x87_opDCreg,
-  itab_x87_opDDreg,
-  itab_x87_opDEreg,
-  itab_x87_opDFreg
-};
-
+/* X87 Group of D8-DF Opcodes  */
 struct map_entry *itab_x87[] = 
 {
   itab_x87_opD8,
@@ -2787,6 +2792,18 @@ struct map_entry *itab_x87[] =
   itab_x87_opDD,
   itab_x87_opDE,
   itab_x87_opDF
+};
+
+struct map_entry itab_g_invalid[0x8] = 
+{
+  { UD_Iinvalid,	NOARG,	NOARG,	NOARG,	Pnone },
+  { UD_Iinvalid,	NOARG,	NOARG,	NOARG,	Pnone },
+  { UD_Iinvalid,	NOARG,	NOARG,	NOARG,	Pnone },
+  { UD_Iinvalid,	NOARG,	NOARG,	NOARG,	Pnone },
+  { UD_Iinvalid,	NOARG,	NOARG,	NOARG,	Pnone },
+  { UD_Iinvalid,	NOARG,	NOARG,	NOARG,	Pnone },
+  { UD_Iinvalid,	NOARG,	NOARG,	NOARG,	Pnone },
+  { UD_Iinvalid,	NOARG,	NOARG,	NOARG,	Pnone },
 };
 
 /* AMD 3DNow! Instructions */

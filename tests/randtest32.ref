@@ -352,7 +352,7 @@
 	js 0x381
 	jge 0x30e
 	dec eax
-	fnstsw [ecx-0x7f]
+	fnstsw word [ecx-0x7f]
 	pop ds
 	shl dword [ecx], 0xe0
 	or esp, [edi+0xd4d52926]
@@ -1090,7 +1090,7 @@
 	adc al, ah
 	jmp dword 0xe3e8:0xe4234f72
 	test [eax], ebp
-	fnstsw [ecx-0x5f]
+	fnstsw word [ecx-0x5f]
 	xor byte [eax+0xef750efc], 0xb9
 	mov [0x39baf1b0], al
 	xchg esp, eax
@@ -2819,7 +2819,7 @@
 	mov dl, 0xbb
 	fldenv [esi]
 	sbb al, 0xa1
-	fstp tbyte [ebp+0xf597d88d]
+	fstp tword [ebp+0xf597d88d]
 	cmpsd 
 	mov al, 0x3f
 	in al, dx

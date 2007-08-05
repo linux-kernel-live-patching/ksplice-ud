@@ -23,7 +23,7 @@ opr_cast(struct ud* u, struct ud_operand* op)
 	case 16: mkasm(u, "word " ); break;
 	case 32: mkasm(u, "dword "); break;
 	case 64: mkasm(u, "qword "); break;
-	case 80: mkasm(u, "tbyte "); break;
+	case 80: mkasm(u, "tword "); break;
 	default: break;
   }
   if (u->br_far)

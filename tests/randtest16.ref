@@ -412,7 +412,7 @@
 	js 0x381
 	jge 0x30e
 	dec ax
-	fnstsw [bx+di-0x7f]
+	fnstsw word [bx+di-0x7f]
 	pop ds
 	shl word [bx+di], 0xe0
 	or sp, [bx+0x2926]
@@ -3437,7 +3437,7 @@
 	xchg [bp+0x54], sp
 	mov dl, 0xbb
 	fldenv [0xa11c]
-	fstp tbyte [di+0xd88d]
+	fstp tword [di+0xd88d]
 	xchg di, ax
 	cmc 
 	cmpsw 
