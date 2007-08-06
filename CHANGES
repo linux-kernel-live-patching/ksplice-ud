@@ -1,5 +1,5 @@
  * [Aug/05/07] Patch for DJGPP (Thanks to Robert Riebisch)
-	       Removed "test" Target in tot Makefile (Thanks Robert to Riebisch)
+	       Removed "test" Target in tot Makefile (Thanks to Robert Riebisch)
 	       New target:tests.
 	       Misc. clean up top-of-tree Makefile.
 	       Use config.h for package version

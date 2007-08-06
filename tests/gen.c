@@ -7,7 +7,7 @@
  * -----------------------------------------------------------------------------
  */
 #include <stdio.h>
-#include <udis86.h>
+#include "../udis86.h"
 
 #if defined(__DJGPP__) || defined(_WIN32)
 # include <io.h>
