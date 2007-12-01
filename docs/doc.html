@@ -456,28 +456,28 @@ ud_obj->operand[n].lval</pre>
   based on which you could use its sub-fields to access the integer values.
 
   <pre>
-ud_obj->operand[n].lval.sbyte		- Signed Byte
-ud_obj->operand[n].lval.ubyte		- Unsigned Byte
-ud_obj->operand[n].lval.sword		- Signed Word
-ud_obj->operand[n].lval.uword		- Unsigned Word
-ud_obj->operand[n].lval.sdword		- Signed Double Word
-ud_obj->operand[n].lval.udword		- Unsined Double Word
-ud_obj->operand[n].lval.sqword		- Signed Quad Word
-ud_obj->operand[n].lval.uqword		- Unsigned Quad Word
-ud_obj->operand[n].lval.ptr.seg		- Pointer Segment in Segment:Offset
-ud_obj->operand[n].lval.ptr.off		- Pointer Offset in Segment:Offset </pre>
+ud_obj->operand[n].lval.sbyte           - Signed Byte
+ud_obj->operand[n].lval.ubyte           - Unsigned Byte
+ud_obj->operand[n].lval.sword           - Signed Word
+ud_obj->operand[n].lval.uword           - Unsigned Word
+ud_obj->operand[n].lval.sdword          - Signed Double Word
+ud_obj->operand[n].lval.udword          - Unsined Double Word
+ud_obj->operand[n].lval.sqword          - Signed Quad Word
+ud_obj->operand[n].lval.uqword          - Unsigned Quad Word
+ud_obj->operand[n].lval.ptr.seg         - Pointer Segment in Segment:Offset
+ud_obj->operand[n].lval.ptr.off         - Pointer Offset in Segment:Offset </pre>
 
 	<li>Prefix Fields - These fields store prefixes (if found). If a prefix
 	does not exists then the field corresponding to it has the value <code>UD_NONE</code>.
 	<pre>
-ud_obj->operand[n].pfx_rex		- 64-bit mode REX prefix
-ud_obj->operand[n].pfx_seg		- Segment register prefix
-ud_obj->operand[n].pfx_opr		- Operand-size prefix (66h)
-ud_obj->operand[n].pfx_adr		- Address-size prefix (67h)
-ud_obj->operand[n].pfx_lock		- Lock prefix
-ud_obj->operand[n].pfx_rep		- Rep prefix
-ud_obj->operand[n].pfx_repe		- Repe prefix
-ud_obj->operand[n].pfx_repne		- Repne prefix</pre>
+ud_obj->pfx_rex                         - 64-bit mode REX prefix
+ud_obj->pfx_seg                         - Segment register prefix
+ud_obj->pfx_opr                         - Operand-size prefix (66h)
+ud_obj->pfx_adr                         - Address-size prefix (67h)
+ud_obj->pfx_lock                        - Lock prefix
+ud_obj->pfx_rep                         - Rep prefix
+ud_obj->pfx_repe                        - Repe prefix
+ud_obj->pfx_repne                       - Repne prefix</pre>
 	</li>
 
 	Possible values for <code>ud_obj->operand[n].pfx_seg</code> are,
