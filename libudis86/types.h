@@ -25,7 +25,7 @@
 # include <inttypes.h>
 #endif
 
-#include "mnemonics.h"
+#include "itab.h"
 
 /* -----------------------------------------------------------------------------
  * All possible "types" of objects in udis86. Order is Important!
@@ -172,6 +172,7 @@ struct ud
   uint8_t		c3;
   uint8_t 		inp_cache[256];
   uint8_t		inp_sess[64];
+  struct ud_itab_entry * itab_entry;
 };
 
 /* -----------------------------------------------------------------------------

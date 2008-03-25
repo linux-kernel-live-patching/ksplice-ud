@@ -264,3 +264,4 @@
 	fnstsw word [0x100]
 	fiadd word [0x100]
 	fild word [0x10]
+	vmrun

@@ -326,7 +326,7 @@
 	sbb al, 0x2d
 	cmpsb 
 	cwde 
-	insd 
+	invalid 
 	invalid 
 	mov [0x313df81954c7e06f], eax
 	push rbp
@@ -454,7 +454,7 @@
 	invalid 
 	jmp dword far [rbx-0x914d8eb]
 	int 0xbb
-	outsd 
+	outsq 
 	mov dl, 0x55
 	sbb al, 0xbb
 	xchg esp, eax
@@ -573,7 +573,7 @@
 	hlt 
 	and al, 0x3b
 	adc [rsi+rcx*8], dl
-	rep fstp qword [r8+0x23]
+	rep fstp qword [rax+0x23]
 	out dx, ax
 	jno 0x59b
 	imul esp, ebp, 0xfd
@@ -1150,7 +1150,7 @@
 	test al, 0xca
 	cmpsd 
 	xor al, 0xdb
-	lock mov r9b, bl
+	lock mov cl, bl
 	pop rbp
 	invalid 
 	int 0xbc
@@ -1290,7 +1290,7 @@
 	add eax, [rsi+0x65]
 	xchg edi, eax
 	sub edi, edx
-	repne or r13d, [rax-0x58]
+	repne or ebp, [rax-0x58]
 	loope 0xcfb
 	sub eax, 0x4b9f573e
 	lea edx, [rdi]
@@ -1482,7 +1482,7 @@
 	jle 0xf79
 	push rsi
 	cmpsb 
-	sub dword [fs:r8+0x68], 0x7ef16c89
+	sub dword [fs:rax+0x68], 0x7ef16c89
 	xor [rsi-0x4e], dh
 	cmp al, 0xa4
 	ror byte [rsi+0x4d005502], 0x8
@@ -2503,7 +2503,7 @@
 	xchg esp, eax
 	cmp al, 0x46
 	mov eax, [0xb8fbde058568d8a4]
-	insd 
+	invalid 
 	mov al, 0xa
 	jo 0x1b05
 	xor ebx, esp
@@ -2578,7 +2578,7 @@
 	out 0x50, al
 	std 
 	invalid 
-	xchg [cs:rcx-0x1fdc4003], r15b
+	xchg [cs:rcx-0x1fdc4003], bh
 	add [rbp+0x13c88cdb], ch
 	fnstenv [rcx-0x694abe77]
 	sbb ah, cl
