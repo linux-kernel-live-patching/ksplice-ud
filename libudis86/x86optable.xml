@@ -1,4 +1,5 @@
 <?xml version="1.0"?>
+<?xml-stylesheet href="x86optable.xsl" type="text/xsl"?>
 <x86optable>
 
   <!--
@@ -668,6 +669,30 @@
     <class> X87 </class>
   </instruction>
 
+  <instruction mnemonic="fcom2">
+    <opcode> DC /mod=11 /x87=10 ; ST0 </opcode>
+    <opcode> DC /mod=11 /x87=11 ; ST1 </opcode>
+    <opcode> DC /mod=11 /x87=12 ; ST2 </opcode>
+    <opcode> DC /mod=11 /x87=13 ; ST3 </opcode>
+    <opcode> DC /mod=11 /x87=14 ; ST4 </opcode>
+    <opcode> DC /mod=11 /x87=15 ; ST5 </opcode>
+    <opcode> DC /mod=11 /x87=16 ; ST6 </opcode>
+    <opcode> DC /mod=11 /x87=17 ; ST7 </opcode>
+    <class> X87 UNDOC </class>
+  </instruction>
+
+  <instruction mnemonic="fcomp3">
+    <opcode> DC /mod=11 /x87=18 ; ST0 </opcode>
+    <opcode> DC /mod=11 /x87=19 ; ST1 </opcode>
+    <opcode> DC /mod=11 /x87=1A ; ST2 </opcode>
+    <opcode> DC /mod=11 /x87=1B ; ST3 </opcode>
+    <opcode> DC /mod=11 /x87=1C ; ST4 </opcode>
+    <opcode> DC /mod=11 /x87=1D ; ST5 </opcode>
+    <opcode> DC /mod=11 /x87=1E ; ST6 </opcode>
+    <opcode> DC /mod=11 /x87=1F ; ST7 </opcode>
+    <class> X87 UNDOC </class>
+  </instruction>
+
   <instruction mnemonic="fcomi">
     <opcode> DB /mod=11 /x87=30 ; ST0 ST0 </opcode>
     <opcode> DB /mod=11 /x87=31 ; ST0 ST1 </opcode>
@@ -716,6 +741,18 @@
     <opcode> D8 /mod=11 /x87=1E ; ST0 ST6 </opcode>
     <opcode> D8 /mod=11 /x87=1F ; ST0 ST7 </opcode>
     <class> X87 </class>
+  </instruction>
+
+  <instruction mnemonic="fcomp5">
+    <opcode> DE /mod=11 /x87=10 ; ST0 </opcode>
+    <opcode> DE /mod=11 /x87=11 ; ST1 </opcode>
+    <opcode> DE /mod=11 /x87=12 ; ST2 </opcode>
+    <opcode> DE /mod=11 /x87=13 ; ST3 </opcode>
+    <opcode> DE /mod=11 /x87=14 ; ST4 </opcode>
+    <opcode> DE /mod=11 /x87=15 ; ST5 </opcode>
+    <opcode> DE /mod=11 /x87=16 ; ST6 </opcode>
+    <opcode> DE /mod=11 /x87=17 ; ST7 </opcode>
+    <class> X87 UNDOC </class>
   </instruction>
 
   <instruction mnemonic="fcompp">
@@ -814,6 +851,18 @@
     <opcode> DD /mod=11 /x87=05 ; ST5 </opcode>
     <opcode> DD /mod=11 /x87=06 ; ST6 </opcode>
     <opcode> DD /mod=11 /x87=07 ; ST7 </opcode>
+    <class> X87 </class>
+  </instruction>
+
+  <instruction mnemonic="ffreep">
+    <opcode> DF /mod=11 /x87=00 ; ST0 </opcode>
+    <opcode> DF /mod=11 /x87=01 ; ST1 </opcode>
+    <opcode> DF /mod=11 /x87=02 ; ST2 </opcode>
+    <opcode> DF /mod=11 /x87=03 ; ST3 </opcode>
+    <opcode> DF /mod=11 /x87=04 ; ST4 </opcode>
+    <opcode> DF /mod=11 /x87=05 ; ST5 </opcode>
+    <opcode> DF /mod=11 /x87=06 ; ST6 </opcode>
+    <opcode> DF /mod=11 /x87=07 ; ST7 </opcode>
     <class> X87 </class>
   </instruction>
 
@@ -1071,6 +1120,39 @@
     <class> X87 </class>
   </instruction>
 
+  <instruction mnemonic="fstp1">
+    <opcode> D9 /mod=11 /x87=18 ; ST0 </opcode>
+    <opcode> D9 /mod=11 /x87=19 ; ST1 </opcode>
+    <opcode> D9 /mod=11 /x87=1A ; ST2 </opcode>
+    <opcode> D9 /mod=11 /x87=1B ; ST3 </opcode>
+    <opcode> D9 /mod=11 /x87=1C ; ST4 </opcode>
+    <opcode> D9 /mod=11 /x87=1D ; ST5 </opcode>
+    <opcode> D9 /mod=11 /x87=1E ; ST6 </opcode>
+    <opcode> D9 /mod=11 /x87=1F ; ST7 </opcode>
+  </instruction>
+
+  <instruction mnemonic="fstp8">
+    <opcode> DF /mod=11 /x87=10 ; ST0 </opcode>
+    <opcode> DF /mod=11 /x87=11 ; ST1 </opcode>
+    <opcode> DF /mod=11 /x87=12 ; ST2 </opcode>
+    <opcode> DF /mod=11 /x87=13 ; ST3 </opcode>
+    <opcode> DF /mod=11 /x87=14 ; ST4 </opcode>
+    <opcode> DF /mod=11 /x87=15 ; ST5 </opcode>
+    <opcode> DF /mod=11 /x87=16 ; ST6 </opcode>
+    <opcode> DF /mod=11 /x87=17 ; ST7 </opcode>
+  </instruction>
+
+  <instruction mnemonic="fstp9">
+    <opcode> DF /mod=11 /x87=18 ; ST0 </opcode>
+    <opcode> DF /mod=11 /x87=19 ; ST1 </opcode>
+    <opcode> DF /mod=11 /x87=1A ; ST2 </opcode>
+    <opcode> DF /mod=11 /x87=1B ; ST3 </opcode>
+    <opcode> DF /mod=11 /x87=1C ; ST4 </opcode>
+    <opcode> DF /mod=11 /x87=1D ; ST5 </opcode>
+    <opcode> DF /mod=11 /x87=1E ; ST6 </opcode>
+    <opcode> DF /mod=11 /x87=1F ; ST7 </opcode>
+  </instruction>
+
   <instruction mnemonic="fst">
     <opcode cast="1"> aso rexr rexx rexb ; D9 /mod=!11 /2 ; Md </opcode>
     <opcode cast="1"> aso rexr rexx rexb ; DD /mod=!11 /2 ; Mq </opcode>
@@ -1217,6 +1299,30 @@
     <opcode> D9 /mod=11 /x87=0D ; ST0 ST5 </opcode>
     <opcode> D9 /mod=11 /x87=0E ; ST0 ST6 </opcode>
     <opcode> D9 /mod=11 /x87=0F ; ST0 ST7 </opcode>
+    <class> X87 </class>
+  </instruction>
+
+  <instruction mnemonic="fxch4">
+    <opcode> DD /mod=11 /x87=08 ; ST0 </opcode>
+    <opcode> DD /mod=11 /x87=09 ; ST1 </opcode>
+    <opcode> DD /mod=11 /x87=0A ; ST2 </opcode>
+    <opcode> DD /mod=11 /x87=0B ; ST3 </opcode>
+    <opcode> DD /mod=11 /x87=0C ; ST4 </opcode>
+    <opcode> DD /mod=11 /x87=0D ; ST5 </opcode>
+    <opcode> DD /mod=11 /x87=0E ; ST6 </opcode>
+    <opcode> DD /mod=11 /x87=0F ; ST7 </opcode>
+    <class> X87 </class>
+  </instruction>
+
+  <instruction mnemonic="fxch7">
+    <opcode> DF /mod=11 /x87=08 ; ST0 </opcode>
+    <opcode> DF /mod=11 /x87=09 ; ST1 </opcode>
+    <opcode> DF /mod=11 /x87=0A ; ST2 </opcode>
+    <opcode> DF /mod=11 /x87=0B ; ST3 </opcode>
+    <opcode> DF /mod=11 /x87=0C ; ST4 </opcode>
+    <opcode> DF /mod=11 /x87=0D ; ST5 </opcode>
+    <opcode> DF /mod=11 /x87=0E ; ST6 </opcode>
+    <opcode> DF /mod=11 /x87=0F ; ST7 </opcode>
     <class> X87 </class>
   </instruction>
 
@@ -1509,7 +1615,7 @@
   </instruction>
 
   <instruction mnemonic="lgdt">
-    <opcode> aso rexr rexx rexb ; 0F 01 /2 ; M </opcode>
+    <opcode> aso rexr rexx rexb ; 0F 01 /2 /mod=!11 ; M </opcode>
   </instruction>
 
   <instruction mnemonic="lldt">
@@ -1517,7 +1623,7 @@
   </instruction>
 
   <instruction mnemonic="lmsw">
-    <opcode> aso rexr rexx rexb ; 0F 01 /6 ; Ew </opcode>
+    <opcode> aso rexr rexx rexb ; 0F 01 /6 /mod=!11 ; Ew </opcode>
   </instruction>
 
   <instruction mnemonic="lock">
@@ -2527,11 +2633,7 @@
   </instruction>
 
   <instruction mnemonic="sal">
-    <opcode cast="1"> aso rexw rexr rexx rexb ; C0 /6 ; Eb Ib </opcode>
-    <opcode cast="1"> aso oso rexw rexr rexx rexb ; C1 /6 ; Ev Ib </opcode>
-    <opcode cast="1"> aso rexw rexr rexx rexb ; D0 /6 ; Eb I1 </opcode>
-    <opcode> aso rexw rexr rexx rexb ; D2 /6 ; Eb CL </opcode>
-    <opcode cast="1"> aso oso rexw rexr rexx rexb ; D3 /6 ; Ev CL </opcode>
+
   </instruction>
 
   <instruction mnemonic="salc">
@@ -2548,12 +2650,18 @@
   </instruction>
 
   <instruction mnemonic="shl">
+    <opcode cast="1"> aso rexw rexr rexx rexb ; C0 /6 ; Eb Ib </opcode>
+    <opcode cast="1"> aso oso rexw rexr rexx rexb ; C1 /6 ; Ev Ib </opcode>
+    <opcode cast="1"> aso rexw rexr rexx rexb ; D0 /6 ; Eb I1 </opcode>
+    <opcode> aso rexw rexr rexx rexb ; D2 /6 ; Eb CL </opcode>
+    <opcode cast="1"> aso oso rexw rexr rexx rexb ; D3 /6 ; Ev CL </opcode>
     <opcode cast="1"> aso oso rexw rexr rexx rexb ; C1 /4 ; Ev Ib </opcode>
     <opcode> aso rexr rexx rexb ; D2 /4 ; Eb CL </opcode>
     <opcode cast="1"> aso oso rexw rexr rexx rexb ; D1 /4 ; Ev I1 </opcode>
     <opcode cast="1"> aso rexw rexr rexx rexb ; D0 /4 ; Eb I1 </opcode>
     <opcode cast="1"> aso rexw rexr rexx rexb ; C0 /4 ; Eb Ib </opcode>
     <opcode cast="1"> aso oso rexw rexr rexx rexb ; D3 /4 ; Ev CL </opcode>
+    <opcode cast="1"> aso oso rexw rexr rexx rexb ; D1 /6 ; Ev I1 </opcode>
   </instruction>
 
   <instruction mnemonic="shr">
@@ -2692,7 +2800,7 @@
   </instruction>
 
   <instruction mnemonic="sidt">
-    <opcode> aso rexr rexx rexb ; 0F 01 /1 ; M </opcode>
+    <opcode> aso rexr rexx rexb ; 0F 01 /1 /mod=!11 ; M </opcode>
   </instruction>
 
   <instruction mnemonic="sldt">
@@ -2700,7 +2808,7 @@
   </instruction>
 
   <instruction mnemonic="smsw">
-    <opcode> aso rexr rexx rexb ; 0F 01 /4 ; M </opcode>
+    <opcode> aso rexr rexx rexb ; 0F 01 /4 /mod=!11 ; M </opcode>
   </instruction>
 
   <instruction mnemonic="sqrtps">

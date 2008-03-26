@@ -154,7 +154,7 @@
 	bswap ebp
 	sbb eax, 0x132463c4
 	sub [ecx+0x98b4a3f5], al
-	invalid 
+	fstp8 st1
 	or al, 0x40
 	out dx, eax
 	or [ecx-0x47], esp
@@ -470,7 +470,7 @@
 	cld 
 	or al, 0xe4
 	jnz 0x4bd
-	sal byte [eax], 1
+	shl byte [eax], 1
 	mov ecx, 0x10a2583c
 	mov esp, 0x8c1432da
 	jp 0x4af
@@ -1005,7 +1005,7 @@
 	mov edx, 0xbe94bcdf
 	mov ecx, 0x1314367e
 	push ss
-	lock sal byte [ebx], 0x56
+	lock shl byte [ebx], 0x56
 	mov [esi+0x194b4c6c], ss
 	out 0xbb, al
 	sub ecx, eax
@@ -1026,8 +1026,7 @@
 	std 
 	int3 
 	stosd 
-	invalid 
-	int3 
+	shl dword [edx-0x34], 1
 	cmp dl, dh
 	jno 0xa01
 	adc dl, [edx+0xa271ac71]
@@ -1393,7 +1392,7 @@
 	xchg edi, eax
 	int1 
 	mov ebx, [ecx+esi]
-	invalid 
+	fxch7 st0
 	inc ecx
 	pop edi
 	popfd 
@@ -1401,7 +1400,7 @@
 	mov esp, 0x72aa7c3b
 	cmp eax, 0xdca682af
 	das 
-	sal dword [esp+ebp-0xc], cl
+	shl dword [esp+ebp-0xc], cl
 	std 
 	xor al, 0x1d
 	inc esi
@@ -1475,7 +1474,7 @@
 	jno 0xe8c
 	sbb dword [ebx+0x23ce924], 0xf8a9277e
 	mov dl, 0xb
-	invalid 
+	fcomp3 st6
 	inc ebx
 	out dx, al
 	sub [ebx+0x2a1886ca], edx
@@ -1579,7 +1578,7 @@
 	aaa 
 	out 0x11, al
 	or ah, [edi+0x7ee5927a]
-	invalid 
+	fxch4 st1
 	pop ecx
 	add al, 0x60
 	inc ebp
@@ -1895,8 +1894,8 @@
 	cmpsb 
 	mov eax, 0x3dd9209
 	test [ecx+0x4], ch
-	sal [ebx+0xe7b11174], cl
-	sal byte [eax+ebx*2-0x23], 1
+	shl [ebx+0xe7b11174], cl
+	shl byte [eax+ebx*2-0x23], 1
 	test eax, 0xad5699b6
 	insb 
 	rep int 0xc5
@@ -2001,7 +2000,7 @@
 	loope 0x135f
 	int1 
 	add dl, bl
-	sal dword [edx], cl
+	shl dword [edx], cl
 	cmp ah, bh
 	adc eax, 0x6ce8b335
 	shr cl, 1
@@ -2123,7 +2122,7 @@
 	mov bh, 0x95
 	scasd 
 	mov ebp, 0xe42974fa
-	sal dword [cs:eax+0x7d], 0xb5
+	shl dword [cs:eax+0x7d], 0xb5
 	bound edx, [edx]
 	outsd 
 	fsubr st0, st5
@@ -2297,7 +2296,7 @@
 	xchg ebp, eax
 	xor al, 0x70
 	mul byte [ebx]
-	sal dword [ebp+0x13], 0x62
+	shl dword [ebp+0x13], 0x62
 	scasb 
 	lds esi, [edi-0x48]
 	outsd 
@@ -2453,7 +2452,7 @@
 	pushfd 
 	pop ebp
 	and eax, 0xdc381f2
-	sal esp, 0x76
+	shl esp, 0x76
 	push eax
 	inc edx
 	or [0xa8d94f4e], cl
@@ -2608,8 +2607,7 @@
 	add [esi], al
 	pop ebp
 	fcmovb st0, st2
-	invalid 
-	int3 
+	shl dword [edx-0x34], 1
 	push edx
 	push edi
 	push esi
@@ -2735,7 +2733,7 @@
 	xor [ebx], edx
 	pop esp
 	mov cr1, eax
-	sal dword [ecx+0x864fe304], cl
+	shl dword [ecx+0x864fe304], cl
 	and [0x5e540579], ebx
 	out 0xe2, eax
 	xor dh, [esi+0x7a]
@@ -2983,7 +2981,7 @@
 	mov ch, [eax]
 	and edx, esi
 	scasb 
-	invalid 
+	fcom2 st7
 	fstp qword [eax+edx*8]
 	lodsb 
 	push esp

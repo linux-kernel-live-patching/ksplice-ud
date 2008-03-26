@@ -126,6 +126,7 @@
 	wrmsr 
 	rdmsr 
 	rdtsc 
+	rdtscp 
 	rdpmc 
 	sysenter 
 	sysexit 
@@ -264,4 +265,16 @@
 	fnstsw word [0x100]
 	fiadd word [0x100]
 	fild word [0x10]
-	vmrun
+	monitor 
+	mwait 
+	lfence 
+	mfence 
+	sfence 
+	vmrun 
+	vmmcall 
+	vmload 
+	vmsave 
+	stgi 
+	clgi 
+	skinit 
+	invlpga 

@@ -32,8 +32,13 @@ test64: gen
 	diff test64.asm test64.out | more
 testjmp: gen
 	yasm -f bin -o testjmp.bin testjmp.asm
-	udcli -64 < testjmp.bin > testjmp.out
+	../udcli/udcli -64 < testjmp.bin > testjmp.out
 	diff testjmp.ref testjmp.out
+
+testobscure: gen
+	yasm -f bin -o testobscure.bin testobscure.asm
+	./gen -32 < testobscure.bin > testobscure.out
+	diff testobscure.ref testobscure.out
 
 ovrrun: bufovrrun.c
 	$(CC) bufovrrun.c -o ovrrun ../libudis86/libudis86.a
