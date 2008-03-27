@@ -3087,6 +3087,7 @@
   </instruction>
 
   <instruction mnemonic="db"></instruction>
+
   <instruction mnemonic="invalid"></instruction>
 
 </x86optable>

@@ -209,6 +209,11 @@ xmlDoc = minidom.parse( "x86optable.xml" )
 tlNode = xmlDoc.firstChild
 
 #
+# look for top-level optable node
+#
+while tlNode and tlNode.localName != "x86optable": tlNode = tlNode.nextSibling
+
+#
 # creates a table entry
 #
 def centry(i, defmap):
@@ -462,7 +467,6 @@ for node in tlNode.childNodes:
             'opr'   : opr,      \
             'flags' : flags     \
         }
-
 
 # ---------------------------------------------------------------------
 # Generate itab.h
