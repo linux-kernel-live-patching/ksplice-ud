@@ -21,11 +21,8 @@ libudis86_la_SOURCES =	itab.c \
 			x86optable.xml \
 			opgen.py
 
-BUILT_SOURCES        =  itab.c \
-			itab.h
-
 include_la_HEADERS   = udis86.h
-libudis86_la_HEADERS = types.h extern.h itab.h
+libudis86_la_HEADERS = types.h extern.h itab.h udis86.h
 
 # DLLs may not contain undefined symbol references.  We have the linker
 # check this explicitly.
@@ -33,10 +30,5 @@ if TARGET_WINDOWS
 libudis86_la_LDFLAGS=-no-undefined -version-info 0:0:0
 endif
 
-itab.c: x86optable.xml opgen.py itab.h
+itab.c itab.h: x86optable.xml opgen.py
 	python ./opgen.py
-
-itab.h: x86optable.xml opgen.py
-	python ./opgen.py
-
-

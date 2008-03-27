@@ -1,4 +1,4 @@
-SUBDIRS = libudis86 udcli . tests
+SUBDIRS = libudis86 . udcli . tests
 
 .PHONY: libudis86 udcli tests
 
