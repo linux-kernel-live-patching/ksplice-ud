@@ -11,8 +11,8 @@
 #include <stdio.h>
 #include <string.h>
 #include <ctype.h>
-#include "../udis86.h"
-#include "../config.h"
+#include <udis86.h>
+#include <config.h>
 
 #if defined(__amd64__) || defined(__x86_64__)
 #  define FMT "l"

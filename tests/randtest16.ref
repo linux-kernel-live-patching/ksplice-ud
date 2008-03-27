@@ -175,7 +175,7 @@
 	and al, 0x13
 	sub [bx+di+0xa3f5], al
 	mov ah, 0x98
-	invalid 
+	fstp8 st1
 	or al, 0x40
 	out dx, ax
 	or [bx+di-0x47], sp
@@ -549,9 +549,7 @@
 	leave 
 	mov cx, 0xebad
 	jbe 0x494
-	invalid 
-	wait 
-	lodsb 
+	shl word [bx+di+0xac9b], 1
 	or ax, 0x158e
 	int1 
 	sub bl, bh
@@ -567,7 +565,7 @@
 	cld 
 	or al, 0xe4
 	jnz 0x4bd
-	sal byte [bx+si], 1
+	shl byte [bx+si], 1
 	mov cx, 0x583c
 	mov [0xbc10], al
 	fidiv dword [bp+si]
@@ -844,7 +842,7 @@
 	pop ds
 	sahf 
 	mov cx, 0x29ae
-	invalid 
+	fstp9 st4
 	clc 
 	cmp cl, cl
 	cmc 
@@ -872,7 +870,7 @@
 	sbb cx, [bx+si+0x669e]
 	xor [bp+di], bx
 	mov si, 0x5b3d
-	invalid 
+	fcomp5 st1
 	js 0x6fc
 	sbb ax, 0xe0d5
 	inc word [0xa87d]
@@ -1086,8 +1084,8 @@
 	rcl word [bx-0x1f], cl
 	or [si+0x60], dh
 	enter 0x211f, 0x78
-	invalid 
-	enter 0x77e3, 0x25
+	shl word [bx+di+0xe3c8], 1
+	ja 0x900
 	out 0x82, al
 	o32 loop 0x90a
 	invalid 
@@ -1220,7 +1218,7 @@
 	mov cx, 0x367e
 	adc al, 0x13
 	push ss
-	lock sal byte [bp+di], 0x56
+	lock shl byte [bp+di], 0x56
 	mov [bp+0x4c6c], ss
 	dec bx
 	sbb si, sp
@@ -1244,8 +1242,7 @@
 	std 
 	int3 
 	stosw 
-	invalid 
-	int3 
+	shl word [bp+si-0x34], 1
 	cmp dl, dh
 	jno 0xa01
 	adc dl, [bp+si+0xac71]
@@ -1922,7 +1919,7 @@
 	out 0x11, al
 	or ah, [bx+0x927a]
 	in ax, 0x7e
-	invalid 
+	fxch4 st1
 	pop cx
 	add al, 0x60
 	inc bp
@@ -2295,9 +2292,9 @@
 	mov ax, 0x9209
 	fld qword [bp+di]
 	test [bx+di+0x4], ch
-	sal [bp+di+0x1174], cl
+	shl [bp+di+0x1174], cl
 	mov cl, 0xe7
-	sal byte [si+0x58], 1
+	shl byte [si+0x58], 1
 	invalid 
 	mov dh, 0x99
 	push si
@@ -2432,7 +2429,7 @@
 	out 0xe1, al
 	mov dh, cl
 	add dl, bl
-	sal word [bp+si], cl
+	shl word [bp+si], cl
 	cmp ah, bh
 	adc ax, 0xb335
 	call 0xffffffffffffe44e
@@ -2589,7 +2586,7 @@
 	scasw 
 	mov bp, 0x74fa
 	sub sp, sp
-	sal word [cs:bx+si+0x7d], 0xb5
+	shl word [cs:bx+si+0x7d], 0xb5
 	bound dx, [bp+si]
 	outsw 
 	fsubr st0, st5
@@ -2795,7 +2792,7 @@
 	xchg bp, ax
 	xor al, 0x70
 	mul byte [bp+di]
-	sal word [di+0x13], 0x62
+	shl word [di+0x13], 0x62
 	scasb 
 	lds si, [bx-0x48]
 	outsw 
@@ -3334,7 +3331,7 @@
 	xor [bp+di], dx
 	pop sp
 	mov cr1, ax
-	sal word [bx+di+0xe304], cl
+	shl word [bx+di+0xe304], cl
 	dec di
 	xchg [bx+di], ah
 	sbb ax, 0x579
@@ -3626,7 +3623,7 @@
 	mov ch, [bx+si]
 	and dx, si
 	scasb 
-	invalid 
+	fcom2 st7
 	fstp qword [si]
 	shr byte [si+0x7554], 1
 	invalid 

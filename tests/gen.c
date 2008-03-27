@@ -7,7 +7,8 @@
  * -----------------------------------------------------------------------------
  */
 #include <stdio.h>
-#include "../udis86.h"
+#include <string.h>
+#include <udis86.h>
 
 #if defined(__DJGPP__) || defined(_WIN32)
 # include <io.h>
@@ -48,4 +49,6 @@ int main(int argc, char **argv)
   while ( ud_disassemble( &ud_obj ) ) {
 	printf( "\t%s\n", ud_insn_asm( &ud_obj ) );
   }
+
+  return 0;
 }

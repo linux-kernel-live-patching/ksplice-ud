@@ -151,3 +151,4 @@
 	psllw xmm12, 0x23
 	swapgs 
 	fadd dword [rax+rbx]
+	shl rsi, 1
