@@ -83,7 +83,7 @@
 	mov gs, [rdx]
 	adc eax, 0x1107e2e1
 	push rax
-	repne movsb 
+	repne gs movsb 
 	scasb 
 	a32 jae 0x130
 	ret 
@@ -368,7 +368,7 @@
 	mov ebp, 0xa44b1a13
 	xor esi, [rsi-0x27]
 	sbb [rsi], edx
-	ror [rcx-0x44c143de], cl
+	ror byte [rcx-0x44c143de], cl
 	outsd 
 	and edi, [rsi-0x2aca0bcb]
 	scasd 
@@ -1031,7 +1031,7 @@
 	jnz 0xa94
 	mov ecx, 0xbaf1b0a2
 	cmp [rbp+rdi*8-0x56cb209f], edx
-	movsb 
+	cs movsb 
 	in al, dx
 	mov ecx, 0x8ee46992
 	mov edx, 0xf73d610b
@@ -1434,7 +1434,7 @@
 	adc [r14+0x3b], esp
 	invalid 
 	cmp ebx, [rcx-0x34]
-	rol [rsi+0x477b9d74], cl
+	rol byte [rsi+0x477b9d74], cl
 	sbb eax, ebx
 	cdq 
 	push rbx
@@ -1929,7 +1929,7 @@
 	cmp edi, [rcx+0x55843717]
 	xchg ebx, eax
 	enter 0xd9ab, 0xfc
-	rcl [rbp+0x3f], cl
+	rcl byte [rbp+0x3f], cl
 	adc [rdx-0x7cb0224d], eax
 	sub al, 0x3a
 	mov al, [0x75ce4221c6bb70d2]
@@ -2203,7 +2203,7 @@
 	test dword [rdi-0x76], 0x4d148686
 	sti 
 	pop rdx
-	lodsb 
+	fs lodsb 
 	cmc 
 	add [rip+0x9ad6f4f], ecx
 	hlt 
@@ -2511,7 +2511,7 @@
 	jnz 0x1ae9
 	push rsi
 	retf 0x694b
-	rcl [rdx-0x56], cl
+	rcl byte [rdx-0x56], cl
 	out dx, al
 	scasd 
 	invalid 

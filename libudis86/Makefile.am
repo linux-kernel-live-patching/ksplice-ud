@@ -3,8 +3,6 @@ lib_LTLIBRARIES	= libudis86.la
 include_ladir = ${includedir}
 libudis86_ladir = ${includedir}/libudis86
 
-libudis86_la_DATA = x86optable.xml
-
 libudis86_la_SOURCES =	itab.c \
 			input.c \
 			decode.c \
@@ -21,8 +19,7 @@ libudis86_la_SOURCES =	itab.c \
 			x86optable.xml \
 			opgen.py
 
-include_la_HEADERS   = udis86.h
-libudis86_la_HEADERS = types.h extern.h itab.h udis86.h
+libudis86_la_HEADERS = types.h extern.h itab.h
 
 # DLLs may not contain undefined symbol references.  We have the linker
 # check this explicitly.

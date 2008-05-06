@@ -1362,15 +1362,15 @@ static struct ud_itab_entry itab__1byte[256] = {
   /* A1 */  { UD_Imov,         O_rAX,   O_Ov,    O_NONE,  P_aso|P_oso|P_rexw },
   /* A2 */  { UD_Imov,         O_Ob,    O_AL,    O_NONE,  P_none },
   /* A3 */  { UD_Imov,         O_Ov,    O_rAX,   O_NONE,  P_aso|P_oso|P_rexw },
-  /* A4 */  { UD_Imovsb,       O_NONE,  O_NONE,  O_NONE,  P_none },
+  /* A4 */  { UD_Imovsb,       O_NONE,  O_NONE,  O_NONE,  P_ImpAddr|P_none },
   /* A5 */  { UD_Igrp_osize,   O_NONE, O_NONE, O_NONE,    ITAB__1BYTE__OP_A5__OSIZE },
   /* A6 */  { UD_Icmpsb,       O_NONE,  O_NONE,  O_NONE,  P_none },
   /* A7 */  { UD_Igrp_osize,   O_NONE, O_NONE, O_NONE,    ITAB__1BYTE__OP_A7__OSIZE },
   /* A8 */  { UD_Itest,        O_AL,    O_Ib,    O_NONE,  P_none },
   /* A9 */  { UD_Itest,        O_rAX,   O_Iz,    O_NONE,  P_oso|P_rexw },
-  /* AA */  { UD_Istosb,       O_NONE,  O_NONE,  O_NONE,  P_none },
+  /* AA */  { UD_Istosb,       O_NONE,  O_NONE,  O_NONE,  P_ImpAddr|P_none },
   /* AB */  { UD_Igrp_osize,   O_NONE, O_NONE, O_NONE,    ITAB__1BYTE__OP_AB__OSIZE },
-  /* AC */  { UD_Ilodsb,       O_NONE,  O_NONE,  O_NONE,  P_none },
+  /* AC */  { UD_Ilodsb,       O_NONE,  O_NONE,  O_NONE,  P_ImpAddr|P_none },
   /* AD */  { UD_Igrp_osize,   O_NONE, O_NONE, O_NONE,    ITAB__1BYTE__OP_AD__OSIZE },
   /* AE */  { UD_Iscasb,       O_NONE,  O_NONE,  O_NONE,  P_none },
   /* AF */  { UD_Igrp_osize,   O_NONE, O_NONE, O_NONE,    ITAB__1BYTE__OP_AF__OSIZE },
@@ -1590,9 +1590,9 @@ static struct ud_itab_entry itab__1byte__op_9d__mode__op_01__osize[3] = {
 };
 
 static struct ud_itab_entry itab__1byte__op_a5__osize[3] = {
-  /* 00 */  { UD_Imovsw,       O_NONE,  O_NONE,  O_NONE,  P_oso|P_rexw },
-  /* 01 */  { UD_Imovsd,       O_NONE,  O_NONE,  O_NONE,  P_oso|P_rexw },
-  /* 02 */  { UD_Imovsq,       O_NONE,  O_NONE,  O_NONE,  P_oso|P_rexw },
+  /* 00 */  { UD_Imovsw,       O_NONE,  O_NONE,  O_NONE,  P_ImpAddr|P_oso|P_rexw },
+  /* 01 */  { UD_Imovsd,       O_NONE,  O_NONE,  O_NONE,  P_ImpAddr|P_oso|P_rexw },
+  /* 02 */  { UD_Imovsq,       O_NONE,  O_NONE,  O_NONE,  P_ImpAddr|P_oso|P_rexw },
 };
 
 static struct ud_itab_entry itab__1byte__op_a7__osize[3] = {
@@ -1602,15 +1602,15 @@ static struct ud_itab_entry itab__1byte__op_a7__osize[3] = {
 };
 
 static struct ud_itab_entry itab__1byte__op_ab__osize[3] = {
-  /* 00 */  { UD_Istosw,       O_NONE,  O_NONE,  O_NONE,  P_oso|P_rexw },
-  /* 01 */  { UD_Istosd,       O_NONE,  O_NONE,  O_NONE,  P_oso|P_rexw },
-  /* 02 */  { UD_Istosq,       O_NONE,  O_NONE,  O_NONE,  P_oso|P_rexw },
+  /* 00 */  { UD_Istosw,       O_NONE,  O_NONE,  O_NONE,  P_ImpAddr|P_oso|P_rexw },
+  /* 01 */  { UD_Istosd,       O_NONE,  O_NONE,  O_NONE,  P_ImpAddr|P_oso|P_rexw },
+  /* 02 */  { UD_Istosq,       O_NONE,  O_NONE,  O_NONE,  P_ImpAddr|P_oso|P_rexw },
 };
 
 static struct ud_itab_entry itab__1byte__op_ad__osize[3] = {
-  /* 00 */  { UD_Ilodsw,       O_NONE,  O_NONE,  O_NONE,  P_oso|P_rexw },
-  /* 01 */  { UD_Ilodsd,       O_NONE,  O_NONE,  O_NONE,  P_oso|P_rexw },
-  /* 02 */  { UD_Ilodsq,       O_NONE,  O_NONE,  O_NONE,  P_oso|P_rexw },
+  /* 00 */  { UD_Ilodsw,       O_NONE,  O_NONE,  O_NONE,  P_ImpAddr|P_oso|P_rexw },
+  /* 01 */  { UD_Ilodsd,       O_NONE,  O_NONE,  O_NONE,  P_ImpAddr|P_oso|P_rexw },
+  /* 02 */  { UD_Ilodsq,       O_NONE,  O_NONE,  O_NONE,  P_ImpAddr|P_oso|P_rexw },
 };
 
 static struct ud_itab_entry itab__1byte__op_ae__mod[2] = {
@@ -1708,10 +1708,10 @@ static struct ud_itab_entry itab__1byte__op_d1__reg[8] = {
 };
 
 static struct ud_itab_entry itab__1byte__op_d2__reg[8] = {
-  /* 00 */  { UD_Irol,         O_Eb,    O_CL,    O_NONE,  P_aso|P_rexw|P_rexr|P_rexx|P_rexb },
-  /* 01 */  { UD_Iror,         O_Eb,    O_CL,    O_NONE,  P_aso|P_rexw|P_rexr|P_rexx|P_rexb },
-  /* 02 */  { UD_Ircl,         O_Eb,    O_CL,    O_NONE,  P_aso|P_rexw|P_rexr|P_rexx|P_rexb },
-  /* 03 */  { UD_Ircr,         O_Eb,    O_CL,    O_NONE,  P_aso|P_rexw|P_rexr|P_rexx|P_rexb },
+  /* 00 */  { UD_Irol,         O_Eb,    O_CL,    O_NONE,  P_c1|P_aso|P_rexw|P_rexr|P_rexx|P_rexb },
+  /* 01 */  { UD_Iror,         O_Eb,    O_CL,    O_NONE,  P_c1|P_aso|P_rexw|P_rexr|P_rexx|P_rexb },
+  /* 02 */  { UD_Ircl,         O_Eb,    O_CL,    O_NONE,  P_c1|P_aso|P_rexw|P_rexr|P_rexx|P_rexb },
+  /* 03 */  { UD_Ircr,         O_Eb,    O_CL,    O_NONE,  P_c1|P_aso|P_rexw|P_rexr|P_rexx|P_rexb },
   /* 04 */  { UD_Ishl,         O_Eb,    O_CL,    O_NONE,  P_aso|P_rexr|P_rexx|P_rexb },
   /* 05 */  { UD_Ishr,         O_Eb,    O_CL,    O_NONE,  P_aso|P_rexw|P_rexr|P_rexx|P_rexb },
   /* 06 */  { UD_Ishl,         O_Eb,    O_CL,    O_NONE,  P_aso|P_rexw|P_rexr|P_rexx|P_rexb },

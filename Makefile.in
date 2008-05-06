@@ -13,6 +13,7 @@
 # PARTICULAR PURPOSE.
 
 @SET_MAKE@
+
 VPATH = @srcdir@
 pkgdatadir = $(datadir)/@PACKAGE@
 pkglibdir = $(libdir)/@PACKAGE@
@@ -32,11 +33,11 @@ POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
 subdir = .
-DIST_COMMON = README $(am__configure_deps) $(srcdir)/Makefile.am \
-	$(srcdir)/Makefile.in $(srcdir)/config.h.in \
-	$(top_srcdir)/configure INSTALL build/config.guess \
-	build/config.sub build/depcomp build/install-sh \
-	build/ltmain.sh build/missing
+DIST_COMMON = README $(am__configure_deps) $(include_la_HEADERS) \
+	$(srcdir)/Makefile.am $(srcdir)/Makefile.in \
+	$(srcdir)/config.h.in $(top_srcdir)/configure INSTALL \
+	build/config.guess build/config.sub build/depcomp \
+	build/install-sh build/ltmain.sh build/missing
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/configure.ac
 am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
@@ -55,6 +56,15 @@ RECURSIVE_TARGETS = all-recursive check-recursive dvi-recursive \
 	install-pdf-recursive install-ps-recursive install-recursive \
 	installcheck-recursive installdirs-recursive pdf-recursive \
 	ps-recursive uninstall-recursive
+am__vpath_adj_setup = srcdirstrip=`echo "$(srcdir)" | sed 's|.|.|g'`;
+am__vpath_adj = case $$p in \
+    $(srcdir)/*) f=`echo "$$p" | sed "s|^$$srcdirstrip/||"`;; \
+    *) f=$$p;; \
+  esac;
+am__strip_dir = `echo $$p | sed -e 's|^.*/||'`;
+am__installdirs = "$(DESTDIR)$(include_ladir)"
+include_laHEADERS_INSTALL = $(INSTALL_HEADER)
+HEADERS = $(include_la_HEADERS)
 RECURSIVE_CLEAN_TARGETS = mostlyclean-recursive clean-recursive	\
   distclean-recursive maintainer-clean-recursive
 ETAGS = etags
@@ -181,6 +191,8 @@ target_alias = @target_alias@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 SUBDIRS = libudis86 . udcli . tests
+include_ladir = ${includedir}
+include_la_HEADERS = udis86.h
 all: config.h
 	$(MAKE) $(AM_MAKEFLAGS) all-recursive
 
@@ -244,6 +256,23 @@ clean-libtool:
 
 distclean-libtool:
 	-rm -f libtool
+install-include_laHEADERS: $(include_la_HEADERS)
+	@$(NORMAL_INSTALL)
+	test -z "$(include_ladir)" || $(MKDIR_P) "$(DESTDIR)$(include_ladir)"
+	@list='$(include_la_HEADERS)'; for p in $$list; do \
+	  if test -f "$$p"; then d=; else d="$(srcdir)/"; fi; \
+	  f=$(am__strip_dir) \
+	  echo " $(include_laHEADERS_INSTALL) '$$d$$p' '$(DESTDIR)$(include_ladir)/$$f'"; \
+	  $(include_laHEADERS_INSTALL) "$$d$$p" "$(DESTDIR)$(include_ladir)/$$f"; \
+	done
+
+uninstall-include_laHEADERS:
+	@$(NORMAL_UNINSTALL)
+	@list='$(include_la_HEADERS)'; for p in $$list; do \
+	  f=$(am__strip_dir) \
+	  echo " rm -f '$(DESTDIR)$(include_ladir)/$$f'"; \
+	  rm -f "$(DESTDIR)$(include_ladir)/$$f"; \
+	done
 
 # This directory's subdirectories are mostly independent; you can cd
 # into them and run `make' without going through this Makefile.
@@ -520,9 +549,12 @@ distcleancheck: distclean
 	       exit 1; } >&2
 check-am: all-am
 check: check-recursive
-all-am: Makefile config.h
+all-am: Makefile $(HEADERS) config.h
 installdirs: installdirs-recursive
 installdirs-am:
+	for dir in "$(DESTDIR)$(include_ladir)"; do \
+	  test -z "$$dir" || $(MKDIR_P) "$$dir"; \
+	done
 install: install-recursive
 install-exec: install-exec-recursive
 install-data: install-data-recursive
@@ -567,7 +599,7 @@ info: info-recursive
 
 info-am:
 
-install-data-am:
+install-data-am: install-include_laHEADERS
 
 install-dvi: install-dvi-recursive
 
@@ -604,7 +636,7 @@ ps: ps-recursive
 
 ps-am:
 
-uninstall-am:
+uninstall-am: uninstall-include_laHEADERS
 
 .MAKE: $(RECURSIVE_CLEAN_TARGETS) $(RECURSIVE_TARGETS) install-am \
 	install-strip
@@ -618,13 +650,14 @@ uninstall-am:
 	dvi-am html html-am info info-am install install-am \
 	install-data install-data-am install-dvi install-dvi-am \
 	install-exec install-exec-am install-html install-html-am \
-	install-info install-info-am install-man install-pdf \
-	install-pdf-am install-ps install-ps-am install-strip \
-	installcheck installcheck-am installdirs installdirs-am \
-	maintainer-clean maintainer-clean-generic \
-	maintainer-clean-local mostlyclean mostlyclean-generic \
-	mostlyclean-libtool pdf pdf-am ps ps-am tags tags-recursive \
-	uninstall uninstall-am
+	install-include_laHEADERS install-info install-info-am \
+	install-man install-pdf install-pdf-am install-ps \
+	install-ps-am install-strip installcheck installcheck-am \
+	installdirs installdirs-am maintainer-clean \
+	maintainer-clean-generic maintainer-clean-local mostlyclean \
+	mostlyclean-generic mostlyclean-libtool pdf pdf-am ps ps-am \
+	tags tags-recursive uninstall uninstall-am \
+	uninstall-include_laHEADERS
 
 
 .PHONY: libudis86 udcli tests
@@ -635,11 +668,10 @@ libudis86:
 udcli: libudis86
 	$(MAKE) -C $@
 
-tests: libudis86 udcli
-	$(MAKE) -C $@ tests
+tests: check
 
 maintainer-clean-local:
-	$(RM) -rf autom4te.cache aclocal.m4 
+	rm -rf autom4te.cache aclocal.m4 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
 .NOEXPORT:

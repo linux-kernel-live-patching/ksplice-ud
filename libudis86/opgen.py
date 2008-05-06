@@ -298,6 +298,11 @@ for node in tlNode.childNodes:
         if 'cast' in n.attributes.keys():
             pfx_c.append( "P_c" + n.attributes['cast'].value )
 
+	# get implicit addressing attribute, if given
+	if 'imp_addr' in n.attributes.keys():
+            if int( n.attributes['imp_addr'].value ):
+                pfx_c.append( "P_ImpAddr" )
+
         # get mode attribute, if given
         if 'mode' in n.attributes.keys():
             v = (n.attributes['mode'].value).strip()

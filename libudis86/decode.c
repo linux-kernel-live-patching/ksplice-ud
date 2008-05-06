@@ -1122,6 +1122,9 @@ static int do_mode( struct ud* u )
   u->c2 = ( P_C2( u->itab_entry->prefix ) ) ? 1 : 0;
   u->c3 = ( P_C3( u->itab_entry->prefix ) ) ? 1 : 0;
 
+  /* set flags for implicit addressing */
+  u->implicit_addr = P_IMPADDR( u->itab_entry->prefix );
+
   return 0;
 }
 

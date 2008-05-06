@@ -1,5 +1,8 @@
 SUBDIRS = libudis86 . udcli . tests
 
+include_ladir = ${includedir}
+include_la_HEADERS = udis86.h
+
 .PHONY: libudis86 udcli tests
 
 libudis86:
@@ -8,8 +11,7 @@ libudis86:
 udcli: libudis86
 	$(MAKE) -C $@
 
-tests: libudis86 udcli
-	$(MAKE) -C $@ tests
+tests: check
 
 maintainer-clean-local:
-	$(RM) -rf autom4te.cache aclocal.m4 
+	rm -rf autom4te.cache aclocal.m4 

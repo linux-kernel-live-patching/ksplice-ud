@@ -13,7 +13,6 @@
 # PARTICULAR PURPOSE.
 
 @SET_MAKE@
-
 VPATH = @srcdir@
 pkgdatadir = $(datadir)/@PACKAGE@
 pkglibdir = $(libdir)/@PACKAGE@
@@ -32,9 +31,10 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
-bin_PROGRAMS = gen$(EXEEXT) ovrrun$(EXEEXT)
+check_PROGRAMS = gen$(EXEEXT) ovrrun$(EXEEXT)
 subdir = tests
-DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in
+DIST_COMMON = $(dist_check_DATA) $(srcdir)/Makefile.am \
+	$(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/configure.ac
 am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
@@ -42,9 +42,6 @@ am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 mkinstalldirs = $(install_sh) -d
 CONFIG_HEADER = $(top_builddir)/config.h
 CONFIG_CLEAN_FILES =
-am__installdirs = "$(DESTDIR)$(bindir)"
-binPROGRAMS_INSTALL = $(INSTALL_PROGRAM)
-PROGRAMS = $(bin_PROGRAMS)
 am_gen_OBJECTS = gen-gen.$(OBJEXT)
 gen_OBJECTS = $(am_gen_OBJECTS)
 gen_DEPENDENCIES = ../libudis86/libudis86.la
@@ -185,10 +182,15 @@ top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 gen_SOURCES = gen.c
 gen_LDADD = ../libudis86/libudis86.la
-gen_CFLAGS = -I$(top_srcdir)/libudis86
+gen_CFLAGS = -I$(top_srcdir)/libudis86 -I$(top_srcdir)
 ovrrun_SOURCES = bufovrrun.c
 ovrrun_LDADD = ../libudis86/libudis86.la
-ovrrun_CFLAGS = -I$(top_srcdir)/libudis86
+ovrrun_CFLAGS = -I$(top_srcdir)/libudis86 -I$(top_srcdir)
+YASM = yasm
+dist_check_DATA = test16.asm test32.asm test64.asm testjmp.asm testobscure.asm \
+		 testjmp.ref testobscure.ref randtest.raw randtest16.ref      \
+		 randtest32.ref randtest64.ref
+
 all: all-am
 
 .SUFFIXES:
@@ -222,30 +224,9 @@ $(top_srcdir)/configure: @MAINTAINER_MODE_TRUE@ $(am__configure_deps)
 	cd $(top_builddir) && $(MAKE) $(AM_MAKEFLAGS) am--refresh
 $(ACLOCAL_M4): @MAINTAINER_MODE_TRUE@ $(am__aclocal_m4_deps)
 	cd $(top_builddir) && $(MAKE) $(AM_MAKEFLAGS) am--refresh
-install-binPROGRAMS: $(bin_PROGRAMS)
-	@$(NORMAL_INSTALL)
-	test -z "$(bindir)" || $(MKDIR_P) "$(DESTDIR)$(bindir)"
-	@list='$(bin_PROGRAMS)'; for p in $$list; do \
-	  p1=`echo $$p|sed 's/$(EXEEXT)$$//'`; \
-	  if test -f $$p \
-	     || test -f $$p1 \
-	  ; then \
-	    f=`echo "$$p1" | sed 's,^.*/,,;$(transform);s/$$/$(EXEEXT)/'`; \
-	   echo " $(INSTALL_PROGRAM_ENV) $(LIBTOOL) --mode=install $(binPROGRAMS_INSTALL) '$$p' '$(DESTDIR)$(bindir)/$$f'"; \
-	   $(INSTALL_PROGRAM_ENV) $(LIBTOOL) --mode=install $(binPROGRAMS_INSTALL) "$$p" "$(DESTDIR)$(bindir)/$$f" || exit 1; \
-	  else :; fi; \
-	done
 
-uninstall-binPROGRAMS:
-	@$(NORMAL_UNINSTALL)
-	@list='$(bin_PROGRAMS)'; for p in $$list; do \
-	  f=`echo "$$p" | sed 's,^.*/,,;s/$(EXEEXT)$$//;$(transform);s/$$/$(EXEEXT)/'`; \
-	  echo " rm -f '$(DESTDIR)$(bindir)/$$f'"; \
-	  rm -f "$(DESTDIR)$(bindir)/$$f"; \
-	done
-
-clean-binPROGRAMS:
-	@list='$(bin_PROGRAMS)'; for p in $$list; do \
+clean-checkPROGRAMS:
+	@list='$(check_PROGRAMS)'; for p in $$list; do \
 	  f=`echo $$p|sed 's/$(EXEEXT)$$//'`; \
 	  echo " rm -f $$p $$f"; \
 	  rm -f $$p $$f ; \
@@ -396,12 +377,11 @@ distdir: $(DISTFILES)
 	  fi; \
 	done
 check-am: all-am
+	$(MAKE) $(AM_MAKEFLAGS) $(check_PROGRAMS) $(dist_check_DATA)
+	$(MAKE) $(AM_MAKEFLAGS) check-local
 check: check-am
-all-am: Makefile $(PROGRAMS)
+all-am: Makefile
 installdirs:
-	for dir in "$(DESTDIR)$(bindir)"; do \
-	  test -z "$$dir" || $(MKDIR_P) "$$dir"; \
-	done
 install: install-am
 install-exec: install-exec-am
 install-data: install-data-am
@@ -428,7 +408,7 @@ maintainer-clean-generic:
 	@echo "it deletes files that may require special tools to rebuild."
 clean: clean-am
 
-clean-am: clean-binPROGRAMS clean-generic clean-libtool clean-local \
+clean-am: clean-checkPROGRAMS clean-generic clean-libtool clean-local \
 	mostlyclean-am
 
 distclean: distclean-am
@@ -451,7 +431,7 @@ install-data-am:
 
 install-dvi: install-dvi-am
 
-install-exec-am: install-binPROGRAMS
+install-exec-am:
 
 install-html: install-html-am
 
@@ -463,7 +443,7 @@ install-pdf: install-pdf-am
 
 install-ps: install-ps-am
 
-installcheck-am:
+installcheck-am: installcheck-local
 
 maintainer-clean: maintainer-clean-am
 	-rm -rf ./$(DEPDIR)
@@ -483,65 +463,73 @@ ps: ps-am
 
 ps-am:
 
-uninstall-am: uninstall-binPROGRAMS
+uninstall-am:
 
 .MAKE: install-am install-strip
 
-.PHONY: CTAGS GTAGS all all-am check check-am clean clean-binPROGRAMS \
-	clean-generic clean-libtool clean-local ctags distclean \
-	distclean-compile distclean-generic distclean-libtool \
-	distclean-tags distdir dvi dvi-am html html-am info info-am \
-	install install-am install-binPROGRAMS install-data \
+.PHONY: CTAGS GTAGS all all-am check check-am check-local clean \
+	clean-checkPROGRAMS clean-generic clean-libtool clean-local \
+	ctags distclean distclean-compile distclean-generic \
+	distclean-libtool distclean-tags distdir dvi dvi-am html \
+	html-am info info-am install install-am install-data \
 	install-data-am install-dvi install-dvi-am install-exec \
 	install-exec-am install-html install-html-am install-info \
 	install-info-am install-man install-pdf install-pdf-am \
 	install-ps install-ps-am install-strip installcheck \
-	installcheck-am installdirs maintainer-clean \
-	maintainer-clean-generic mostlyclean mostlyclean-compile \
-	mostlyclean-generic mostlyclean-libtool pdf pdf-am ps ps-am \
-	tags uninstall uninstall-am uninstall-binPROGRAMS
+	installcheck-am installcheck-local installdirs \
+	maintainer-clean maintainer-clean-generic mostlyclean \
+	mostlyclean-compile mostlyclean-generic mostlyclean-libtool \
+	pdf pdf-am ps ps-am tags uninstall uninstall-am
 
+
+check-local: tests
 
 tests: test16 test32 test64 testjmp bufovrrun randraw
 
-test16: gen
-	yasm -f bin -o test16.bin test16.asm
+test16: gen 
+	$(YASM) -f bin -o test16.bin $(top_srcdir)/tests/test16.asm
 	echo "[bits 16]" > test16.out
 	./gen -16 < test16.bin >> test16.out
-	diff test16.asm test16.out
+	diff $(top_srcdir)/tests/test16.asm test16.out
+
 test32: gen
-	yasm -f bin -o test32.bin test32.asm
+	$(YASM) -f bin -o test32.bin $(top_srcdir)/tests/test32.asm
 	echo "[bits 32]" > test32.out
 	./gen -32 < test32.bin >> test32.out
-	diff test32.asm test32.out
+	diff $(top_srcdir)/tests/test32.asm test32.out
+
 test64: gen
-	yasm -f bin -o test64.bin test64.asm
+	$(YASM) -f bin -o test64.bin $(top_srcdir)/tests/test64.asm
 	echo "[bits 64]" > test64.out
 	./gen -64 < test64.bin >> test64.out
-	diff test64.asm test64.out
+	diff $(top_srcdir)/tests/test64.asm test64.out
+
 testjmp: gen
-	yasm -f bin -o testjmp.bin testjmp.asm
+	$(YASM) -f bin -o testjmp.bin $(top_srcdir)/tests/testjmp.asm
 	../udcli/udcli -64 < testjmp.bin > testjmp.out
-	diff testjmp.ref testjmp.out
+	diff $(top_srcdir)/tests/testjmp.ref testjmp.out
 
 testobscure: gen
-	yasm -f bin -o testobscure.bin testobscure.asm
+	$(YASM) -f bin -o testobscure.bin $(top_srcdir)/tests/testobscure.asm
 	./gen -32 < testobscure.bin > testobscure.out
-	diff testobscure.ref testobscure.out
+	diff $(top_srcdir)/tests/testobscure.ref testobscure.out
 
 bufovrrun: ovrrun
 	./ovrrun
 
-randraw: randtest.raw
-	./gen -16 < randtest.raw > randtest16.out
-	diff randtest16.out randtest16.ref
-	./gen -32 < randtest.raw > randtest32.out
-	diff randtest32.out randtest32.ref
-	./gen -64 < randtest.raw > randtest64.out
-	diff randtest64.out randtest64.ref
+randraw: 
+	./gen -16 < $(top_srcdir)/tests/randtest.raw > randtest16.out
+	diff randtest16.out $(top_srcdir)/tests/randtest16.ref
+	./gen -32 < $(top_srcdir)/tests/randtest.raw > randtest32.out
+	diff randtest32.out $(top_srcdir)/tests/randtest32.ref
+	./gen -64 < $(top_srcdir)/tests/randtest.raw > randtest64.out
+	diff randtest64.out $(top_srcdir)/tests/randtest64.ref
+
+installcheck-local:
+	$(CC) $(srcdir)/gen.c -o gen_installcheck.bin -I$(includedir) -L$(libdir) -ludis86
 
 clean-local:
-	$(RM) -f *.bin *.out
+	rm -f *.bin *.out
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
 .NOEXPORT:

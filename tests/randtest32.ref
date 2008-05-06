@@ -81,7 +81,7 @@
 	adc eax, 0x1107e2e1
 	push eax
 	dec ebx
-	repne movsb 
+	repne gs movsb 
 	scasb 
 	a16 inc esp
 	jae 0x130
@@ -389,7 +389,7 @@
 	fdivr dword [ebp+0xa44b1a13]
 	xor esi, [esi-0x27]
 	sbb [esi], edx
-	ror [ecx+0xbb3ebc22], cl
+	ror byte [ecx+0xbb3ebc22], cl
 	outsd 
 	and edi, [esi+0xd535f435]
 	scasd 
@@ -1097,7 +1097,7 @@
 	popad 
 	fbstp [ecx+ebp*4]
 	dec ebx
-	movsb 
+	cs movsb 
 	in al, dx
 	mov ecx, 0x8ee46992
 	inc esp
@@ -1521,7 +1521,7 @@
 	adc [esi+0x3b], esp
 	invalid 
 	cmp ebx, [ecx-0x34]
-	rol [esi+0x477b9d74], cl
+	rol byte [esi+0x477b9d74], cl
 	sbb eax, ebx
 	cdq 
 	push ebx
@@ -2055,7 +2055,7 @@
 	cmp edi, [ecx+0x55843717]
 	xchg ebx, eax
 	enter 0xd9ab, 0xfc
-	rcl [ebp+0x3f], cl
+	rcl byte [ebp+0x3f], cl
 	adc [edx+0x834fddb3], eax
 	sub al, 0x3a
 	mov al, [0xc6bb70d2]
@@ -2358,7 +2358,7 @@
 	test dword [edi-0x76], 0x4d148686
 	sti 
 	pop edx
-	lodsb 
+	fs lodsb 
 	cmc 
 	add [0x9ad6f4f], ecx
 	hlt 
@@ -2677,7 +2677,7 @@
 	jnz 0x1ae9
 	push esi
 	retf 0x694b
-	rcl [edx-0x56], cl
+	rcl byte [edx-0x56], cl
 	out dx, al
 	scasd 
 	lds edi, [edi+0xe]

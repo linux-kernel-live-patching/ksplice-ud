@@ -38,6 +38,8 @@
 #define P_ASO(n)        ( ( n >> 10 ) & 1 )
 #define P_rexx          ( 1 << 11 )
 #define P_REXX(n)       ( ( n >> 11 ) & 1 )
+#define P_ImpAddr       ( 1 << 12 )
+#define P_IMPADDR(n)    ( ( n >> 12 ) & 1 )
 
 /* rex prefix bits */
 #define REX_W(r)        ( ( 0xF & ( r ) )  >> 3 )

@@ -89,7 +89,7 @@
 	adc ax, 0xe2e1
 	pop es
 	adc [bx+si+0x4b], dx
-	repne movsb 
+	repne gs movsb 
 	scasb 
 	a32 inc sp
 	jae 0x130
@@ -1842,7 +1842,7 @@
 	adc [bp+0x3b], sp
 	invalid 
 	cmp bx, [bx+di-0x34]
-	rol [bp+0x9d74], cl
+	rol byte [bp+0x9d74], cl
 	jnp 0xf55
 	sbb ax, bx
 	cwd 
@@ -2504,7 +2504,7 @@
 	cmp di, [bx+di+0x3717]
 	test [di-0x6d], dl
 	enter 0xd9ab, 0xfc
-	rcl [di+0x3f], cl
+	rcl byte [di+0x3f], cl
 	adc [bp+si+0xddb3], ax
 	dec di
 	sub word [si], 0x3a
@@ -2560,7 +2560,7 @@
 	jg 0x14cf
 	jmp word 0x3c69:0x4d5e
 	das 
-	rol [bx-0xf], cl
+	rol byte [bx-0xf], cl
 	in ax, 0x77
 	out dx, al
 	and al, 0xf7
@@ -2865,7 +2865,7 @@
 	adc al, 0x4d
 	sti 
 	pop dx
-	lodsb 
+	fs lodsb 
 	cmc 
 	add [di], cx
 	dec di
@@ -3263,7 +3263,7 @@
 	jnz 0x1ae9
 	push si
 	retf 0x694b
-	rcl [bp+si-0x56], cl
+	rcl byte [bp+si-0x56], cl
 	out dx, al
 	scasw 
 	lds di, [bx+0xe]
@@ -3279,7 +3279,7 @@
 	sub [bx+si-0x48], ax
 	test al, 0x3a
 	add [bp+di+0x7779], si
-	rcr [bx+si+0x6e9], cl
+	rcr byte [bx+si+0x6e9], cl
 	repne jcxz 0x1ac4
 	mov dx, 0x3c22
 	salc 
@@ -3568,7 +3568,7 @@
 	dec bx
 	jno 0x1cd3
 	fldcw word [bp+0xc7bf]
-	rcl [bp+si], cl
+	rcl byte [bp+si], cl
 	bswap ax
 	mov di, 0x4899
 	xor ax, 0xd4d7

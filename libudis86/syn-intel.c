@@ -184,6 +184,8 @@ extern void ud_translate_intel(struct ud* u)
 	mkasm(u, "rep ");
   if (u->pfx_repne)
 	mkasm(u, "repne ");
+  if (u->implicit_addr && u->pfx_seg)
+	mkasm(u, "%s ", ud_reg_tab[u->pfx_seg - UD_R_AL]);
 
   /* print the instruction mnemonic */
   mkasm(u, "%s ", ud_lookup_mnemonic(u->mnemonic));

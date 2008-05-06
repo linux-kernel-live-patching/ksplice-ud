@@ -15,7 +15,6 @@
 @SET_MAKE@
 
 
-
 VPATH = @srcdir@
 pkgdatadir = $(datadir)/@PACKAGE@
 pkglibdir = $(libdir)/@PACKAGE@
@@ -35,8 +34,8 @@ POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
 subdir = libudis86
-DIST_COMMON = $(include_la_HEADERS) $(libudis86_la_HEADERS) \
-	$(srcdir)/Makefile.am $(srcdir)/Makefile.in
+DIST_COMMON = $(libudis86_la_HEADERS) $(srcdir)/Makefile.am \
+	$(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/configure.ac
 am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
@@ -50,8 +49,7 @@ am__vpath_adj = case $$p in \
     *) f=$$p;; \
   esac;
 am__strip_dir = `echo $$p | sed -e 's|^.*/||'`;
-am__installdirs = "$(DESTDIR)$(libdir)" "$(DESTDIR)$(libudis86_ladir)" \
-	"$(DESTDIR)$(include_ladir)" "$(DESTDIR)$(libudis86_ladir)"
+am__installdirs = "$(DESTDIR)$(libdir)" "$(DESTDIR)$(libudis86_ladir)"
 libLTLIBRARIES_INSTALL = $(INSTALL)
 LTLIBRARIES = $(lib_LTLIBRARIES)
 libudis86_la_LIBADD =
@@ -75,11 +73,8 @@ LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) \
 	$(LDFLAGS) -o $@
 SOURCES = $(libudis86_la_SOURCES)
 DIST_SOURCES = $(libudis86_la_SOURCES)
-libudis86_laDATA_INSTALL = $(INSTALL_DATA)
-DATA = $(libudis86_la_DATA)
-include_laHEADERS_INSTALL = $(INSTALL_HEADER)
 libudis86_laHEADERS_INSTALL = $(INSTALL_HEADER)
-HEADERS = $(include_la_HEADERS) $(libudis86_la_HEADERS)
+HEADERS = $(libudis86_la_HEADERS)
 ETAGS = etags
 CTAGS = ctags
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
@@ -195,7 +190,6 @@ top_srcdir = @top_srcdir@
 lib_LTLIBRARIES = libudis86.la
 include_ladir = ${includedir}
 libudis86_ladir = ${includedir}/libudis86
-libudis86_la_DATA = x86optable.xml
 libudis86_la_SOURCES = itab.c \
 			input.c \
 			decode.c \
@@ -212,8 +206,7 @@ libudis86_la_SOURCES = itab.c \
 			x86optable.xml \
 			opgen.py
 
-include_la_HEADERS = udis86.h
-libudis86_la_HEADERS = types.h extern.h itab.h udis86.h
+libudis86_la_HEADERS = types.h extern.h itab.h
 
 # DLLs may not contain undefined symbol references.  We have the linker
 # check this explicitly.
@@ -321,40 +314,6 @@ mostlyclean-libtool:
 
 clean-libtool:
 	-rm -rf .libs _libs
-install-libudis86_laDATA: $(libudis86_la_DATA)
-	@$(NORMAL_INSTALL)
-	test -z "$(libudis86_ladir)" || $(MKDIR_P) "$(DESTDIR)$(libudis86_ladir)"
-	@list='$(libudis86_la_DATA)'; for p in $$list; do \
-	  if test -f "$$p"; then d=; else d="$(srcdir)/"; fi; \
-	  f=$(am__strip_dir) \
-	  echo " $(libudis86_laDATA_INSTALL) '$$d$$p' '$(DESTDIR)$(libudis86_ladir)/$$f'"; \
-	  $(libudis86_laDATA_INSTALL) "$$d$$p" "$(DESTDIR)$(libudis86_ladir)/$$f"; \
-	done
-
-uninstall-libudis86_laDATA:
-	@$(NORMAL_UNINSTALL)
-	@list='$(libudis86_la_DATA)'; for p in $$list; do \
-	  f=$(am__strip_dir) \
-	  echo " rm -f '$(DESTDIR)$(libudis86_ladir)/$$f'"; \
-	  rm -f "$(DESTDIR)$(libudis86_ladir)/$$f"; \
-	done
-install-include_laHEADERS: $(include_la_HEADERS)
-	@$(NORMAL_INSTALL)
-	test -z "$(include_ladir)" || $(MKDIR_P) "$(DESTDIR)$(include_ladir)"
-	@list='$(include_la_HEADERS)'; for p in $$list; do \
-	  if test -f "$$p"; then d=; else d="$(srcdir)/"; fi; \
-	  f=$(am__strip_dir) \
-	  echo " $(include_laHEADERS_INSTALL) '$$d$$p' '$(DESTDIR)$(include_ladir)/$$f'"; \
-	  $(include_laHEADERS_INSTALL) "$$d$$p" "$(DESTDIR)$(include_ladir)/$$f"; \
-	done
-
-uninstall-include_laHEADERS:
-	@$(NORMAL_UNINSTALL)
-	@list='$(include_la_HEADERS)'; for p in $$list; do \
-	  f=$(am__strip_dir) \
-	  echo " rm -f '$(DESTDIR)$(include_ladir)/$$f'"; \
-	  rm -f "$(DESTDIR)$(include_ladir)/$$f"; \
-	done
 install-libudis86_laHEADERS: $(libudis86_la_HEADERS)
 	@$(NORMAL_INSTALL)
 	test -z "$(libudis86_ladir)" || $(MKDIR_P) "$(DESTDIR)$(libudis86_ladir)"
@@ -449,9 +408,9 @@ distdir: $(DISTFILES)
 	done
 check-am: all-am
 check: check-am
-all-am: Makefile $(LTLIBRARIES) $(DATA) $(HEADERS)
+all-am: Makefile $(LTLIBRARIES) $(HEADERS)
 installdirs:
-	for dir in "$(DESTDIR)$(libdir)" "$(DESTDIR)$(libudis86_ladir)" "$(DESTDIR)$(include_ladir)" "$(DESTDIR)$(libudis86_ladir)"; do \
+	for dir in "$(DESTDIR)$(libdir)" "$(DESTDIR)$(libudis86_ladir)"; do \
 	  test -z "$$dir" || $(MKDIR_P) "$$dir"; \
 	done
 install: install-am
@@ -499,8 +458,7 @@ info: info-am
 
 info-am:
 
-install-data-am: install-include_laHEADERS install-libudis86_laDATA \
-	install-libudis86_laHEADERS
+install-data-am: install-libudis86_laHEADERS
 
 install-dvi: install-dvi-am
 
@@ -536,8 +494,7 @@ ps: ps-am
 
 ps-am:
 
-uninstall-am: uninstall-include_laHEADERS uninstall-libLTLIBRARIES \
-	uninstall-libudis86_laDATA uninstall-libudis86_laHEADERS
+uninstall-am: uninstall-libLTLIBRARIES uninstall-libudis86_laHEADERS
 
 .MAKE: install-am install-strip
 
@@ -547,17 +504,14 @@ uninstall-am: uninstall-include_laHEADERS uninstall-libLTLIBRARIES \
 	distclean-tags distdir dvi dvi-am html html-am info info-am \
 	install install-am install-data install-data-am install-dvi \
 	install-dvi-am install-exec install-exec-am install-html \
-	install-html-am install-include_laHEADERS install-info \
-	install-info-am install-libLTLIBRARIES \
-	install-libudis86_laDATA install-libudis86_laHEADERS \
-	install-man install-pdf install-pdf-am install-ps \
-	install-ps-am install-strip installcheck installcheck-am \
-	installdirs maintainer-clean maintainer-clean-generic \
-	mostlyclean mostlyclean-compile mostlyclean-generic \
-	mostlyclean-libtool pdf pdf-am ps ps-am tags uninstall \
-	uninstall-am uninstall-include_laHEADERS \
-	uninstall-libLTLIBRARIES uninstall-libudis86_laDATA \
-	uninstall-libudis86_laHEADERS
+	install-html-am install-info install-info-am \
+	install-libLTLIBRARIES install-libudis86_laHEADERS install-man \
+	install-pdf install-pdf-am install-ps install-ps-am \
+	install-strip installcheck installcheck-am installdirs \
+	maintainer-clean maintainer-clean-generic mostlyclean \
+	mostlyclean-compile mostlyclean-generic mostlyclean-libtool \
+	pdf pdf-am ps ps-am tags uninstall uninstall-am \
+	uninstall-libLTLIBRARIES uninstall-libudis86_laHEADERS
 
 
 itab.c itab.h: x86optable.xml opgen.py

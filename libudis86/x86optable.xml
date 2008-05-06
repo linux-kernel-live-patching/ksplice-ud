@@ -1631,19 +1631,19 @@
   </instruction>
 
   <instruction mnemonic="lodsb">
-    <opcode> ; ac ; </opcode>
+    <opcode imp_addr="1"> ; ac ; </opcode>
   </instruction>
 
   <instruction mnemonic="lodsw">
-    <opcode> oso rexw ; ad /O16 ; </opcode>
+    <opcode imp_addr="1"> oso rexw ; ad /O16 ; </opcode>
   </instruction>
 
   <instruction mnemonic="lodsd">
-    <opcode> oso rexw ; ad /O32 ; </opcode>
+    <opcode imp_addr="1"> oso rexw ; ad /O32 ; </opcode>
   </instruction>
 
   <instruction mnemonic="lodsq">
-    <opcode> oso rexw ; ad /O64 ; </opcode>
+    <opcode imp_addr="1"> oso rexw ; ad /O64 ; </opcode>
   </instruction>
 
   <instruction mnemonic="loopnz">
@@ -1856,21 +1856,21 @@
   </instruction>
 
   <instruction mnemonic="movsb">
-    <opcode> a4 ; </opcode>
+    <opcode imp_addr="1"> a4 ; </opcode>
   </instruction>
 
   <instruction mnemonic="movsw">
-    <opcode> oso rexw ; a5 /O16 ; </opcode>
+    <opcode imp_addr="1"> oso rexw ; a5 /O16 ; </opcode>
   </instruction>
 
   <instruction mnemonic="movsd">
-    <opcode> oso rexw ; a5 /O32 ; </opcode>
+    <opcode imp_addr="1"> oso rexw ; a5 /O32 ; </opcode>
     <opcode> aso rexr rexx rexb ; ssef2 0f 10 ; V W </opcode>
     <opcode> aso rexr rexx rexb ; ssef2 0f 11 ; W V </opcode>
   </instruction>
 
   <instruction mnemonic="movsq">
-    <opcode> oso rexw ; a5 /O64 ; </opcode>
+    <opcode imp_addr="1"> oso rexw ; a5 /O64 ; </opcode>
   </instruction>
 
   <instruction mnemonic="movsldup">
@@ -2541,7 +2541,7 @@
     <opcode cast="1"> aso rexw rexr rexx rexb ; C0 /2 ; Eb Ib </opcode>
     <opcode cast="1"> aso oso rexw rexr rexx rexb ; C1 /2 ; Ev Ib </opcode>
     <opcode cast="1"> aso rexw rexr rexx rexb ; D0 /2 ; Eb I1 </opcode>
-    <opcode> aso rexw rexr rexx rexb ; D2 /2 ; Eb CL </opcode>
+    <opcode cast="1"> aso rexw rexr rexx rexb ; D2 /2 ; Eb CL </opcode>
     <opcode cast="1"> aso oso rexw rexr rexx rexb ; D3 /2 ; Ev CL </opcode>
     <opcode cast="1"> aso oso rexw rexr rexx rexb ; D1 /2 ; Ev I1 </opcode>
   </instruction>
@@ -2551,7 +2551,7 @@
     <opcode cast="1"> aso oso rexw rexr rexx rexb ; C1 /3 ; Ev Ib </opcode>
     <opcode cast="1"> aso rexw rexr rexx rexb ; C0 /3 ; Eb Ib </opcode>
     <opcode cast="1"> aso oso rexw rexr rexx rexb ; D1 /3 ; Ev I1 </opcode>
-    <opcode> aso rexw rexr rexx rexb ; D2 /3 ; Eb CL </opcode>
+    <opcode cast="1"> aso rexw rexr rexx rexb ; D2 /3 ; Eb CL </opcode>
     <opcode cast="1"> aso oso rexw rexr rexx rexb ; D3 /3 ; Ev CL </opcode>
   </instruction>
 
@@ -2559,7 +2559,7 @@
     <opcode cast="1"> aso rexw rexr rexx rexb ; C0 /0 ; Eb Ib </opcode>
     <opcode cast="1"> aso rexw rexr rexx rexb ; D0 /0 ; Eb I1 </opcode>
     <opcode cast="1"> aso oso rexw rexr rexx rexb ; D1 /0 ; Ev I1 </opcode>
-    <opcode> aso rexw rexr rexx rexb ; D2 /0 ; Eb CL </opcode>
+    <opcode cast="1"> aso rexw rexr rexx rexb ; D2 /0 ; Eb CL </opcode>
     <opcode cast="1"> aso oso rexw rexr rexx rexb ; D3 /0 ; Ev CL </opcode>
     <opcode cast="1"> aso oso rexw rexr rexx rexb ; C1 /0 ; Ev Ib </opcode>
   </instruction>
@@ -2569,7 +2569,7 @@
     <opcode cast="1"> aso rexw rexr rexx rexb ; C0 /1 ; Eb Ib </opcode>
     <opcode cast="1"> aso oso rexw rexr rexx rexb ; C1 /1 ; Ev Ib </opcode>
     <opcode cast="1"> aso oso rexw rexr rexx rexb ; D1 /1 ; Ev I1 </opcode>
-    <opcode> aso rexw rexr rexx rexb ; D2 /1 ; Eb CL </opcode>
+    <opcode cast="1"> aso rexw rexr rexx rexb ; D2 /1 ; Eb CL </opcode>
     <opcode cast="1"> aso oso rexw rexr rexx rexb ; D3 /1 ; Ev CL </opcode>
   </instruction>
 
@@ -2854,19 +2854,19 @@
   </instruction>
 
   <instruction mnemonic="stosb">
-    <opcode> ; aa ; </opcode>
+    <opcode imp_addr="1"> ; aa ; </opcode>
   </instruction>
 
   <instruction mnemonic="stosw">
-    <opcode> oso rexw ; ab /O16 ; </opcode> 
+    <opcode imp_addr="1"> oso rexw ; ab /O16 ; </opcode> 
   </instruction>
 
   <instruction mnemonic="stosd">
-    <opcode> oso rexw ; ab /O32 ; </opcode> 
+    <opcode imp_addr="1"> oso rexw ; ab /O32 ; </opcode> 
   </instruction>
 
   <instruction mnemonic="stosq">
-    <opcode> oso rexw ; ab /O64 ; </opcode> 
+    <opcode imp_addr="1"> oso rexw ; ab /O64 ; </opcode> 
   </instruction>
 
   <instruction mnemonic="str">
