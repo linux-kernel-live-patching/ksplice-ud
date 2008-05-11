@@ -1,7 +1,7 @@
 #
 #
 AC_PREREQ(2.59)
-AC_INIT([udis86], [1.6], [vivek@sig9.com])
+AC_INIT([udis86], [1.7], [vivek@sig9.com])
 AC_CONFIG_AUX_DIR(build)
 AM_MAINTAINER_MODE
 
