@@ -1,13 +1,14 @@
-# Makefile
-# udis86 - Cmd line interface.
 #
+# Makefile for win32 compilers
+# (I need some help here!)
 
-CC			= cl
-CFLAGS		= -O2
-RM			= del
+CC	= cl
+CFLAGS	= -O2
+RM	= del
 
 
 .SUFFIXES: .c .obj
+
 .c.obj:
 	$(CC) -c $(CFLAGS) -o $@ $<
 

@@ -13,8 +13,6 @@
 # PARTICULAR PURPOSE.
 
 @SET_MAKE@
-
-
 VPATH = @srcdir@
 pkgdatadir = $(datadir)/@PACKAGE@
 pkglibdir = $(libdir)/@PACKAGE@
@@ -33,8 +31,9 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
-subdir = libudis86
-DIST_COMMON = $(libudis86_la_HEADERS) $(srcdir)/Makefile.am \
+check_PROGRAMS = gen$(EXEEXT) ovrrun$(EXEEXT)
+subdir = tests
+DIST_COMMON = $(dist_check_DATA) $(srcdir)/Makefile.am \
 	$(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/configure.ac
@@ -43,22 +42,18 @@ am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 mkinstalldirs = $(install_sh) -d
 CONFIG_HEADER = $(top_builddir)/config.h
 CONFIG_CLEAN_FILES =
-am__vpath_adj_setup = srcdirstrip=`echo "$(srcdir)" | sed 's|.|.|g'`;
-am__vpath_adj = case $$p in \
-    $(srcdir)/*) f=`echo "$$p" | sed "s|^$$srcdirstrip/||"`;; \
-    *) f=$$p;; \
-  esac;
-am__strip_dir = `echo $$p | sed -e 's|^.*/||'`;
-am__installdirs = "$(DESTDIR)$(libdir)" "$(DESTDIR)$(libudis86_ladir)"
-libLTLIBRARIES_INSTALL = $(INSTALL)
-LTLIBRARIES = $(lib_LTLIBRARIES)
-libudis86_la_LIBADD =
-am_libudis86_la_OBJECTS = itab.lo input.lo decode.lo syn.lo \
-	syn-intel.lo syn-att.lo udis86.lo
-libudis86_la_OBJECTS = $(am_libudis86_la_OBJECTS)
-libudis86_la_LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) \
-	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
-	$(libudis86_la_LDFLAGS) $(LDFLAGS) -o $@
+am_gen_OBJECTS = gen-gen.$(OBJEXT)
+gen_OBJECTS = $(am_gen_OBJECTS)
+gen_DEPENDENCIES = ../libudis86/libudis86.la
+gen_LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) \
+	--mode=link $(CCLD) $(gen_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) \
+	$(LDFLAGS) -o $@
+am_ovrrun_OBJECTS = ovrrun-bufovrrun.$(OBJEXT)
+ovrrun_OBJECTS = $(am_ovrrun_OBJECTS)
+ovrrun_DEPENDENCIES = ../libudis86/libudis86.la
+ovrrun_LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) \
+	--mode=link $(CCLD) $(ovrrun_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) \
+	$(LDFLAGS) -o $@
 DEFAULT_INCLUDES = -I. -I$(top_builddir)@am__isrc@
 depcomp = $(SHELL) $(top_srcdir)/build/depcomp
 am__depfiles_maybe = depfiles
@@ -71,10 +66,8 @@ CCLD = $(CC)
 LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) \
 	--mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) \
 	$(LDFLAGS) -o $@
-SOURCES = $(libudis86_la_SOURCES)
-DIST_SOURCES = $(libudis86_la_SOURCES)
-libudis86_laHEADERS_INSTALL = $(INSTALL_HEADER)
-HEADERS = $(libudis86_la_HEADERS)
+SOURCES = $(gen_SOURCES) $(ovrrun_SOURCES)
+DIST_SOURCES = $(gen_SOURCES) $(ovrrun_SOURCES)
 ETAGS = etags
 CTAGS = ctags
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
@@ -187,31 +180,17 @@ sysconfdir = @sysconfdir@
 target_alias = @target_alias@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
-lib_LTLIBRARIES = libudis86.la
-include_ladir = ${includedir}
-libudis86_ladir = ${includedir}/libudis86
-libudis86_la_SOURCES = itab.c \
-			input.c \
-			decode.c \
-			syn.c \
-			syn-intel.c \
-			syn-att.c \
-			udis86.c \
-			input.h \
-			syn.h \
-			decode.h \
-			extern.h \
-			types.h \
-			itab.h \
-			x86optable.xml \
-			x86optable.xsl \
-			opgen.py
+gen_SOURCES = gen.c
+gen_LDADD = ../libudis86/libudis86.la
+gen_CFLAGS = -I$(top_srcdir)/libudis86 -I$(top_srcdir)
+ovrrun_SOURCES = bufovrrun.c
+ovrrun_LDADD = ../libudis86/libudis86.la
+ovrrun_CFLAGS = -I$(top_srcdir)/libudis86 -I$(top_srcdir)
+YASM = yasm
+dist_check_DATA = test16.asm test32.asm test64.asm testjmp.asm testobscure.asm \
+		 testjmp.ref testobscure.ref randtest.raw randtest16.ref      \
+		 randtest32.ref randtest64.ref
 
-libudis86_la_HEADERS = types.h extern.h itab.h
-
-# DLLs may not contain undefined symbol references.  We have the linker
-# check this explicitly.
-@TARGET_WINDOWS_TRUE@libudis86_la_LDFLAGS = -no-undefined -version-info 0:0:0
 all: all-am
 
 .SUFFIXES:
@@ -225,9 +204,9 @@ $(srcdir)/Makefile.in: @MAINTAINER_MODE_TRUE@ $(srcdir)/Makefile.am  $(am__confi
 	      exit 1;; \
 	  esac; \
 	done; \
-	echo ' cd $(top_srcdir) && $(AUTOMAKE) --foreign  libudis86/Makefile'; \
+	echo ' cd $(top_srcdir) && $(AUTOMAKE) --foreign  tests/Makefile'; \
 	cd $(top_srcdir) && \
-	  $(AUTOMAKE) --foreign  libudis86/Makefile
+	  $(AUTOMAKE) --foreign  tests/Makefile
 .PRECIOUS: Makefile
 Makefile: $(srcdir)/Makefile.in $(top_builddir)/config.status
 	@case '$?' in \
@@ -245,35 +224,19 @@ $(top_srcdir)/configure: @MAINTAINER_MODE_TRUE@ $(am__configure_deps)
 	cd $(top_builddir) && $(MAKE) $(AM_MAKEFLAGS) am--refresh
 $(ACLOCAL_M4): @MAINTAINER_MODE_TRUE@ $(am__aclocal_m4_deps)
 	cd $(top_builddir) && $(MAKE) $(AM_MAKEFLAGS) am--refresh
-install-libLTLIBRARIES: $(lib_LTLIBRARIES)
-	@$(NORMAL_INSTALL)
-	test -z "$(libdir)" || $(MKDIR_P) "$(DESTDIR)$(libdir)"
-	@list='$(lib_LTLIBRARIES)'; for p in $$list; do \
-	  if test -f $$p; then \
-	    f=$(am__strip_dir) \
-	    echo " $(LIBTOOL) --mode=install $(libLTLIBRARIES_INSTALL) $(INSTALL_STRIP_FLAG) '$$p' '$(DESTDIR)$(libdir)/$$f'"; \
-	    $(LIBTOOL) --mode=install $(libLTLIBRARIES_INSTALL) $(INSTALL_STRIP_FLAG) "$$p" "$(DESTDIR)$(libdir)/$$f"; \
-	  else :; fi; \
-	done
 
-uninstall-libLTLIBRARIES:
-	@$(NORMAL_UNINSTALL)
-	@list='$(lib_LTLIBRARIES)'; for p in $$list; do \
-	  p=$(am__strip_dir) \
-	  echo " $(LIBTOOL) --mode=uninstall rm -f '$(DESTDIR)$(libdir)/$$p'"; \
-	  $(LIBTOOL) --mode=uninstall rm -f "$(DESTDIR)$(libdir)/$$p"; \
+clean-checkPROGRAMS:
+	@list='$(check_PROGRAMS)'; for p in $$list; do \
+	  f=`echo $$p|sed 's/$(EXEEXT)$$//'`; \
+	  echo " rm -f $$p $$f"; \
+	  rm -f $$p $$f ; \
 	done
-
-clean-libLTLIBRARIES:
-	-test -z "$(lib_LTLIBRARIES)" || rm -f $(lib_LTLIBRARIES)
-	@list='$(lib_LTLIBRARIES)'; for p in $$list; do \
-	  dir="`echo $$p | sed -e 's|/[^/]*$$||'`"; \
-	  test "$$dir" != "$$p" || dir=.; \
-	  echo "rm -f \"$${dir}/so_locations\""; \
-	  rm -f "$${dir}/so_locations"; \
-	done
-libudis86.la: $(libudis86_la_OBJECTS) $(libudis86_la_DEPENDENCIES) 
-	$(libudis86_la_LINK) -rpath $(libdir) $(libudis86_la_OBJECTS) $(libudis86_la_LIBADD) $(LIBS)
+gen$(EXEEXT): $(gen_OBJECTS) $(gen_DEPENDENCIES) 
+	@rm -f gen$(EXEEXT)
+	$(gen_LINK) $(gen_OBJECTS) $(gen_LDADD) $(LIBS)
+ovrrun$(EXEEXT): $(ovrrun_OBJECTS) $(ovrrun_DEPENDENCIES) 
+	@rm -f ovrrun$(EXEEXT)
+	$(ovrrun_LINK) $(ovrrun_OBJECTS) $(ovrrun_LDADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
@@ -281,13 +244,8 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/decode.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/input.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/itab.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/syn-att.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/syn-intel.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/syn.Plo@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/udis86.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/gen-gen.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ovrrun-bufovrrun.Po@am__quote@
 
 .c.o:
 @am__fastdepCC_TRUE@	$(COMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<
@@ -310,28 +268,39 @@ distclean-compile:
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(LTCOMPILE) -c -o $@ $<
 
+gen-gen.o: gen.c
+@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(gen_CFLAGS) $(CFLAGS) -MT gen-gen.o -MD -MP -MF $(DEPDIR)/gen-gen.Tpo -c -o gen-gen.o `test -f 'gen.c' || echo '$(srcdir)/'`gen.c
+@am__fastdepCC_TRUE@	mv -f $(DEPDIR)/gen-gen.Tpo $(DEPDIR)/gen-gen.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='gen.c' object='gen-gen.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(gen_CFLAGS) $(CFLAGS) -c -o gen-gen.o `test -f 'gen.c' || echo '$(srcdir)/'`gen.c
+
+gen-gen.obj: gen.c
+@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(gen_CFLAGS) $(CFLAGS) -MT gen-gen.obj -MD -MP -MF $(DEPDIR)/gen-gen.Tpo -c -o gen-gen.obj `if test -f 'gen.c'; then $(CYGPATH_W) 'gen.c'; else $(CYGPATH_W) '$(srcdir)/gen.c'; fi`
+@am__fastdepCC_TRUE@	mv -f $(DEPDIR)/gen-gen.Tpo $(DEPDIR)/gen-gen.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='gen.c' object='gen-gen.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(gen_CFLAGS) $(CFLAGS) -c -o gen-gen.obj `if test -f 'gen.c'; then $(CYGPATH_W) 'gen.c'; else $(CYGPATH_W) '$(srcdir)/gen.c'; fi`
+
+ovrrun-bufovrrun.o: bufovrrun.c
+@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(ovrrun_CFLAGS) $(CFLAGS) -MT ovrrun-bufovrrun.o -MD -MP -MF $(DEPDIR)/ovrrun-bufovrrun.Tpo -c -o ovrrun-bufovrrun.o `test -f 'bufovrrun.c' || echo '$(srcdir)/'`bufovrrun.c
+@am__fastdepCC_TRUE@	mv -f $(DEPDIR)/ovrrun-bufovrrun.Tpo $(DEPDIR)/ovrrun-bufovrrun.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='bufovrrun.c' object='ovrrun-bufovrrun.o' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(ovrrun_CFLAGS) $(CFLAGS) -c -o ovrrun-bufovrrun.o `test -f 'bufovrrun.c' || echo '$(srcdir)/'`bufovrrun.c
+
+ovrrun-bufovrrun.obj: bufovrrun.c
+@am__fastdepCC_TRUE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(ovrrun_CFLAGS) $(CFLAGS) -MT ovrrun-bufovrrun.obj -MD -MP -MF $(DEPDIR)/ovrrun-bufovrrun.Tpo -c -o ovrrun-bufovrrun.obj `if test -f 'bufovrrun.c'; then $(CYGPATH_W) 'bufovrrun.c'; else $(CYGPATH_W) '$(srcdir)/bufovrrun.c'; fi`
+@am__fastdepCC_TRUE@	mv -f $(DEPDIR)/ovrrun-bufovrrun.Tpo $(DEPDIR)/ovrrun-bufovrrun.Po
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	source='bufovrrun.c' object='ovrrun-bufovrrun.obj' libtool=no @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(ovrrun_CFLAGS) $(CFLAGS) -c -o ovrrun-bufovrrun.obj `if test -f 'bufovrrun.c'; then $(CYGPATH_W) 'bufovrrun.c'; else $(CYGPATH_W) '$(srcdir)/bufovrrun.c'; fi`
+
 mostlyclean-libtool:
 	-rm -f *.lo
 
 clean-libtool:
 	-rm -rf .libs _libs
-install-libudis86_laHEADERS: $(libudis86_la_HEADERS)
-	@$(NORMAL_INSTALL)
-	test -z "$(libudis86_ladir)" || $(MKDIR_P) "$(DESTDIR)$(libudis86_ladir)"
-	@list='$(libudis86_la_HEADERS)'; for p in $$list; do \
-	  if test -f "$$p"; then d=; else d="$(srcdir)/"; fi; \
-	  f=$(am__strip_dir) \
-	  echo " $(libudis86_laHEADERS_INSTALL) '$$d$$p' '$(DESTDIR)$(libudis86_ladir)/$$f'"; \
-	  $(libudis86_laHEADERS_INSTALL) "$$d$$p" "$(DESTDIR)$(libudis86_ladir)/$$f"; \
-	done
-
-uninstall-libudis86_laHEADERS:
-	@$(NORMAL_UNINSTALL)
-	@list='$(libudis86_la_HEADERS)'; for p in $$list; do \
-	  f=$(am__strip_dir) \
-	  echo " rm -f '$(DESTDIR)$(libudis86_ladir)/$$f'"; \
-	  rm -f "$(DESTDIR)$(libudis86_ladir)/$$f"; \
-	done
 
 ID: $(HEADERS) $(SOURCES) $(LISP) $(TAGS_FILES)
 	list='$(SOURCES) $(HEADERS) $(LISP) $(TAGS_FILES)'; \
@@ -408,12 +377,11 @@ distdir: $(DISTFILES)
 	  fi; \
 	done
 check-am: all-am
+	$(MAKE) $(AM_MAKEFLAGS) $(check_PROGRAMS) $(dist_check_DATA)
+	$(MAKE) $(AM_MAKEFLAGS) check-local
 check: check-am
-all-am: Makefile $(LTLIBRARIES) $(HEADERS)
+all-am: Makefile
 installdirs:
-	for dir in "$(DESTDIR)$(libdir)" "$(DESTDIR)$(libudis86_ladir)"; do \
-	  test -z "$$dir" || $(MKDIR_P) "$$dir"; \
-	done
 install: install-am
 install-exec: install-exec-am
 install-data: install-data-am
@@ -440,7 +408,7 @@ maintainer-clean-generic:
 	@echo "it deletes files that may require special tools to rebuild."
 clean: clean-am
 
-clean-am: clean-generic clean-libLTLIBRARIES clean-libtool \
+clean-am: clean-checkPROGRAMS clean-generic clean-libtool clean-local \
 	mostlyclean-am
 
 distclean: distclean-am
@@ -459,11 +427,11 @@ info: info-am
 
 info-am:
 
-install-data-am: install-libudis86_laHEADERS
+install-data-am:
 
 install-dvi: install-dvi-am
 
-install-exec-am: install-libLTLIBRARIES
+install-exec-am:
 
 install-html: install-html-am
 
@@ -475,7 +443,7 @@ install-pdf: install-pdf-am
 
 install-ps: install-ps-am
 
-installcheck-am:
+installcheck-am: installcheck-local
 
 maintainer-clean: maintainer-clean-am
 	-rm -rf ./$(DEPDIR)
@@ -495,28 +463,73 @@ ps: ps-am
 
 ps-am:
 
-uninstall-am: uninstall-libLTLIBRARIES uninstall-libudis86_laHEADERS
+uninstall-am:
 
 .MAKE: install-am install-strip
 
-.PHONY: CTAGS GTAGS all all-am check check-am clean clean-generic \
-	clean-libLTLIBRARIES clean-libtool ctags distclean \
-	distclean-compile distclean-generic distclean-libtool \
-	distclean-tags distdir dvi dvi-am html html-am info info-am \
-	install install-am install-data install-data-am install-dvi \
-	install-dvi-am install-exec install-exec-am install-html \
-	install-html-am install-info install-info-am \
-	install-libLTLIBRARIES install-libudis86_laHEADERS install-man \
-	install-pdf install-pdf-am install-ps install-ps-am \
-	install-strip installcheck installcheck-am installdirs \
+.PHONY: CTAGS GTAGS all all-am check check-am check-local clean \
+	clean-checkPROGRAMS clean-generic clean-libtool clean-local \
+	ctags distclean distclean-compile distclean-generic \
+	distclean-libtool distclean-tags distdir dvi dvi-am html \
+	html-am info info-am install install-am install-data \
+	install-data-am install-dvi install-dvi-am install-exec \
+	install-exec-am install-html install-html-am install-info \
+	install-info-am install-man install-pdf install-pdf-am \
+	install-ps install-ps-am install-strip installcheck \
+	installcheck-am installcheck-local installdirs \
 	maintainer-clean maintainer-clean-generic mostlyclean \
 	mostlyclean-compile mostlyclean-generic mostlyclean-libtool \
-	pdf pdf-am ps ps-am tags uninstall uninstall-am \
-	uninstall-libLTLIBRARIES uninstall-libudis86_laHEADERS
+	pdf pdf-am ps ps-am tags uninstall uninstall-am
 
 
-itab.c itab.h: x86optable.xml opgen.py
-	python ./opgen.py
+check-local: tests
+
+tests: test16 test32 test64 testjmp bufovrrun randraw
+
+test16: gen 
+	$(YASM) -f bin -o test16.bin $(top_srcdir)/tests/test16.asm
+	echo "[bits 16]" > test16.out
+	./gen -16 < test16.bin >> test16.out
+	diff $(top_srcdir)/tests/test16.asm test16.out
+
+test32: gen
+	$(YASM) -f bin -o test32.bin $(top_srcdir)/tests/test32.asm
+	echo "[bits 32]" > test32.out
+	./gen -32 < test32.bin >> test32.out
+	diff $(top_srcdir)/tests/test32.asm test32.out
+
+test64: gen
+	$(YASM) -f bin -o test64.bin $(top_srcdir)/tests/test64.asm
+	echo "[bits 64]" > test64.out
+	./gen -64 < test64.bin >> test64.out
+	diff $(top_srcdir)/tests/test64.asm test64.out
+
+testjmp: gen
+	$(YASM) -f bin -o testjmp.bin $(top_srcdir)/tests/testjmp.asm
+	../udcli/udcli -64 < testjmp.bin > testjmp.out
+	diff $(top_srcdir)/tests/testjmp.ref testjmp.out
+
+testobscure: gen
+	$(YASM) -f bin -o testobscure.bin $(top_srcdir)/tests/testobscure.asm
+	./gen -32 < testobscure.bin > testobscure.out
+	diff $(top_srcdir)/tests/testobscure.ref testobscure.out
+
+bufovrrun: ovrrun
+	./ovrrun
+
+randraw: 
+	./gen -16 < $(top_srcdir)/tests/randtest.raw > randtest16.out
+	diff randtest16.out $(top_srcdir)/tests/randtest16.ref
+	./gen -32 < $(top_srcdir)/tests/randtest.raw > randtest32.out
+	diff randtest32.out $(top_srcdir)/tests/randtest32.ref
+	./gen -64 < $(top_srcdir)/tests/randtest.raw > randtest64.out
+	diff randtest64.out $(top_srcdir)/tests/randtest64.ref
+
+installcheck-local:
+	$(CC) $(srcdir)/gen.c -o gen_installcheck.bin -I$(includedir) -L$(libdir) -ludis86
+
+clean-local:
+	rm -f *.bin *.out
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
 .NOEXPORT:

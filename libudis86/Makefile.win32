@@ -1,10 +1,9 @@
-# Makefile - libudis86
 #
+# Makefile for win32 compilers
+# 
+# (I need some help here.)
 #
 
-SHELL		= @SHELL@
-top_srcdir	= @top_srcdir@
-srcdir		= @srcdir@
 CC		= cl
 CFLAGS		= /O2
 AR		= lib
@@ -15,8 +14,9 @@ PERL		= perl
 .c.obj:
 	$(CC) -c $(CFLAGS) -o $@ $<
 
-OBJS =	mnemonics.obj \
-	opcmap.obj \
+OBJS =	itab.obj \
+	input.obj \
+	decode.obj \	
 	input.obj \
 	decode.obj \
 	syn.obj \
@@ -24,21 +24,20 @@ OBJS =	mnemonics.obj \
 	syn-att.obj \
 	udis86.obj
 
+HDRS =	types.h \
+	extern.h \
+	itab.h \
+	decode.h \
+	syn.h \
+	input.h
+
 libudis86.a: $(OBJS)
 	$(AR) /out:udis86.lib $(OBJS)
 
-mnemonics.c: mnemonics.dat
-	$(PERL) mnemonics.pl < mnemonics.dat
-mnemonics.h: mnemonics.dat
-	$(PERL) mnemonics.pl < mnemonics.dat
-input.c: input.h types.h
-opcmap.c: opcmap.h input.h types.h
-decode.c: opcmap.h input.h types.h extern.h
-syn-intel.c: syn.h input.h types.h opcmap.h 
-syn-att.c: syn.h input.h types.h opcmap.h 
-syn.c: syn.h types.h opcmap.h 
-udis86.c: input.h syn.h types.h extern.h
+itab.c itab.h: x86optable.xml opgen.py
+	python ./opgen.py
+
+itab.c input.c decode.c syn-intel.c syn-att.c syn.c udis86.c:  $(HDRS)
 
 clean:
 	$(RM) *.obj *.lib
-

@@ -1,3 +1,11 @@
+ * [May/03/08] Fix: Makefile for HP-UX build.
+	       Checked build on HP-UX, Solaris, FreeBSD, MacOS, Linux.
+	       Potentially broken win32 build (need help.)
+ * [Apr/29/08] Fix: operand size cast for rcl, ror, etc. (Thanks to Hans)
+	       Fix: support for implicit operands and segment 
+	            overrides (Thanks to Hans)
+ * [Mar/27/08] Add: new XML based optable generator.
+	       Add: new build system based on libtool.
  * [Dec/01/07] Fix: documentation buf: prefix fields
                Fix: bufoverrun.c to include the right header.
  * [Aug/05/07] Patch for DJGPP (Thanks to Robert Riebisch)
@@ -10,7 +18,8 @@
                Fixed: set_input_buffered to set_input_buffer in documentation.
                Added support for INTEL VMX instructions.
                API addition: ud_set_vendor(): UD_VENDOR_{INTEL, AMD}.
-               Fixed: Handling of invalid combination of bytes. No more input re-syncing.
+               Fixed: Handling of invalid combination of bytes. No more 
+               input re-syncing.
                Added Makefiles for win32 build. (Thanks to Xi Hang).
                Added Makefile.standalone for "Standalone Udis86".
                Fixed: u->inp_end initialization bug.

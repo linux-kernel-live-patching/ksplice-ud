@@ -8,7 +8,8 @@
 
 #include "types.h"
 #include "extern.h"
-#include "opcmap.h"
+#include "decode.h"
+#include "itab.h"
 #include "syn.h"
 
 /* -----------------------------------------------------------------------------
@@ -149,8 +150,8 @@ extern void ud_translate_intel(struct ud* u)
 {
   /* -- prefixes -- */
 
-  /* check if P_O32 prefix is used */
-  if (! P_O32(u->mapen->prefix) && u->pfx_opr) {
+  /* check if P_OSO prefix is used */
+  if (! P_OSO(u->itab_entry->prefix) && u->pfx_opr) {
 	switch (u->dis_mode) {
 		case 16: 
 			mkasm(u, "o32 ");
@@ -162,8 +163,8 @@ extern void ud_translate_intel(struct ud* u)
 	}
   }
 
-  /* check if P_A32 prefix was used */
-  if (! P_A32(u->mapen->prefix) && u->pfx_adr) {
+  /* check if P_ASO prefix was used */
+  if (! P_ASO(u->itab_entry->prefix) && u->pfx_adr) {
 	switch (u->dis_mode) {
 		case 16: 
 			mkasm(u, "a32 ");
@@ -183,6 +184,8 @@ extern void ud_translate_intel(struct ud* u)
 	mkasm(u, "rep ");
   if (u->pfx_repne)
 	mkasm(u, "repne ");
+  if (u->implicit_addr && u->pfx_seg)
+	mkasm(u, "%s ", ud_reg_tab[u->pfx_seg - UD_R_AL]);
 
   /* print the instruction mnemonic */
   mkasm(u, "%s ", ud_lookup_mnemonic(u->mnemonic));
