@@ -26,7 +26,7 @@
     </style>
    </head>
    <body> 
-      <h1 style="text-align:left; padding-left:8px;">x86optable.xml</h1>
+      <h1 style="text-align:left; font:sans; padding-left:8px;">x86optable.xml</h1>
 	<p style="text-align:left; padding-left:8px">
 		<a style="text-decoration:none" href="http://udis86.sourceforge.net/">udis86.sourceforge.net</a></p>
       <table cellpadding="4" cellspacing="6" width="800px"> 

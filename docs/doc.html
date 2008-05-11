@@ -21,9 +21,13 @@
 <body>
 <div id="topbar"><h1>Udis86 - Disassembler Library for x86 and AMD64</h1></div>
 <div id="wrapper">
+
+<div id="sidebar">
+	<a href="index.html">Main page</a>
+</div>
+
 <div id="content">
 
-<a href="index.html">Home</a>
 
 <h1>Documentation</h1>
 <small><i>Dec 19, 2006</i> - Added new API function and Standalone build mode.</small>
@@ -33,7 +37,7 @@
 <blockquote>
 	<a href="#sec11">1.1 Compiling and Installing</a> <br/>
 	<blockquote>
-		<a href="#sec111">1.1.1 Standalone Udis86</a> <br/>
+		<a href="#sec111">1.1.1 Standalone Udis86 (Deprecated)</a> <br/>
 	</blockquote>
 	<a href="#sec12">1.2 Interfacing With Your Program</a> <br/>
 	<a href="#sec13">1.3 A Quick Example</a><br/>
@@ -78,27 +82,7 @@ appropriate locations of in system.
 <a name="sec111"></a>
 <h4>1.1.1 Standalone Udis86</h4>
 
-<p>Standalone udis86 is (for now) a simple build hack that lets you build
-a single relocatable object file with all of the libudis86 functionality, that you
-could possibly use in any environment, say, a kernel module. The standalone object 
-assumes the availablity of the following functionality in the environment.</p>
-
-<pre>
-- memset()
-- vprintf()
-- sscanf()
-</pre>
-
-<p> To build udis86 in standalone mode, do the following.</p>
-
-<pre>
-$ ./configure
-$ make standalone
-</pre>
-
-which will generate <code>ud_standalone.o</code> in <code>ud/libudis86</code>. This build
-mode is a little hack'ish in nature and hopefully is replaced with better configure scripts
-in the future. If you have ideas, let me know!
+	<p>Deprecated</p>
 
 <a name="sec12"></a>
 <h3>1.2 Interfacing with your program</h3>
