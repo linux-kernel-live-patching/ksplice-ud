@@ -204,6 +204,7 @@ libudis86_la_SOURCES = itab.c \
 			types.h \
 			itab.h \
 			x86optable.xml \
+			x86optable.xsl \
 			opgen.py
 
 libudis86_la_HEADERS = types.h extern.h itab.h
