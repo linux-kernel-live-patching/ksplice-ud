@@ -16,8 +16,6 @@ libudis86_la_SOURCES =	itab.c \
 			extern.h \
 			types.h \
 			itab.h \
-			x86optable.xml \
-			x86optable.xsl \
 			opgen.py
 
 libudis86_la_HEADERS = types.h extern.h itab.h
@@ -28,5 +26,5 @@ if TARGET_WINDOWS
 libudis86_la_LDFLAGS=-no-undefined -version-info 0:0:0
 endif
 
-itab.c itab.h: x86optable.xml opgen.py
+itab.c itab.h: ../docs/x86optable.xml opgen.py
 	python ./opgen.py

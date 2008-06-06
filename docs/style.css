@@ -11,6 +11,7 @@ body {
 	background-color: skyblue;
 	color: navy;
 }
+
 #topbar h1 {
 	padding: 0;
 	margin: 0;
@@ -22,21 +23,6 @@ body {
 	width: 750px;
 }
 
-#sidebar {
-	float: left;
-	font-size: 1.1em;
-	margin-top: 1em;
-	padding-top: 1em;
-	margin-left: 2px;
-	padding-left: 1.2em;
-	list-style: none;
-}
-
-#sidebar a {
-	text-decoration: none;
-	color: navy;
-}
-
 #menu {
 }
 #content a {
@@ -46,7 +32,7 @@ body {
 }
 
 #content {
-	margin-left: 140px;
+	margin-left: 40px;
 	font-size: 1.1em;
 	line-height: 1.4em;
 	padding: 1em;

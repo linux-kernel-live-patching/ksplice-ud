@@ -36,6 +36,7 @@ AC_CONFIG_FILES([
     libudis86/Makefile
     udcli/Makefile
     tests/Makefile
+    docs/Makefile
 ])
 
 AC_OUTPUT

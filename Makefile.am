@@ -1,4 +1,4 @@
-SUBDIRS = libudis86 . udcli . tests
+SUBDIRS = libudis86 . udcli . tests . docs
 
 include_ladir = ${includedir}
 include_la_HEADERS = udis86.h
