@@ -136,7 +136,9 @@ struct ud
   int 			(*inp_hook) (struct ud*);
   uint8_t		inp_curr;
   uint8_t		inp_fill;
+#ifndef __UD_STANDALONE__
   FILE*			inp_file;
+#endif
   uint8_t		inp_ctr;
   uint8_t*		inp_buff;
   uint8_t*		inp_buff_end;
@@ -173,6 +175,7 @@ struct ud
   uint8_t		c3;
   uint8_t 		inp_cache[256];
   uint8_t		inp_sess[64];
+  void *        user_opaque_data;
   struct ud_itab_entry * itab_entry;
 };
 
