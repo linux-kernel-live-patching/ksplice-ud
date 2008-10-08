@@ -306,6 +306,8 @@ search:
             index = ITAB__VENDOR_INDX__INTEL; 
         else if ( u->vendor == UD_VENDOR_AMD )
             index = ITAB__VENDOR_INDX__AMD;
+        else if ( u->vendor == UD_VENDOR_ANY )
+            index = ITAB__VENDOR_INDX__ANY;
         else
             assert( !"unrecognized vendor id" );
         break;
