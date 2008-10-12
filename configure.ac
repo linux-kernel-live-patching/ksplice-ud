@@ -18,7 +18,7 @@ esac
 # Initialize the automake subsystem.
 # In case we have a Windows build, we pass a TARGET_WINDOWS conditional to
 # automake.
-AM_INIT_AUTOMAKE
+AM_INIT_AUTOMAKE([-Wall -Werror foreign])
 AM_CONDITIONAL(TARGET_WINDOWS, test "$TARGET_OS" = windows)
 
 AC_PROG_CC
