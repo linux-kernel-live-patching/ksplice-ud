@@ -6,7 +6,6 @@
  * -----------------------------------------------------------------------------
  */
 
-#include <assert.h>
 #include <string.h>
 
 #include "types.h"
@@ -309,15 +308,15 @@ search:
         else if ( u->vendor == UD_VENDOR_ANY )
             index = ITAB__VENDOR_INDX__ANY;
         else
-            assert( !"unrecognized vendor id" );
+            return -1;
         break;
 
     case UD_Id3vil:
-        assert( !"invalid instruction mnemonic constant Id3vil" );
+        return -1;
         break;
 
     default:
-        assert( !"invalid instruction mnemonic constant" );
+        return -1;
         break;
     }
 
