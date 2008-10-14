@@ -8,7 +8,11 @@
 #ifndef UD_TYPES_H
 #define UD_TYPES_H
 
-#include <stdio.h>
+#include "itab.h"
+
+#ifndef __UD_STANDALONE__
+# include <stdio.h>
+#endif /* __UD_STANDALONE__ */
 
 #ifdef _MSC_VER
 # define FMT64 "%I64"
@@ -22,10 +26,10 @@
   typedef __int64 int64_t;
 #else
 # define FMT64 "%ll"
-# include <inttypes.h>
+# ifndef __UD_STANDALONE__
+#  include <inttypes.h>
+# endif /* __UD_STANDALONE__ */
 #endif
-
-#include "itab.h"
 
 /* -----------------------------------------------------------------------------
  * All possible "types" of objects in udis86. Order is Important!
