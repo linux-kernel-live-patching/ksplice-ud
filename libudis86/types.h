@@ -8,6 +8,14 @@
 #ifndef UD_TYPES_H
 #define UD_TYPES_H
 
+#ifdef __KERNEL__
+  /* -D__KERNEL__ is automatically passed on the command line when
+     building something as part of the Linux kernel */
+# include <linux/kernel.h>
+# include <linux/string.h>
+# define __UD_STANDALONE__ 1
+#endif /* __KERNEL__ */
+
 #include "itab.h"
 
 #ifndef __UD_STANDALONE__
